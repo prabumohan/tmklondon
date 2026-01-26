@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getTranslation, type Language } from '../utils/i18n';
+import { siteConfig } from '../utils/seo';
+
+const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
+---
+
+<BaseLayout 
+  title={getTranslation('contact', lang)}
+  description="Contact TMK London - Get in touch with us for Tamil school registration, events, or general inquiries."
+  lang={lang}
+>
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-center font-tamil">
+          {getTranslation('contact', lang)}
+        </h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4 font-tamil">
+              {getTranslation('address', lang)}
+            </h2>
+            <p class="text-gray-700 leading-relaxed">
+              TMK House,<br />
+              {siteConfig.contact.address.street}<br />
+              {siteConfig.contact.address.area}<br />
+              {siteConfig.contact.address.city}<br />
+              {siteConfig.contact.address.postcode}<br />
+              {siteConfig.contact.address.country}
+            </p>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4 font-tamil">
+              {getTranslation('contact', lang)}
+            </h2>
+            <div class="space-y-4">
+              <p class="text-gray-700">
+                <strong>{getTranslation('email', lang)}:</strong><br />
+                <a href={`mailto:${siteConfig.contact.email}`} class="text-primary-600 hover:underline">
+                  {siteConfig.contact.email}
+                </a>
+              </p>
+              <p class="text-gray-700">
+                <strong>{getTranslation('phone', lang)}:</strong><br />
+                <a href={`tel:${siteConfig.contact.phone}`} class="text-primary-600 hover:underline">
+                  {siteConfig.contact.phone}
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <div class="flex items-center mb-6">
+            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
+              <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold font-tamil text-gray-900">
+              {lang === 'ta' ? 'முக்கிய தொடர்பு எண்கள்' : 'Key Contact Numbers'}
+            </h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
+            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p>
+                <strong class="text-gray-900">{lang === 'ta' ? 'த மு க/ தமிழ்ப் பள்ளி:' : 'TMK / Tamil School:'}</strong><br />
+                <a href="tel:+447459528739" class="text-primary-600 hover:text-primary-700 font-medium">+44 7459 528739</a>
+              </p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p>
+                <strong class="text-gray-900">{lang === 'ta' ? 'தலைவர்:' : 'President:'}</strong><br />
+                <a href="tel:+447931463952" class="text-primary-600 hover:text-primary-700 font-medium">+44 7931 463952</a>
+              </p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p>
+                <strong class="text-gray-900">{lang === 'ta' ? 'துணைத் தலைவர்:' : 'Vice President:'}</strong><br />
+                <a href="tel:+447540647760" class="text-primary-600 hover:text-primary-700 font-medium">+44 7540 647760</a>
+              </p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p>
+                <strong class="text-gray-900">{lang === 'ta' ? 'செயலாளர்:' : 'Secretary:'}</strong><br />
+                <a href="tel:+447942863702" class="text-primary-600 hover:text-primary-700 font-medium">+44 7942 863702</a>
+              </p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p>
+                <strong class="text-gray-900">{lang === 'ta' ? 'பொருளாளர்:' : 'Treasurer:'}</strong><br />
+                <a href="tel:+447738529167" class="text-primary-600 hover:text-primary-700 font-medium">+44 7738 529167</a>
+              </p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p>
+                <strong class="text-gray-900">{lang === 'ta' ? 'தலைமை ஆசிரியை:' : 'Head Teacher:'}</strong><br />
+                <a href="tel:+447340077673" class="text-primary-600 hover:text-primary-700 font-medium">+44 7340 077673</a>
+              </p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p>
+                <strong class="text-gray-900">{lang === 'ta' ? 'பள்ளி ஒருங்கினணப்பாளர்:' : 'School Coordinator:'}</strong><br />
+                <a href="tel:+447725049347" class="text-primary-600 hover:text-primary-700 font-medium">+44 7725 049347</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdminLogin from '../../components/admin/AdminLogin';
+
+const seoConfig = {
+  title: 'Admin Login - TMK London',
+  description: 'Admin login portal for TMK London',
+  noindex: true,
+};
+---
+
+<BaseLayout {...seoConfig}>
+  <AdminLogin client:load />
+</BaseLayout>

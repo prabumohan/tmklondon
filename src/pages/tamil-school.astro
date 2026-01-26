@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getTranslation, type Language } from '../utils/i18n';
+import { getLocalBusinessSchema } from '../utils/seo';
+
+const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
+const schoolSchema = getLocalBusinessSchema();
+---
+
+<BaseLayout 
+  title={getTranslation('tamilSchool', lang)}
+  description="TMK Tamil School - Learn Tamil language and culture in London. Register your child for Tamil language classes."
+  lang={lang}
+  schema={schoolSchema}
+>
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-center font-tamil">
+          {getTranslation('tamilSchool', lang)}
+        </h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <h2 class="text-2xl font-bold mb-4 font-tamil">
+            {lang === 'ta' ? 'நமது பள்ளி பற்றி' : 'About Our School'}
+          </h2>
+          <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
+            {lang === 'ta' 
+              ? 'TMK தமிழ்ப் பள்ளி லண்டனில் வாழும் தமிழ் குழந்தைகளுக்கு தமிழ் மொழி மற்றும் கலாச்சாரத்தை கற்பிக்கும் ஒரு அமைப்பாகும். நாங்கள் தமிழ் மொழியின் அழகு மற்றும் செழுமையை அடுத்த தலைமுறைக்கு கடத்துவதில் கவனம் செலுத்துகிறோம்.'
+              : 'TMK Tamil School is an organization that teaches Tamil language and culture to Tamil children living in London. We focus on passing on the beauty and richness of the Tamil language to the next generation.'}
+          </p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <h2 class="text-2xl font-bold mb-4 font-tamil">
+            {lang === 'ta' ? 'பாடத்திட்டம்' : 'Curriculum'}
+          </h2>
+          <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
+            {lang === 'ta' 
+              ? 'நமது பாடத்திட்டம் தமிழ் மொழி கற்பித்தல், இலக்கியம், கலாச்சாரம் மற்றும் மரபுகளை உள்ளடக்கியது. வயது வந்தோர் மற்றும் குழந்தைகள் இருவருக்கும் வகுப்புகள் வழங்கப்படுகின்றன.'
+              : 'Our curriculum includes Tamil language teaching, literature, culture, and traditions. Classes are offered for both adults and children.'}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <a href="/student-registration" class="bg-primary-600 text-white p-6 rounded-lg shadow-md hover:bg-primary-700 transition-colors text-center">
+            <h3 class="text-xl font-bold mb-2 font-tamil">
+              {getTranslation('studentRegistration', lang)}
+            </h3>
+            <p class="text-primary-100">
+              {lang === 'ta' ? 'மாணவர் பதிவு செய்ய' : 'Register as a student'}
+            </p>
+          </a>
+
+          <a href="/tamil-school/donation" class="bg-primary-500 text-white p-6 rounded-lg shadow-md hover:bg-primary-600 transition-colors text-center">
+            <h3 class="text-xl font-bold mb-2 font-tamil">
+              {getTranslation('schoolDonation', lang)}
+            </h3>
+            <p class="text-primary-100">
+              {lang === 'ta' ? 'பள்ளிக்கு நன்கொடை அளிக்க' : 'Donate to the school'}
+            </p>
+          </a>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold mb-4 font-tamil">
+            {lang === 'ta' ? 'தொடர்பு' : 'Contact'}
+          </h2>
+          <p class="text-gray-700 mb-4">
+            <strong>{lang === 'ta' ? 'தலைமை ஆசிரியை:' : 'Head Teacher:'}</strong> +44 7340 077673
+          </p>
+          <p class="text-gray-700 mb-4">
+            <strong>{lang === 'ta' ? 'பள்ளி ஒருங்கினணப்பாளர்:' : 'School Coordinator:'}</strong> +44 7725 049347
+          </p>
+          <p class="text-gray-700">
+            <strong>{lang === 'ta' ? 'மின்னஞ்சல்:' : 'Email:'}</strong> tmktamilschool@gmail.com
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

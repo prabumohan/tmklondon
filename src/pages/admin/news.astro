@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdminNews from '../../components/admin/AdminNews';
+
+const seoConfig = {
+  title: 'News Ticker Management - TMK London',
+  description: 'Manage news ticker messages',
+  noindex: true,
+};
+---
+
+<BaseLayout {...seoConfig}>
+  <AdminNews client:load />
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import { SEO as SEOComponent } from 'astro-seo';
+import type { SEOProps } from 'astro-seo';
+
+interface Props extends SEOProps {
+  schema?: object | object[];
+}
+
+const { schema, ...seoProps } = Astro.props;
+---
+
+<SEOComponent {...seoProps} />
+{schema && (
+  <script type="application/ld+json" set:html={JSON.stringify(Array.isArray(schema) ? schema : [schema])} is:inline />
+)}

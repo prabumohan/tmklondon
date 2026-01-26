@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdminDashboard from '../../components/admin/AdminDashboard';
+
+const seoConfig = {
+  title: 'Admin Dashboard - TMK London',
+  description: 'Admin dashboard for TMK London',
+  noindex: true,
+};
+---
+
+<BaseLayout {...seoConfig}>
+  <AdminDashboard client:load />
+</BaseLayout>

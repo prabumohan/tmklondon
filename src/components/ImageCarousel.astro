@@ -1,0 +1,106 @@
+---
+interface Props {
+  images: string[];
+  alt?: string;
+}
+
+const { images, alt = 'Tamil Heritage' } = Astro.props;
+---
+
+<div class="relative w-full h-[500px] md:h-[600px] overflow-hidden">
+  <div id="carousel-container" class="flex transition-transform duration-700 ease-in-out h-full">
+    {images.map((image, index) => (
+      <div class="min-w-full h-full relative">
+        <img 
+          src={image} 
+          alt={`${alt} ${index + 1}`}
+          class="w-full h-full object-cover"
+          loading={index === 0 ? 'eager' : 'lazy'}
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+      </div>
+    ))}
+  </div>
+  
+  <!-- Carousel Controls -->
+  <button 
+    id="carousel-prev"
+    class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all z-10"
+    aria-label="Previous image"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  
+  <button 
+    id="carousel-next"
+    class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all z-10"
+    aria-label="Next image"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+  
+  <!-- Indicators -->
+  <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+    {images.map((_, index) => (
+      <button
+        class="carousel-indicator w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-all"
+        data-index={index}
+        aria-label={`Go to slide ${index + 1}`}
+      ></button>
+    ))}
+  </div>
+</div>
+
+<script define:vars={{ imageCount: images.length }}>
+  let currentIndex = 0;
+  const container = document.getElementById('carousel-container');
+  const prevBtn = document.getElementById('carousel-prev');
+  const nextBtn = document.getElementById('carousel-next');
+  const indicators = document.querySelectorAll('.carousel-indicator');
+
+  function updateCarousel() {
+    if (container) {
+      container.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+    
+    indicators.forEach((indicator, index) => {
+      if (index === currentIndex) {
+        indicator.classList.add('bg-white', 'w-8');
+        indicator.classList.remove('bg-white/50', 'w-2');
+      } else {
+        indicator.classList.remove('bg-white', 'w-8');
+        indicator.classList.add('bg-white/50', 'w-2');
+      }
+    });
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % imageCount;
+    updateCarousel();
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + imageCount) % imageCount;
+    updateCarousel();
+  }
+
+  prevBtn?.addEventListener('click', prevSlide);
+  nextBtn?.addEventListener('click', nextSlide);
+
+  indicators.forEach((indicator, index) => {
+    indicator.addEventListener('click', () => {
+      currentIndex = index;
+      updateCarousel();
+    });
+  });
+
+  // Auto-play carousel
+  setInterval(nextSlide, 5000);
+  
+  // Initialize
+  updateCarousel();
+</script>

@@ -1,0 +1,37 @@
+---
+interface Stat {
+  value: string;
+  label: {
+    ta: string;
+    en: string;
+  };
+  icon?: string;
+}
+
+interface Props {
+  stats: Stat[];
+  lang?: 'ta' | 'en';
+}
+
+const { stats, lang = 'ta' } = Astro.props;
+---
+
+<section class="py-16 bg-gradient-to-br from-primary-50 to-primary-100">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {stats.map((stat) => (
+        <div class="text-center p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+          {stat.icon && (
+            <div class="text-5xl mb-4">{stat.icon}</div>
+          )}
+          <div class="text-5xl md:text-6xl font-bold text-primary-600 mb-2">
+            {stat.value}
+          </div>
+          <div class="text-xl text-gray-700 font-tamil">
+            {stat.label[lang]}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

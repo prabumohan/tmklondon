@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTranslation, type Language } from '../../utils/i18n';
+
+const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
+---
+
+<BaseLayout 
+  title={getTranslation('schoolDonation', lang)}
+  description="Support TMK Tamil School through donations. Help us continue teaching Tamil language and culture to the next generation."
+  lang={lang}
+>
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-center font-tamil">
+          {getTranslation('schoolDonation', lang)}
+        </h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
+            {lang === 'ta' 
+              ? 'TMK தமிழ்ப் பள்ளியின் பணிகளைத் தொடர்ந்து நடத்த, உங்களின் நன்கொடை மிகவும் மதிப்புமிக்கது. உங்களின் பங்களிப்பு தமிழ் மொழி மற்றும் கலாச்சாரத்தை அடுத்த தலைமுறைக்கு கடத்த உதவும்.'
+              : 'Your donation is highly valued to continue the work of TMK Tamil School. Your contribution will help pass on the Tamil language and culture to the next generation.'}
+          </p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold mb-4 font-tamil">
+            {lang === 'ta' ? 'நன்கொடை அளிக்க' : 'Make a Donation'}
+          </h2>
+          <p class="text-gray-700 mb-6">
+            {lang === 'ta' 
+              ? 'நன்கொடை அளிக்க, தயவுசெய்து கீழ்க்கண்ட விவரங்களுடன் தொடர்பு கொள்ளவும்:'
+              : 'To make a donation, please contact us with the following details:'}
+          </p>
+          <div class="space-y-4">
+            <p class="text-gray-700">
+              <strong>{lang === 'ta' ? 'மின்னஞ்சல்:' : 'Email:'}</strong> tmktamilschool@gmail.com
+            </p>
+            <p class="text-gray-700">
+              <strong>{lang === 'ta' ? 'தொலைபேசி:' : 'Phone:'}</strong> +44 7459 528739
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
