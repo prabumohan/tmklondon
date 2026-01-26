@@ -134,17 +134,14 @@ const events = [
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-12 max-w-4xl mx-auto">
-          {stats.map((stat) => {
-            const numericValue = parseInt(stat.value.replace('+', ''));
-            return (
-              <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-                <div class="flex items-baseline justify-center">
-                  <span class="text-4xl md:text-5xl lg:text-6xl font-bold text-accent" data-stat-value={stat.value}>{stat.value}</span>
-                </div>
-                <div class="text-sm md:text-base text-white/90 font-medium text-center mt-2">{stat.label[lang]}</div>
+          {stats.map((stat) => (
+            <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+              <div class="flex items-baseline justify-center">
+                <span class="text-4xl md:text-5xl lg:text-6xl font-bold text-accent" data-stat-value={stat.value}>{stat.value}</span>
               </div>
-            );
-          })}
+              <div class="text-sm md:text-base text-white/90 font-medium text-center mt-2">{stat.label[lang]}</div>
+            </div>
+          ))}
         </div>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
@@ -290,7 +287,7 @@ const events = [
         if (valueText.includes('+')) {
           element.textContent = currentValue + '+';
         } else {
-          element.textContent = currentValue;
+          element.textContent = String(currentValue);
         }
         
         if (currentStep >= steps) {

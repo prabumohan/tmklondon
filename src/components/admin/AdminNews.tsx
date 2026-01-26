@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function AdminNews() {
   const [newsItems, setNewsItems] = useState<string[]>([]);
@@ -188,7 +188,7 @@ export default function AdminNews() {
                           type="text"
                           value={editValue}
                           onChange={(e) => setEditValue(e.target.value)}
-                          onKeyPress={(e) => {
+                          onKeyDown={(e) => {
                             if (e.key === 'Enter') handleSaveEdit(index);
                             if (e.key === 'Escape') handleCancelEdit();
                           }}

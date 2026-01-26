@@ -55,7 +55,7 @@ const { images, alt = 'Tamil Heritage' } = Astro.props;
   </div>
 </div>
 
-<script define:vars={{ imageCount: images.length }}>
+<script is:inline define:vars={{ imageCount: images.length }}>
   let currentIndex = 0;
   const container = document.getElementById('carousel-container');
   const prevBtn = document.getElementById('carousel-prev');
