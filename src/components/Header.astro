@@ -20,13 +20,14 @@ function getUrlWithLang(langParam: Language): string {
   return url.pathname + (url.search ? url.search : '');
 }
 
-// Header: single fixed background image
+// Header: use paths that exist in repo (public/logo.png; static/ may be untracked on deploy)
 const headerBgImage = '/static/content/header-carousel/fiery_sunset_sky_swirling-full.jpg';
+const logoUrl = '/logo.png';
 ---
 
 <header class="fixed top-0 left-0 right-0 w-full z-[100] shadow-lg bg-transparent header-fixed-lts" id="site-header">
-  <!-- Header Banner: background image, compact height -->
-  <div class="relative min-h-[100px] md:min-h-[110px] header-banner-custom overflow-hidden">
+  <!-- Header Banner: background image with gradient fallback if image 404s -->
+  <div class="relative min-h-[100px] md:min-h-[110px] header-banner-custom overflow-hidden" style="background: linear-gradient(135deg, #1e3a5f 0%, #162d49 50%, #12263d 100%);">
     <img
       src={headerBgImage}
       alt=""
@@ -41,7 +42,7 @@ const headerBgImage = '/static/content/header-carousel/fiery_sunset_sky_swirling
           <div class="relative logo-modern-wrap">
             <div class="absolute inset-0 bg-white rounded-full shadow-md ring-1 ring-gray-200/80 transition-all duration-300 group-hover:shadow-lg group-hover:ring-primary-200"></div>
             <div class="absolute -inset-0.5 bg-primary-100/40 rounded-full blur-md transition-opacity duration-300 group-hover:bg-primary-50/60"></div>
-            <img src="/static/content/logo.png" alt="TMK London" class="relative logo-modern-img h-20 w-20 sm:h-24 sm:w-24 md:h-36 md:w-36 lg:h-44 lg:w-44 rounded-full object-cover transition-transform duration-300 ease-out group-hover:scale-105" />
+            <img src={logoUrl} alt="TMK London" class="relative logo-modern-img h-20 w-20 sm:h-24 sm:w-24 md:h-36 md:w-36 lg:h-44 lg:w-44 rounded-full object-cover transition-transform duration-300 ease-out group-hover:scale-105" />
           </div>
         </a>
 
@@ -817,13 +818,20 @@ const headerBgImage = '/static/content/header-carousel/fiery_sunset_sky_swirling
       ];
     }
 
+    // Escape so news text can't break the DOM (quotes, <, >, &)
+    function esc(s) {
+      if (typeof s !== 'string') return '';
+      const div = document.createElement('div');
+      div.textContent = s;
+      return div.innerHTML;
+    }
     // Create ticker content with duplicates for seamless loop (index 0 = most recent)
     const items = [...newsItems, ...newsItems];
     ticker.innerHTML = items.map((item, index) => {
       const isLast = index === items.length - 1;
       const isLatest = newsItems.length > 0 && (index % newsItems.length) === 0;
       const spanClass = isLatest ? 'text-sm font-bold ticker-latest' : 'text-sm text-white/90';
-      return `<span class="${spanClass}">${item}</span>${!isLast ? '<span class="text-gray-400">•</span>' : ''}`;
+      return '<span class="' + spanClass + '">' + esc(item) + '</span>' + (!isLast ? '<span class="text-gray-400">•</span>' : '');
     }).join('');
   }
 

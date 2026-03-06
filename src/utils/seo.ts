@@ -2,10 +2,11 @@ import type { SEOProps } from 'astro-seo';
 
 export const siteConfig = {
   title: 'TMK London - Thamizhar Munnetra Kazhagam',
-  description: 'Thamizhar Munnetra Kazhagam (TMK) London - Tamil School and Community Organization in London, UK',
+  description: 'TMK Tamil School London - Learn Tamil language and culture in London, UK. Best Tamil school for children and adults. Tamil language classes, Tamil education, Tamil cultural programs.',
   url: 'https://tmklondon.com',
   defaultLocale: 'ta',
   locales: ['ta', 'en'],
+  keywords: 'Tamil school, Tamil school London, Tamil language classes, Tamil education UK, Tamil school near me, learn Tamil London, Tamil classes for kids, Tamil cultural center, TMK Tamil School, Tamil school East London',
   contact: {
     email: 'tmktamilschool@gmail.com',
     phone: '+447459528739',
@@ -25,9 +26,10 @@ export const siteConfig = {
   },
 };
 
-export function getSEOConfig(pageTitle?: string, description?: string, image?: string): SEOProps {
+export function getSEOConfig(pageTitle?: string, description?: string, image?: string, keywords?: string): SEOProps {
   const title = pageTitle ? `${pageTitle} | ${siteConfig.title}` : siteConfig.title;
   const defaultImage = image || `${siteConfig.url}/logo.png`;
+  const metaKeywords = keywords || siteConfig.keywords;
   
   return {
     title,
@@ -55,6 +57,26 @@ export function getSEOConfig(pageTitle?: string, description?: string, image?: s
       title,
       description: description || siteConfig.description,
       image: defaultImage,
+    },
+    extend: {
+      meta: [
+        {
+          name: 'keywords',
+          content: metaKeywords,
+        },
+        {
+          name: 'author',
+          content: 'TMK London',
+        },
+        {
+      name: 'geo.region',
+          content: 'GB-LND',
+        },
+        {
+          name: 'geo.placename',
+          content: 'London, UK',
+        },
+      ],
     },
   };
 }
