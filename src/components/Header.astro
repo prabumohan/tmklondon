@@ -19,192 +19,209 @@ function getUrlWithLang(langParam: Language): string {
   url.searchParams.set('lang', langParam);
   return url.pathname + (url.search ? url.search : '');
 }
+
+// Header: single fixed background image
+const headerBgImage = '/static/content/header-carousel/fiery_sunset_sky_swirling-full.jpg';
 ---
 
-<header class="sticky top-0 z-50 shadow-lg">
-  <!-- Header Banner Section -->
-  <div class="relative bg-cover bg-center bg-no-repeat" style="background-image: url('/images/hero-banner.jpg');">
-    <!-- Overlay for text readability -->
-    <div class="absolute inset-0 bg-white/90 backdrop-blur-sm"></div>
-    
-    <div class="container mx-auto relative z-10">
-      <div class="flex items-center justify-between py-2 md:py-2.5">
-        <!-- Logo Section (Compact) -->
-        <a href="/" class="flex-shrink-0 group ml-2 md:ml-4">
-          <div class="relative">
-            <!-- White background circle -->
-            <div class="absolute inset-0 bg-white rounded-full shadow-lg"></div>
-            <!-- Light beam effect from top -->
-            <div class="absolute inset-0 rounded-full overflow-hidden">
-              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1/2 bg-gradient-to-b from-white/70 via-white/40 to-transparent blur-sm"></div>
-              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1/3 bg-gradient-to-b from-yellow-200/50 via-yellow-100/30 to-transparent"></div>
-            </div>
-            <!-- Glowing effect layers -->
-            <div class="absolute -inset-1 bg-primary-400/40 rounded-full blur-xl"></div>
-            <!-- Logo - Compact size -->
-            <img src="/logo.png" alt="TMK London" class="relative h-20 w-20 md:h-24 md:w-24 lg:h-28 lg:w-28 rounded-full object-cover transition-all group-hover:scale-105 drop-shadow-lg brightness-150 contrast-150 saturate-150" />
+<header class="fixed top-0 left-0 right-0 w-full z-[100] shadow-lg bg-transparent header-fixed-lts" id="site-header">
+  <!-- Header Banner: background image, compact height -->
+  <div class="relative min-h-[100px] md:min-h-[110px] header-banner-custom overflow-hidden">
+    <img
+      src={headerBgImage}
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+      loading="eager"
+      decoding="async"
+    />
+    <div class="relative z-10 w-full px-3 sm:px-4 md:px-6 lg:px-8">
+      <div class="header-banner-row flex flex-nowrap items-center justify-between gap-2 sm:gap-3 md:gap-6 py-2.5 sm:py-3 md:py-4 min-h-[100px] sm:min-h-[110px] md:min-h-[140px]">
+        <!-- 1. Logo (left) – slightly smaller on mobile for breathing room -->
+        <a href="/" class="header-logo flex-shrink-0 mr-1 sm:mr-2 md:mr-4 group animate-fade-in-left">
+          <div class="relative logo-modern-wrap">
+            <div class="absolute inset-0 bg-white rounded-full shadow-md ring-1 ring-gray-200/80 transition-all duration-300 group-hover:shadow-lg group-hover:ring-primary-200"></div>
+            <div class="absolute -inset-0.5 bg-primary-100/40 rounded-full blur-md transition-opacity duration-300 group-hover:bg-primary-50/60"></div>
+            <img src="/static/content/logo.png" alt="TMK London" class="relative logo-modern-img h-20 w-20 sm:h-24 sm:w-24 md:h-36 md:w-36 lg:h-44 lg:w-44 rounded-full object-cover transition-transform duration-300 ease-out group-hover:scale-105" />
           </div>
         </a>
 
-        <!-- Name Section (Compact) -->
-        <a href="/" class="flex-shrink-0 group flex-1 ml-3 md:ml-4">
-          <div class="text-left">
+        <!-- 2. Name (center) – clean; text shadow for readability, no box -->
+        <a href="/" class="header-name flex-1 flex items-center justify-center text-center min-w-0 px-1 sm:px-2 md:px-4 group ring-0 border-0 outline-none focus:ring-0 focus:outline-none focus:border-0">
+          <div class="header-name-block animate-name-fall w-full max-w-none min-w-0 pt-1.5 pb-1 px-2 sm:pt-2 sm:pb-1.5 md:pt-2.5 md:pb-2 md:px-3 overflow-visible">
+            <!-- Main title: multi-colour gradient – readable on bright bg with shadow -->
             {lang === 'ta' ? (
-              <div class="text-lg md:text-xl lg:text-2xl font-bold text-primary-700 font-tamil leading-tight mb-0.5">
+              <div class="name-title name-title-gradient text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold font-tamil leading-tight sm:leading-relaxed mb-0.5 sm:mb-1 md:mb-1.5 tracking-wide">
                 தமிழர் முன்னேற்றக் கழகம்
               </div>
             ) : (
-              <div class="text-lg md:text-xl lg:text-2xl font-bold text-primary-700 leading-tight mb-0.5">
+              <div class="name-title name-title-gradient text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold leading-tight sm:leading-snug mb-0.5 sm:mb-1 md:mb-1.5 tracking-wide">
                 Thamizhar Munnetra Kazhagam
               </div>
             )}
-            <div class="text-sm md:text-base lg:text-lg text-primary-600 font-bold tracking-wide mb-0.5 uppercase">
+            <!-- English subtitle: hidden on smallest mobile to reduce clutter -->
+            <div class="name-subtitle-gradient hidden sm:block text-[10px] md:text-xs lg:text-sm font-bold tracking-[0.15em] md:tracking-[0.2em] uppercase mb-0.5 md:mb-1 letter-spread">
               THAMIZHAR MUNNETRA KAZHAGAM
             </div>
-            <div class="text-xs md:text-sm text-gray-600 font-medium">
-              {lang === 'ta' ? 'தமிழ் சமூகம் மற்றும் கல்வி மையம் • நிறுவப்பட்டது 1975' : 'Tamil Community & Education Center • Estd. 1975'}
+            <div class="header-name-tagline text-[9px] sm:text-[10px] md:text-xs font-medium tracking-wide leading-snug sm:leading-relaxed text-white">
+              {lang === 'ta' ? 'தமிழ் சமூகம் மற்றும் கல்வி மையம் · நிறுவப்பட்டது 1975' : 'Tamil Community & Education Center · Estd. 1975'}
             </div>
           </div>
         </a>
 
-        <!-- Contact Information (Compact - Horizontal Layout) -->
-        <div class="hidden lg:flex items-center space-x-2 flex-shrink-0 ml-4 mr-4">
-          <a href={`tel:${siteConfig.contact.phone}`} class="flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-primary-300 rounded-lg hover:bg-primary-50 transition-all shadow-sm">
-            <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-            </svg>
-            <span class="text-xs font-semibold text-gray-800">{siteConfig.contact.phone}</span>
-          </a>
-          <a href={`mailto:${siteConfig.contact.email}`} class="flex items-center space-x-1.5 px-3 py-1.5 bg-white border border-primary-300 rounded-lg hover:bg-primary-50 transition-all shadow-sm">
-            <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            <span class="text-xs font-semibold text-gray-800 truncate max-w-[140px]">{siteConfig.contact.email}</span>
-          </a>
-          <!-- Social Media Links (Horizontal) -->
-          <div class="flex items-center space-x-1.5">
-            <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" 
-               class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:shadow-md transition-all border border-blue-500 hover:scale-110">
-              <svg class="w-4 h-4" fill="#1877F2" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-            </a>
-            <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer"
-               class="w-8 h-8 flex items-center justify-center rounded-full shadow-sm hover:shadow-md transition-all hover:scale-110 relative"
-               style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); padding: 2px;">
-              <div class="w-full h-full bg-white rounded-full flex items-center justify-center">
-                <svg class="w-4 h-4" fill="url(#instagram-gradient)" viewBox="0 0 24 24">
-                  <defs>
-                    <linearGradient id="instagram-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" style="stop-color:#f09433;stop-opacity:1" />
-                      <stop offset="25%" style="stop-color:#e6683c;stop-opacity:1" />
-                      <stop offset="50%" style="stop-color:#dc2743;stop-opacity:1" />
-                      <stop offset="75%" style="stop-color:#cc2366;stop-opacity:1" />
-                      <stop offset="100%" style="stop-color:#bc1888;stop-opacity:1" />
-                    </linearGradient>
-                  </defs>
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-              </div>
-            </a>
-            <a href={siteConfig.social.youtube} target="_blank" rel="noopener noreferrer"
-               class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:shadow-md transition-all border border-red-600 hover:scale-110">
-              <svg class="w-4 h-4" fill="#FF0000" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-            </a>
-            <a href={`https://wa.me/${siteConfig.social.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"
-               class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:shadow-md transition-all border border-green-500 hover:scale-110">
-              <svg class="w-4 h-4" fill="#25D366" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-              </svg>
-            </a>
+        <!-- 3. Contact + Social – desktop: full card; mobile: compact icons -->
+        <div class="header-contact flex flex-shrink-0 ml-auto justify-end animate-fade-in-right">
+          <!-- Desktop: full contact card -->
+          <div class="contact-card hidden md:flex flex-col gap-2 p-2.5 min-w-[200px]">
+            <!-- Phone & Email -->
+            <div class="flex flex-col gap-1">
+              <a href={`tel:${siteConfig.contact.phone}`} class="flex items-center gap-2 px-1.5 py-1.5 rounded-md hover:opacity-90 transition-all">
+                <span class="flex h-6 w-6 md:h-7 md:w-7 shrink-0 items-center justify-center rounded text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.8)]">
+                  <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </span>
+                <span class="text-xs md:text-sm font-bold text-white truncate [text-shadow:0_1px_3px_rgba(0,0,0,0.9)]">{siteConfig.contact.phone}</span>
+              </a>
+              <a href={`mailto:${siteConfig.contact.email}`} class="flex items-center gap-1.5 px-1 py-1 rounded-md hover:opacity-90 transition-all">
+                <span class="flex h-6 w-6 md:h-7 md:w-7 shrink-0 items-center justify-center rounded text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.8)]">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </span>
+                <span class="text-sm font-bold text-white truncate min-w-0 max-w-[180px] lg:max-w-[200px] [text-shadow:0_1px_3px_rgba(0,0,0,0.9)]">{siteConfig.contact.email}</span>
+              </a>
+            </div>
+            <!-- Social icons – no background -->
+            <div class="flex items-center justify-center gap-2.5 pt-2 mt-0.5 border-t border-white/40">
+              <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" class="flex h-8 w-8 items-center justify-center rounded-md bg-[#1877F2] text-white hover:bg-[#166fe5] hover:scale-110 transition-all" aria-label="Facebook">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </a>
+              <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" class="flex h-6 w-6 md:h-7 md:w-7 items-center justify-center rounded bg-gradient-to-br from-purple-600 to-pink-500 text-white hover:from-purple-500 hover:to-pink-400 hover:scale-110 transition-all" aria-label="Instagram">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <a href={siteConfig.social.youtube} target="_blank" rel="noopener noreferrer" class="flex h-6 w-6 md:h-7 md:w-7 items-center justify-center rounded bg-red-600 text-white hover:bg-red-500 hover:scale-110 transition-all" aria-label="YouTube">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </a>
+              <a href={`https://wa.me/${siteConfig.social.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" class="flex h-6 w-6 md:h-7 md:w-7 items-center justify-center rounded bg-green-600 text-white hover:bg-green-500 hover:scale-110 transition-all" aria-label="WhatsApp">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              </a>
+            </div>
+          </div>
+          <!-- Mobile: two compact rows – phone/email then social – takes less space -->
+          <div class="header-contact-mobile flex flex-col md:hidden items-end gap-1 justify-center">
+            <div class="flex items-center gap-1">
+              <a href={`tel:${siteConfig.contact.phone}`} class="header-mobile-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-white" aria-label="Phone">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+              </a>
+              <a href={`mailto:${siteConfig.contact.email}`} class="header-mobile-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-white" aria-label="Email">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              </a>
+            </div>
+            <div class="flex items-center gap-1">
+              <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#1877F2] text-white transition-all" aria-label="Facebook">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              </a>
+              <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-purple-600 to-pink-500 text-white transition-all" aria-label="Instagram">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </a>
+              <a href={siteConfig.social.youtube} target="_blank" rel="noopener noreferrer" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-red-600 text-white transition-all" aria-label="YouTube">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              </a>
+              <a href={`https://wa.me/${siteConfig.social.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-green-600 text-white transition-all" aria-label="WhatsApp">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+              </a>
+            </div>
           </div>
         </div>
-
-        <!-- Mobile Menu Button -->
-        <button class="md:hidden p-2 text-gray-700" id="mobile-menu-button">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
       </div>
     </div>
   </div>
 
-  <!-- Navigation Bar -->
-  <nav class="sticky top-0 left-0 right-0 text-white shadow-lg z-50" style="background: linear-gradient(to right, #0f766e, #0d9488);">
-    <div class="container mx-auto px-4 md:px-5 lg:px-6">
-      <div class="flex items-center justify-between py-2.5 md:py-3">
-        <div class="flex items-center space-x-1 overflow-x-auto scrollbar-hide">
-          <a href={`/${lang === 'en' ? '?lang=en' : ''}`} class={`text-white no-underline font-semibold flex items-center gap-2 py-3 px-4 md:px-5 transition-all relative text-sm rounded-lg hover:bg-white/20 group ${currentPath === '/' ? 'bg-white/10' : ''}`}>
-            <span>{getTranslation('home', lang)}</span>
-            <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-white group-hover:w-3/4 transition-all duration-300 rounded-full"></span>
+  <!-- Navigation Bar – moved up, new style, responsive (visible from md up) -->
+  <nav class="site-nav site-nav-desktop hidden md:flex text-white z-50 -mt-px" aria-label="Main navigation">
+    <div class="site-nav-inner container mx-auto px-3 sm:px-4 md:px-5 lg:px-6 w-full">
+      <div class="flex items-stretch justify-between gap-2 py-2 md:py-2.5 min-h-[48px]">
+        <div class="flex items-center gap-0.5 sm:gap-1 overflow-x-auto scrollbar-hide flex-1 min-w-0">
+          <a href={`/${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath === '/' ? 'site-nav-link-active' : ''}`}>
+            {getTranslation('home', lang)}
           </a>
           <div class="relative group">
-            <a href={`/tamil-school${lang === 'en' ? '?lang=en' : ''}`} class={`text-white no-underline font-semibold flex items-center gap-2 py-3 px-4 md:px-5 transition-all relative text-sm rounded-lg hover:bg-white/20 ${currentPath.startsWith('/tamil-school') ? 'bg-white/10' : ''}`}>
-              <span>{getTranslation('tamilSchool', lang)}</span>
-              <svg class="w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href={`/tamil-school${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link site-nav-link-has-dropdown ${currentPath.startsWith('/tamil-school') ? 'site-nav-link-active' : ''}`}>
+              {getTranslation('tamilSchool', lang)}
+              <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
-              <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-white group-hover:w-3/4 transition-all duration-300 rounded-full"></span>
             </a>
-            <div class="absolute top-full left-0 bg-white list-none min-w-[240px] shadow-2xl rounded-xl p-2 mt-2 transition-all duration-300 z-50 border border-gray-100 opacity-0 invisible -translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
-              <a href={`/tamil-school/donation${lang === 'en' ? '?lang=en' : ''}`} class="block py-3 px-6 text-gray-800 no-underline transition-all font-medium hover:bg-gradient-to-r hover:from-primary/10 hover:to-secondary/10 hover:text-primary rounded-lg">
+            <div class="site-nav-dropdown">
+              <a href={`/tamil-school/donation${lang === 'en' ? '?lang=en' : ''}`} class="site-nav-dropdown-item">
                 {getTranslation('schoolDonation', lang)}
               </a>
             </div>
           </div>
+          <a href={`/student-registration${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath === '/student-registration' ? 'site-nav-link-active' : ''}`}>
+            {getTranslation('studentRegistration', lang)}
+          </a>
+          <a href={`/publications${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath === '/publications' ? 'site-nav-link-active' : ''}`}>
+            {getTranslation('publications', lang)}
+          </a>
           <div class="relative group">
-            <a href={`/activities${lang === 'en' ? '?lang=en' : ''}`} class={`text-white no-underline font-semibold flex items-center gap-2 py-3 px-4 md:px-5 transition-all relative text-sm rounded-lg hover:bg-white/20 ${currentPath.startsWith('/activities') ? 'bg-white/10' : ''}`}>
-              <span>{lang === 'ta' ? 'நடவடிக்கைகள்' : 'Activities'}</span>
-              <svg class="w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href={`/gallery${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link site-nav-link-has-dropdown ${currentPath === '/gallery' ? 'site-nav-link-active' : ''}`}>
+              {getTranslation('gallery', lang)}
+              <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
-              <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-white group-hover:w-3/4 transition-all duration-300 rounded-full"></span>
             </a>
-            <div class="absolute top-full left-0 bg-white list-none min-w-[240px] shadow-2xl rounded-xl p-2 mt-2 transition-all duration-300 z-50 border border-gray-100 opacity-0 invisible -translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
-              <a href={`/activities${lang === 'en' ? '?lang=en' : ''}`} class="block py-3 px-6 text-gray-800 no-underline transition-all font-medium hover:bg-gradient-to-r hover:from-primary/10 hover:to-secondary/10 hover:text-primary rounded-lg">
-                {lang === 'ta' ? 'அனைத்து நடவடிக்கைகள்' : 'All Activities'}
+            <div class="site-nav-dropdown">
+              <a href={`/gallery#teachers${lang === 'en' ? '?lang=en' : ''}`} class="site-nav-dropdown-item">
+                {getTranslation('galleryTeachers', lang)}
+              </a>
+              <a href={`/gallery#school${lang === 'en' ? '?lang=en' : ''}`} class="site-nav-dropdown-item">
+                {getTranslation('gallerySchoolActivities', lang)}
+              </a>
+              <a href={`/gallery#events${lang === 'en' ? '?lang=en' : ''}`} class="site-nav-dropdown-item">
+                {getTranslation('galleryEvents', lang)}
+              </a>
+              <a href={`/gallery#community${lang === 'en' ? '?lang=en' : ''}`} class="site-nav-dropdown-item">
+                {getTranslation('galleryCommunity', lang)}
               </a>
             </div>
           </div>
-          <div class="relative group">
-            <a href={`/about${lang === 'en' ? '?lang=en' : ''}`} class={`text-white no-underline font-semibold flex items-center gap-2 py-3 px-4 md:px-5 transition-all relative text-sm rounded-lg hover:bg-white/20 ${currentPath.startsWith('/about') ? 'bg-white/10' : ''}`}>
-              <span>{getTranslation('about', lang)}</span>
-              <svg class="w-3 h-3 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-              </svg>
-              <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-white group-hover:w-3/4 transition-all duration-300 rounded-full"></span>
-            </a>
-            <div class="absolute top-full left-0 bg-white list-none min-w-[240px] shadow-2xl rounded-xl p-2 mt-2 transition-all duration-300 z-50 border border-gray-100 opacity-0 invisible -translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
-              <a href={`/about${lang === 'en' ? '?lang=en' : ''}`} class="block py-3 px-6 text-gray-800 no-underline transition-all font-medium hover:bg-gradient-to-r hover:from-primary/10 hover:to-secondary/10 hover:text-primary rounded-lg">
-                {lang === 'ta' ? 'எங்களைப் பற்றி' : 'About Us'}
-              </a>
-            </div>
-          </div>
-          <a href={`/contact${lang === 'en' ? '?lang=en' : ''}`} class={`text-white no-underline font-semibold flex items-center gap-2 py-3 px-4 md:px-5 transition-all relative text-sm rounded-lg hover:bg-white/20 ${currentPath === '/contact' ? 'bg-white/10' : ''}`}>
-            <span>{getTranslation('contact', lang)}</span>
-            <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-white hover:w-3/4 transition-all duration-300 rounded-full"></span>
+          <a href={`/about${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath.startsWith('/about') ? 'site-nav-link-active' : ''}`}>
+            {getTranslation('about', lang)}
+          </a>
+          <a href={`/contact${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath === '/contact' ? 'site-nav-link-active' : ''}`}>
+            {getTranslation('contact', lang)}
           </a>
         </div>
-        
-        <!-- Right side with Language Selector and Admin Login -->
-        <div class="flex items-center space-x-2 ml-4 flex-shrink-0">
-          <!-- Language Selector -->
-          <div class="flex items-center space-x-1">
-            <a href={getUrlWithLang('ta')} class={`px-3 py-2 text-sm rounded-lg transition-all text-white font-semibold ${lang === 'ta' ? 'bg-white/10' : 'hover:bg-white/20'}`}>
-              தமிழ்
-            </a>
-            <a href={getUrlWithLang('en')} class={`px-3 py-2 text-sm rounded-lg transition-all text-white font-semibold ${lang === 'en' ? 'bg-white/10' : 'hover:bg-white/20'}`}>
-              English
-            </a>
-          </div>
-          
-          <!-- Admin Login Button -->
-          <a href="/admin/login" class="text-white no-underline font-semibold flex items-center gap-2 py-3 px-4 md:px-5 transition-all relative text-sm rounded-lg hover:bg-white/20 bg-white/10">
-            <span>Admin Login</span>
-            <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-white hover:w-3/4 transition-all duration-300 rounded-full"></span>
+        <div class="flex items-center gap-1 lg:gap-2 ml-2 flex-shrink-0">
+          <a href={getUrlWithLang('ta')} class={`site-nav-util ${lang === 'ta' ? 'site-nav-util-active' : ''}`}>தமிழ்</a>
+          <a href={getUrlWithLang('en')} class={`site-nav-util ${lang === 'en' ? 'site-nav-util-active' : ''}`}>English</a>
+          <a href="/admin/login" class="site-nav-util flex items-center gap-1.5" title="Admin Login">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span class="hidden sm:inline">Admin</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation Bar – prominent so menu is easy to find -->
+  <nav class="site-nav site-nav-mobile md:hidden text-white z-50 -mt-px border-t border-white/10" aria-label="Mobile navigation">
+    <div class="site-nav-inner container mx-auto px-3">
+      <div class="flex items-center justify-between gap-2 py-3 min-h-[52px]">
+        <button type="button" class="site-nav-mobile-btn flex items-center gap-2.5 py-2.5 px-4 -ml-1 min-h-[44px] rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 transition-colors" id="mobile-nav-button" aria-expanded="false" aria-controls="mobile-menu" aria-label={lang === 'ta' ? 'பட்டியல்' : 'Menu'}>
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <span class="text-sm font-bold">{lang === 'ta' ? 'பட்டியல்' : 'Menu'}</span>
+        </button>
+        <div class="flex items-center gap-1">
+          <a href={getUrlWithLang('ta')} class={`site-nav-util min-h-[44px] min-w-[44px] flex items-center justify-center ${lang === 'ta' ? 'site-nav-util-active' : ''}`}>தமிழ்</a>
+          <a href={getUrlWithLang('en')} class={`site-nav-util min-h-[44px] min-w-[44px] flex items-center justify-center px-3 ${lang === 'en' ? 'site-nav-util-active' : ''}`}>EN</a>
+          <a href="/admin/login" class="site-nav-util min-h-[44px] min-w-[44px] flex items-center justify-center px-3" title="Admin Login">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
           </a>
         </div>
       </div>
@@ -212,11 +229,11 @@ function getUrlWithLang(langParam: Language): string {
   </nav>
 
   <!-- News Ticker/Scroller Bar -->
-  <div class="text-white py-2 overflow-hidden" style="background: linear-gradient(to right, #0d9488, #0f766e);">
+  <div class="text-white py-2 overflow-hidden -mt-px" style="background: linear-gradient(to right, #162d49, #1e3a5f);">
     <div class="container mx-auto px-4">
       <div class="flex items-center">
         <!-- LATEST NEWS Label -->
-        <div class="px-4 py-1.5 flex-shrink-0" style="background: #115e59;">
+        <div class="px-4 py-1.5 flex-shrink-0" style="background: #12263d;">
           <span class="font-bold text-sm uppercase tracking-wide">LATEST NEWS:</span>
         </div>
         
@@ -230,73 +247,117 @@ function getUrlWithLang(langParam: Language): string {
     </div>
   </div>
 
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+  <!-- Mobile Menu (slides down when opened) – solid background so contact/social read clearly -->
+  <div id="mobile-menu" class="hidden bg-white border-t border-gray-200 shadow-xl md:hidden">
     <div class="container mx-auto px-4 py-4">
       <div class="flex flex-col space-y-2">
-        <a href={`/${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-2 text-gray-800 hover:bg-primary-50 rounded-lg font-medium">
+        <!-- Language Selector for Mobile -->
+        <div class="flex items-center justify-center space-x-2 pb-3 border-b border-gray-200 mb-2">
+          <span class="text-sm text-gray-500">{lang === 'ta' ? 'மொழி:' : 'Language:'}</span>
+          <a href={getUrlWithLang('ta')} class={`px-4 py-2 text-sm rounded-lg transition-all font-semibold ${lang === 'ta' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+            தமிழ்
+          </a>
+          <a href={getUrlWithLang('en')} class={`px-4 py-2 text-sm rounded-lg transition-all font-semibold ${lang === 'en' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+            English
+          </a>
+        </div>
+        
+        <!-- Menu Items -->
+        <a href={`/${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
           {getTranslation('home', lang)}
         </a>
-        <a href={`/tamil-school${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-2 text-gray-800 hover:bg-primary-50 rounded-lg font-medium">
+        <a href={`/tamil-school${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath.startsWith('/tamil-school') ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
           {getTranslation('tamilSchool', lang)}
         </a>
-        <a href={`/tamil-school/donation${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-2 text-gray-800 hover:bg-primary-50 rounded-lg pl-8 font-medium">
+        <a href={`/tamil-school/donation${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-3 text-gray-700 hover:bg-primary-50 rounded-lg pl-12 font-medium flex items-center gap-3">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
           {getTranslation('schoolDonation', lang)}
         </a>
-        <a href={`/student-registration${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-2 text-gray-800 hover:bg-primary-50 rounded-lg font-medium">
+        <a href={`/student-registration${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/student-registration' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+          </svg>
           {getTranslation('studentRegistration', lang)}
         </a>
-        <a href={`/publications${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-2 text-gray-800 hover:bg-primary-50 rounded-lg font-medium">
+        <a href={`/publications${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/publications' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+          </svg>
           {getTranslation('publications', lang)}
         </a>
-        <a href={`/gallery${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-2 text-gray-800 hover:bg-primary-50 rounded-lg font-medium">
+        <a href={`/gallery${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/gallery' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
           {getTranslation('gallery', lang)}
         </a>
-        <a href={`/about${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-2 text-gray-800 hover:bg-primary-50 rounded-lg font-medium">
+        <a href={`/about${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath.startsWith('/about') ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
           {getTranslation('about', lang)}
         </a>
-        <a href={`/contact${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-2 bg-primary-600 text-white hover:bg-primary-700 rounded-lg font-medium">
+        <a href={`/contact${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/contact' ? 'bg-primary-600 text-white' : 'bg-primary-600 text-white hover:bg-primary-700'}`}>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
           {getTranslation('contact', lang)}
         </a>
-        <div class="pt-2 border-t border-gray-200">
-          <div class="flex items-center justify-center space-x-3 mb-3">
+        <a href="/admin/login" class="px-4 py-3 rounded-lg font-medium flex items-center gap-3 text-gray-700 hover:bg-gray-100 border border-gray-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          Admin Login
+        </a>
+        
+        <!-- Social Media & Contact – right-aligned, even spacing -->
+        <div class="pt-4 border-t border-gray-200 mt-2 flex flex-col items-end">
+          <div class="flex items-center justify-end gap-4 mb-4">
             <a href={siteConfig.social.facebook} target="_blank" rel="noopener noreferrer" 
-               class="w-10 h-10 flex items-center justify-center bg-primary-50 rounded-full hover:bg-primary-100 transition-all">
-              <svg class="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
+               class="w-11 h-11 flex items-center justify-center bg-blue-50 rounded-full hover:bg-blue-100 transition-all border border-blue-200">
+              <svg class="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
             </a>
             <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer"
-               class="w-10 h-10 flex items-center justify-center bg-primary-50 rounded-full hover:bg-primary-100 transition-all">
-              <svg class="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
+               class="w-11 h-11 flex items-center justify-center bg-pink-50 rounded-full hover:bg-pink-100 transition-all border border-pink-200">
+              <svg class="w-5 h-5" fill="#E4405F" viewBox="0 0 24 24">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
               </svg>
             </a>
             <a href={siteConfig.social.youtube} target="_blank" rel="noopener noreferrer"
-               class="w-10 h-10 flex items-center justify-center bg-primary-50 rounded-full hover:bg-primary-100 transition-all">
-              <svg class="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
+               class="w-11 h-11 flex items-center justify-center bg-red-50 rounded-full hover:bg-red-100 transition-all border border-red-200">
+              <svg class="w-5 h-5" fill="#FF0000" viewBox="0 0 24 24">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
             </a>
             <a href={`https://wa.me/${siteConfig.social.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"
-               class="w-10 h-10 flex items-center justify-center bg-primary-50 rounded-full hover:bg-primary-100 transition-all">
-              <svg class="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
+               class="w-11 h-11 flex items-center justify-center bg-green-50 rounded-full hover:bg-green-100 transition-all border border-green-200">
+              <svg class="w-5 h-5" fill="#25D366" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
               </svg>
             </a>
           </div>
-          <div class="flex items-center space-x-2">
-            <a href={`tel:${siteConfig.contact.phone}`} class="flex items-center space-x-2 px-4 py-2 text-gray-800 hover:bg-primary-50 rounded-lg font-medium flex-1">
-              <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex flex-col gap-2 w-full max-w-[280px]">
+            <a href={`tel:${siteConfig.contact.phone}`} class="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-medium border border-gray-200 shadow-sm">
+              <svg class="w-5 h-5 shrink-0 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              <span class="text-sm">{siteConfig.contact.phone}</span>
+              <span class="text-sm text-gray-800">{siteConfig.contact.phone}</span>
             </a>
-            <a href={`mailto:${siteConfig.contact.email}`} class="flex items-center space-x-2 px-4 py-2 text-gray-800 hover:bg-primary-50 rounded-lg font-medium flex-1">
-              <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href={`mailto:${siteConfig.contact.email}`} class="flex items-center gap-3 w-full px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-medium border border-gray-200 shadow-sm">
+              <svg class="w-5 h-5 shrink-0 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <span class="text-sm truncate">{siteConfig.contact.email}</span>
+              <span class="text-sm text-gray-800 truncate">{siteConfig.contact.email}</span>
             </a>
           </div>
         </div>
@@ -306,6 +367,373 @@ function getUrlWithLang(langParam: Language): string {
 </header>
 
 <style>
+  /* Fixed header + menu like lts-bqd.pages.dev – stays at top when scrolling */
+  #site-header.header-fixed-lts {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 100 !important;
+    background-color: transparent;
+  }
+
+  /* LTS-style header: logo left, name centered in middle, contact+social right */
+  .header-banner-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-banner-row .header-logo {
+    flex: 0 0 auto;
+  }
+  /* Modern logo: lighter, brighter presentation */
+  .logo-modern-wrap {
+    isolation: isolate;
+  }
+  .logo-modern-img {
+    filter: brightness(1.12) contrast(1.05) saturate(0.95);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  }
+  .header-logo:hover .logo-modern-img {
+    filter: brightness(1.15) contrast(1.06) saturate(1);
+  }
+  .header-banner-row .header-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+  .header-name-block {
+    line-height: 1.3;
+    overflow: visible;
+    box-shadow: none;
+    background: none;
+    border: none;
+    outline: none;
+  }
+  /* Prevent Tamil/script glyphs from being clipped (ascenders, loops) */
+  .header-name-block .name-title {
+    padding-top: 0.15em;
+    padding-bottom: 0.05em;
+  }
+  .header-name-block .letter-spread {
+    letter-spacing: 0.2em;
+  }
+  @media (min-width: 768px) {
+    .header-name-block .letter-spread {
+      letter-spacing: 0.28em;
+    }
+  }
+
+  /* Multi-colour gradient text: main title (cream → saffron → amber). Fallback light color so never black. */
+  .name-title-gradient {
+    color: #fefce8;
+    background: linear-gradient(105deg, #fefce8 0%, #fde68a 25%, #fbbf24 50%, #f59e0b 75%, #d97706 100%);
+    background-size: 200% auto;
+    background-position: 0% center;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: background-position 0.6s ease;
+  }
+  .group:hover .name-title-gradient {
+    background-position: 100% center;
+  }
+
+  /* Subtitle: light gradient (cream → saffron). Fallback light color so never black. */
+  .name-subtitle-gradient {
+    color: #fefce8;
+    background: linear-gradient(90deg, #fefce8, #fde68a, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Name block: falling + glowing on refresh */
+  @keyframes nameFall {
+    from {
+      opacity: 0;
+      transform: translateY(-32px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes nameGlow {
+    0%, 50% {
+      box-shadow: 0 1px 3px rgba(254, 252, 232, 0.15);
+    }
+    75% {
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3), 0 0 30px rgba(254, 252, 232, 0.2);
+    }
+    100% {
+      box-shadow: 0 1px 3px rgba(254, 252, 232, 0.15);
+    }
+  }
+  .animate-name-fall {
+    animation: nameFall 0.65s ease-out 0.08s both;
+  }
+  /* Name block: no panel/glow (user prefers plain text only) */
+  .header-name-block.animate-name-glow {
+    animation: none;
+    box-shadow: none !important;
+  }
+  /* Ensure name block text is always visible (fallback if animation doesn't run) */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-name-fall {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Professional entrance animations */
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .animate-fade-in-left {
+    animation: fadeInLeft 0.5s ease-out forwards;
+  }
+  .animate-fade-in-up {
+    animation: fadeInUp 0.55s ease-out 0.1s forwards;
+    opacity: 0;
+  }
+  .animate-fade-in-right {
+    animation: fadeInRight 0.5s ease-out 0.15s forwards;
+    opacity: 0;
+  }
+
+  .header-banner-row .header-contact {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+  .contact-card {
+    margin-right: 0;
+  }
+
+  /* Header: background image + subtle overlay so text is readable everywhere */
+  .header-banner-custom {
+    background-color: transparent;
+  }
+  .header-banner-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.15) 0%,
+      rgba(0, 0, 0, 0.35) 50%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+    z-index: 1;
+  }
+
+  /* ========== Menu bar: moved up, new style, responsive ========== */
+  .site-nav {
+    background: linear-gradient(to right, #1e3a5f 0%, #162d49 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-bottom: 3px solid rgba(245, 158, 11, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .site-nav-desktop {
+    min-height: 48px;
+    align-items: stretch;
+  }
+  .site-nav-inner {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .site-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 0.375rem;
+    border-bottom: 2px solid transparent;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  @media (min-width: 768px) {
+    .site-nav-link {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .site-nav-link {
+      padding: 0.5rem 1rem;
+    }
+  }
+  .site-nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom-color: rgba(245, 158, 11, 0.9);
+  }
+  .site-nav-link-active {
+    background: rgba(245, 158, 11, 0.2);
+    border-bottom-color: #f59e0b;
+  }
+  .site-nav-link-has-dropdown {
+    padding-right: 0.5rem;
+  }
+  .site-nav-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e5e7eb;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+    z-index: 60;
+    list-style: none;
+  }
+  .group:hover .site-nav-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .site-nav-dropdown-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1e3a5f;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: background 0.15s, color 0.15s;
+  }
+  .site-nav-dropdown-item:hover {
+    background: rgba(30, 58, 95, 0.08);
+    color: #1e3a5f;
+  }
+  .site-nav-util {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: background 0.2s;
+  }
+  @media (min-width: 768px) {
+    .site-nav-util {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+  .site-nav-util:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  .site-nav-util-active {
+    background: rgba(245, 158, 11, 0.35);
+  }
+  .site-nav-mobile .site-nav-inner {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .site-nav-mobile-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background 0.2s;
+  }
+  .site-nav-mobile-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  /* Header name: one clean style – light text + readable shadow (no black, no odd box) */
+  .header-name-block .name-title,
+  .header-name-block .name-subtitle-gradient,
+  .header-name-block .header-name-tagline {
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.9),
+      0 2px 4px rgba(0, 0, 0, 0.8),
+      0 0 20px rgba(0, 0, 0, 0.5),
+      0 0 8px rgba(255, 255, 255, 0.3);
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+  }
+
+  /* Mobile: title/tagline solid white so never black; same shadow */
+  @media (max-width: 767px) {
+    .header-name-block .name-title.name-title-gradient {
+      color: #fff;
+      -webkit-text-fill-color: #fff;
+      background: none;
+      background-clip: unset;
+      -webkit-background-clip: unset;
+    }
+    .header-name-block .name-subtitle-gradient {
+      color: rgba(255, 255, 255, 0.95);
+      -webkit-text-fill-color: rgba(255, 255, 255, 0.95);
+      background: none;
+      background-clip: unset;
+      -webkit-background-clip: unset;
+    }
+    .header-name-block .header-name-tagline {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    .header-mobile-icon {
+      background: rgba(22, 45, 73, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .header-mobile-icon:hover {
+      background: rgba(30, 58, 95, 0.95);
+    }
+  }
+
   @keyframes gradientShift {
     0%, 100% {
       background-position: 0% 50%;
@@ -332,6 +760,11 @@ function getUrlWithLang(langParam: Language): string {
     animation-play-state: paused;
   }
 
+  /* Most recent ticker message – distinct color */
+  .ticker-latest {
+    color: #fcd34d; /* amber-300 – stands out from white */
+  }
+
   /* Hide scrollbar but keep functionality */
   .scrollbar-hide {
     -ms-overflow-style: none;
@@ -344,10 +777,16 @@ function getUrlWithLang(langParam: Language): string {
 </style>
 
 <script>
+  // Handle both mobile menu buttons
   const menuButton = document.getElementById('mobile-menu-button');
+  const mobileNavButton = document.getElementById('mobile-nav-button');
   const mobileMenu = document.getElementById('mobile-menu');
 
   menuButton?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+  
+  mobileNavButton?.addEventListener('click', () => {
     mobileMenu?.classList.toggle('hidden');
   });
 
@@ -378,11 +817,13 @@ function getUrlWithLang(langParam: Language): string {
       ];
     }
 
-    // Create ticker content with duplicates for seamless loop
+    // Create ticker content with duplicates for seamless loop (index 0 = most recent)
     const items = [...newsItems, ...newsItems];
     ticker.innerHTML = items.map((item, index) => {
       const isLast = index === items.length - 1;
-      return `<span class="text-sm">${item}</span>${!isLast ? '<span class="text-gray-400">•</span>' : ''}`;
+      const isLatest = newsItems.length > 0 && (index % newsItems.length) === 0;
+      const spanClass = isLatest ? 'text-sm font-bold ticker-latest' : 'text-sm text-white/90';
+      return `<span class="${spanClass}">${item}</span>${!isLast ? '<span class="text-gray-400">•</span>' : ''}`;
     }).join('');
   }
 

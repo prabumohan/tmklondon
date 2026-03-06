@@ -64,7 +64,8 @@ export default function AdminNews() {
 
   const handleAdd = () => {
     if (newItem.trim()) {
-      const updated = [...newsItems, newItem.trim()];
+      // Prepend so the most recent is always first (index 0)
+      const updated = [newItem.trim(), ...newsItems];
       saveNewsItems(updated);
       setNewItem('');
     }
@@ -211,7 +212,13 @@ export default function AdminNews() {
                     ) : (
                       <div className="flex items-start gap-3">
                         <div className="flex-1">
-                          <div className="text-sm text-gray-500 mb-1">Item #{index + 1}</div>
+                          <div className="text-sm text-gray-500 mb-1 flex items-center gap-2">
+                            {index === 0 ? (
+                              <span className="px-2 py-0.5 rounded bg-primary-100 text-primary-700 font-semibold text-xs">Latest (shows first)</span>
+                            ) : (
+                              <>Item #{index + 1}</>
+                            )}
+                          </div>
                           <div className="text-gray-800 font-medium">{item}</div>
                         </div>
                         <div className="flex gap-2">
