@@ -155,7 +155,7 @@ export default function AdminNews() {
                 type="text"
                 value={newItem}
                 onChange={(e) => setNewItem(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleAdd()}
+                onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                 placeholder="Enter news item text..."
                 className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-600 transition-colors"
               />
