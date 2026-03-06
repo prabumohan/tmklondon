@@ -777,7 +777,7 @@ const logoUrl = '/logo.png';
   }
 </style>
 
-<script lang="ts">
+<script>
   // Handle both mobile menu buttons
   const menuButton = document.getElementById('mobile-menu-button');
   const mobileNavButton = document.getElementById('mobile-nav-button');
@@ -818,20 +818,19 @@ const logoUrl = '/logo.png';
       ];
     }
 
-    // Escape so news text can't break the DOM (quotes, <, >, &)
-    function esc(s: string): string {
-      if (typeof s !== 'string') return '';
-      const div = document.createElement('div');
-      div.textContent = s;
-      return div.innerHTML;
-    }
-    // Create ticker content with duplicates for seamless loop (index 0 = most recent)
+    // Escape so news text can't break the DOM (inline to avoid script type-check)
     const items = [...newsItems, ...newsItems];
     ticker.innerHTML = items.map((item, index) => {
       const isLast = index === items.length - 1;
       const isLatest = newsItems.length > 0 && (index % newsItems.length) === 0;
       const spanClass = isLatest ? 'text-sm font-bold ticker-latest' : 'text-sm text-white/90';
-      return '<span class="' + spanClass + '">' + esc(item) + '</span>' + (!isLast ? '<span class="text-gray-400">•</span>' : '');
+      let text = '';
+      if (typeof item === 'string') {
+        const el = document.createElement('div');
+        el.textContent = item;
+        text = el.innerHTML;
+      }
+      return '<span class="' + spanClass + '">' + text + '</span>' + (!isLast ? '<span class="text-gray-400">•</span>' : '');
     }).join('');
   }
 
