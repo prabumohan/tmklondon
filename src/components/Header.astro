@@ -805,7 +805,7 @@ const logoUrl = '/logo.png';
   }
 </style>
 
-<script>
+<script lang="ts">
   // Handle both mobile menu buttons
   const menuButton = document.getElementById('mobile-menu-button');
   const mobileNavButton = document.getElementById('mobile-nav-button');
@@ -814,13 +814,13 @@ const logoUrl = '/logo.png';
   menuButton?.addEventListener('click', () => {
     mobileMenu?.classList.toggle('hidden');
   });
-  
+
   mobileNavButton?.addEventListener('click', () => {
     mobileMenu?.classList.toggle('hidden');
   });
 
-  // Normalize stored item to { text, priority }
-  function normalizeTickerItem(item) {
+  type TickerItem = string | { text: string; priority?: string };
+  function normalizeTickerItem(item: TickerItem): { text: string; priority: string } {
     if (typeof item === 'string') return { text: item, priority: 'medium' };
     return { text: item.text || '', priority: item.priority || 'medium' };
   }

@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
-import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,9 +15,7 @@ export default defineConfig({
   integrations: [
     tailwind(),
     react(),
-    sitemap({
-      filter: (page) => !page.includes('/admin'),
-    }),
+    // Sitemap removed: @astrojs/sitemap relied on deprecated astro:routes:resolved (undefined in this Astro version), causing build to fail. Add back when upgrading Astro or use a custom sitemap.
   ],
   output: 'static',
   site: 'https://tmklondon.com',

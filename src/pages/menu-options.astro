@@ -275,46 +275,50 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </main>
 </BaseLayout>
 
-<script define:vars={{}}>
-  const STORAGE_KEY = 'tmkMenuOptions';
+<script is:inline>
+  (function() {
+    var STORAGE_KEY = 'tmkMenuOptions';
 
-  function getSelections(): Record<string, string> {
-    const form = document.getElementById('menu-options-form') as HTMLFormElement;
-    if (!form) return {};
-    const data: Record<string, string> = {};
-    const names = ['visual', 'layout', 'active', 'dropdown', 'language', 'mobile', 'ticker'];
-    names.forEach((name) => {
-      const el = form.elements.namedItem(name) as RadioNodeList;
-      const val = el?.value;
-      if (val) data[name] = val;
-    });
-    return data;
-  }
-
-  function loadSelections(): void {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const saved = JSON.parse(raw) as Record<string, string>;
-      Object.entries(saved).forEach(([name, value]) => {
-        const input = document.querySelector(`input[name="${name}"][value="${value}"]`) as HTMLInputElement;
-        if (input) input.checked = true;
+    function getSelections() {
+      var form = document.getElementById('menu-options-form');
+      if (!form) return {};
+      var data = {};
+      var names = ['visual', 'layout', 'active', 'dropdown', 'language', 'mobile', 'ticker'];
+      names.forEach(function(name) {
+        var el = form.elements.namedItem(name);
+        var val = el && el.value;
+        if (val) data[name] = val;
       });
-    } catch (_) {}
-  }
-
-  document.getElementById('menu-options-form')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const selections = getSelections();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(selections));
-    const summary = document.getElementById('save-summary');
-    const result = document.getElementById('save-result');
-    if (summary && result) {
-      summary.textContent = `Visual: ${selections.visual || '–'}, Layout: ${selections.layout || '–'}, Active: ${selections.active || '–'}, Dropdown: ${selections.dropdown || '–'}, Language: ${selections.language || '–'}, Mobile: ${selections.mobile || '–'}, Ticker: ${selections.ticker || '–'}`;
-      result.classList.remove('hidden');
-      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return data;
     }
-  });
 
-  loadSelections();
+    function loadSelections() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        var saved = JSON.parse(raw);
+        Object.keys(saved).forEach(function(name) {
+          var value = saved[name];
+          var input = document.querySelector('input[name="' + name + '"][value="' + value + '"]');
+          if (input) input.checked = true;
+        });
+      } catch (_) {}
+    }
+
+    var formEl = document.getElementById('menu-options-form');
+    if (formEl) formEl.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var selections = getSelections();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(selections));
+      var summary = document.getElementById('save-summary');
+      var result = document.getElementById('save-result');
+      if (summary && result) {
+        summary.textContent = 'Visual: ' + (selections.visual || '–') + ', Layout: ' + (selections.layout || '–') + ', Active: ' + (selections.active || '–') + ', Dropdown: ' + (selections.dropdown || '–') + ', Language: ' + (selections.language || '–') + ', Mobile: ' + (selections.mobile || '–') + ', Ticker: ' + (selections.ticker || '–');
+        result.classList.remove('hidden');
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+
+    loadSelections();
+  })();
 </script>

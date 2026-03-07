@@ -102,7 +102,8 @@ const themes = [
     var t = document.documentElement.getAttribute('data-theme') || localStorage.getItem('tmkSiteTheme') || 'classic';
     var names = { classic: 'Classic Professional', modern: 'Modern Minimal', heritage: 'Heritage Tamil', london: 'London Contemporary' };
     var el = document.getElementById('current-theme-name');
-    if (el) el.textContent = names[t] || t;
+    var entry = Object.entries(names).find(function(e) { return e[0] === t; });
+    if (el) el.textContent = entry ? entry[1] : t;
   })();
   document.querySelectorAll('.theme-apply-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
