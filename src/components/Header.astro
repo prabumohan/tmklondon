@@ -23,6 +23,23 @@ function getUrlWithLang(langParam: Language): string {
 // Header: use paths that exist in repo (public/logo.png; static/ may be untracked on deploy)
 const headerBgImage = '/static/content/header-carousel/fiery_sunset_sky_swirling-full.jpg';
 const logoUrl = '/logo.png';
+
+// Default ticker items (server-rendered so ticker is never empty; client may replace with /api/ticker)
+const defaultTickerItems = [
+  { text: 'Welcome to London Tamil Sangam - Celebrating Tamil Culture and Heritage', priority: 'high' },
+  { text: 'Follow us on social media for the latest updates and events', priority: 'medium' },
+  { text: 'Tamil School registration is now open for the new academic year', priority: 'high' },
+  { text: 'Join us for our upcoming cultural events and celebrations', priority: 'medium' },
+];
+const tickerItems = defaultTickerItems.concat(defaultTickerItems);
+const initialTickerHtml = tickerItems.map((item, index) => {
+  const priorityClass = 'ticker-priority-' + item.priority;
+  const latestClass = index === 0 ? ' ticker-latest' : '';
+  const spanClass = 'text-sm ' + priorityClass + latestClass;
+  const text = item.text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const sep = index < tickerItems.length - 1 ? '<span class="text-gray-400">•</span>' : '';
+  return '<span class="' + spanClass + '">' + text + '</span>' + sep;
+}).join('');
 ---
 
 <header class="fixed top-0 left-0 right-0 w-full z-[100] shadow-lg bg-transparent header-fixed-lts" id="site-header">
@@ -238,11 +255,9 @@ const logoUrl = '/logo.png';
           <span class="font-bold text-sm uppercase tracking-wide">LATEST NEWS:</span>
         </div>
         
-        <!-- Scrolling Content -->
+        <!-- Scrolling Content: server-rendered default so ticker always shows; client replaces with KV if /api/ticker works -->
         <div class="flex-1 overflow-hidden relative ml-4 h-6">
-          <div id="news-ticker" class="flex items-center space-x-6 whitespace-nowrap">
-            <!-- News items will be loaded dynamically -->
-          </div>
+          <div id="news-ticker" class="flex items-center space-x-6 whitespace-nowrap" set:html={initialTickerHtml} />
         </div>
       </div>
     </div>
