@@ -1,0 +1,10 @@
+{
+  "name": "tmklondon",
+  "pages_build_output_dir": "./dist",
+  "kv_namespaces": [
+    {
+      "binding": "TMK_KV",
+      "id": "4d12fa8734d54ace85d54faaaa7b7b0c"
+    }
+  ]
+}

@@ -825,12 +825,35 @@ const logoUrl = '/logo.png';
     return { text: item.text || '', priority: item.priority || 'medium' };
   }
 
+  var DEFAULT_ITEMS = [
+    { text: 'Welcome to London Tamil Sangam - Celebrating Tamil Culture and Heritage', priority: 'high' },
+    { text: 'Follow us on social media for the latest updates and events', priority: 'medium' },
+    { text: 'Tamil School registration is now open for the new academic year', priority: 'high' },
+    { text: 'Join us for our upcoming cultural events and celebrations', priority: 'medium' }
+  ];
+
+  function renderTicker(ticker: HTMLElement, newsItems: { text: string; priority: string }[]) {
+    if (newsItems.length === 0) newsItems = DEFAULT_ITEMS;
+    var items = newsItems.concat(newsItems);
+    ticker.innerHTML = items.map(function (item, index) {
+      var isLast = index === items.length - 1;
+      var isLatest = index % newsItems.length === 0;
+      var priorityClass = 'ticker-priority-' + (item.priority || 'medium');
+      var latestClass = isLatest ? ' ticker-latest' : '';
+      var spanClass = 'text-sm ' + priorityClass + latestClass;
+      var div = document.createElement('div');
+      div.textContent = item.text;
+      var text = div.innerHTML;
+      return '<span class="' + spanClass + '">' + text + '</span>' + (!isLast ? '<span class="text-gray-400">•</span>' : '');
+    }).join('');
+  }
+
   function loadNewsTicker() {
     const ticker = document.getElementById('news-ticker');
     if (!ticker) return;
 
     var stored = localStorage.getItem('newsTickerItems');
-    var raw = [];
+    var raw: TickerItem[] = [];
     if (stored) {
       try {
         var parsed = JSON.parse(stored);
@@ -841,30 +864,46 @@ const logoUrl = '/logo.png';
     }
     var newsItems = raw.map(normalizeTickerItem).filter(function (x) { return x.text; });
 
-    if (newsItems.length === 0) {
-      newsItems = [
-        { text: 'Welcome to TMK London - Celebrating Tamil Culture and Heritage', priority: 'high' },
-        { text: 'Follow us on social media for the latest updates and events', priority: 'medium' },
-        { text: 'Tamil School registration is now open for the new academic year', priority: 'high' },
-        { text: 'Join us for our upcoming cultural events and celebrations', priority: 'medium' }
-      ];
+    if (newsItems.length > 0) {
+      renderTicker(ticker, newsItems);
+      return;
     }
 
-    var items = newsItems.concat(newsItems);
-    ticker.innerHTML = items.map(function (item, index) {
-      var isLast = index === items.length - 1;
-      var isLatest = index % newsItems.length === 0;
-      var priorityClass = 'ticker-priority-' + item.priority;
-      var latestClass = isLatest ? ' ticker-latest' : '';
-      var spanClass = 'text-sm ' + priorityClass + latestClass;
-      var div = document.createElement('div');
-      div.textContent = item.text;
-      var text = div.innerHTML;
-      return '<span class="' + spanClass + '">' + text + '</span>' + (!isLast ? '<span class="text-gray-400">•</span>' : '');
-    }).join('');
+    // No localStorage: try KV-backed API first, then static JSON, then inline default
+    fetch('/api/ticker')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (arr) {
+        if (Array.isArray(arr) && arr.length > 0) {
+          newsItems = arr.map(normalizeTickerItem).filter(function (x) { return x.text; });
+        }
+        if (newsItems.length === 0) newsItems = DEFAULT_ITEMS;
+        renderTicker(ticker, newsItems);
+      })
+      .catch(function () {
+        fetch('/news-ticker.json')
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (arr) {
+            if (Array.isArray(arr) && arr.length > 0) {
+              newsItems = arr.map(normalizeTickerItem).filter(function (x) { return x.text; });
+            }
+            if (newsItems.length === 0) newsItems = DEFAULT_ITEMS;
+            renderTicker(ticker, newsItems);
+          })
+          .catch(function () {
+            renderTicker(ticker, DEFAULT_ITEMS);
+          });
+      });
   }
 
-  loadNewsTicker();
+  function runTickerWhenReady() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadNewsTicker);
+    } else {
+      loadNewsTicker();
+    }
+  }
+
+  runTickerWhenReady();
 
   // Same-tab: admin dispatches this when saving
   window.addEventListener('newsTickerUpdated', loadNewsTicker);

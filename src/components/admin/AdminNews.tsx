@@ -7,6 +7,7 @@ export interface NewsTickerItem {
   priority: TickerPriority;
 }
 
+const API_KEY_STORAGE = 'tmkAdminApiKey';
 const PRIORITIES: { value: TickerPriority; label: string }[] = [
   { value: 'high', label: 'High' },
   { value: 'medium', label: 'Medium' },
@@ -18,6 +19,13 @@ function normalizeItem(item: string | NewsTickerItem): NewsTickerItem {
   return { text: item.text, priority: item.priority || 'medium' };
 }
 
+const DEFAULT_ITEMS: NewsTickerItem[] = [
+  { text: 'Welcome to London Tamil Sangam - Celebrating Tamil Culture and Heritage', priority: 'high' },
+  { text: 'Follow us on social media for the latest updates and events', priority: 'medium' },
+  { text: 'Tamil School registration is now open for the new academic year', priority: 'high' },
+  { text: 'Join us for our upcoming cultural events and celebrations', priority: 'medium' },
+];
+
 export default function AdminNews() {
   const [newsItems, setNewsItems] = useState<NewsTickerItem[]>([]);
   const [newItem, setNewItem] = useState('');
@@ -26,6 +34,8 @@ export default function AdminNews() {
   const [editValue, setEditValue] = useState('');
   const [editPriority, setEditPriority] = useState<TickerPriority>('medium');
   const [message, setMessage] = useState({ type: '', text: '' });
+  const [apiKey, setApiKey] = useState('');
+  const [apiKeyInput, setApiKeyInput] = useState('');
 
   // Check authentication
   useEffect(() => {
@@ -33,46 +43,90 @@ export default function AdminNews() {
       window.location.href = '/admin/login';
       return;
     }
+    if (typeof window !== 'undefined') {
+      setApiKey(localStorage.getItem(API_KEY_STORAGE) || '');
+    }
     loadNewsItems();
   }, []);
 
   const loadNewsItems = () => {
     if (typeof window === 'undefined') return;
-    
-    const stored = localStorage.getItem('newsTickerItems');
-    if (stored) {
+
+    // Prefer KV-backed API so admin sees same data as live site
+    fetch('/api/ticker')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((arr) => {
+        if (Array.isArray(arr) && arr.length > 0) {
+          const items = arr.map(normalizeItem);
+          setNewsItems(items);
+          localStorage.setItem('newsTickerItems', JSON.stringify(items));
+          return;
+        }
+        throw new Error('No data');
+      })
+      .catch(() => {
+        const stored = localStorage.getItem('newsTickerItems');
+        if (stored) {
+          try {
+            const parsed = JSON.parse(stored);
+            const items = Array.isArray(parsed) ? parsed.map(normalizeItem) : [];
+            setNewsItems(items.length > 0 ? items : DEFAULT_ITEMS);
+            return;
+          } catch (e) {
+            console.error('Error parsing stored news items:', e);
+          }
+        }
+        setNewsItems(DEFAULT_ITEMS);
+        localStorage.setItem('newsTickerItems', JSON.stringify(DEFAULT_ITEMS));
+      });
+  };
+
+  const saveNewsItems = async (items: NewsTickerItem[]) => {
+    if (typeof window === 'undefined') return;
+
+    const key = localStorage.getItem(API_KEY_STORAGE);
+    if (key) {
       try {
-        const parsed = JSON.parse(stored);
-        const items = Array.isArray(parsed)
-          ? parsed.map(normalizeItem)
-          : [];
-        setNewsItems(items);
-        return;
+        const res = await fetch('/api/ticker', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Key': key },
+          body: JSON.stringify(items),
+        });
+        if (res.ok) {
+          localStorage.setItem('newsTickerItems', JSON.stringify(items));
+          setNewsItems(items);
+          showMessage('success', '💾 Saved to live site (KV). All visitors will see this.');
+          window.dispatchEvent(new CustomEvent('newsTickerUpdated'));
+          return;
+        }
+        const err = await res.json().catch(() => ({}));
+        showMessage('error', err?.error || `Save failed (${res.status}). Check API key.`);
       } catch (e) {
-        console.error('Error parsing stored news items:', e);
+        showMessage('error', 'Network error. Save to site failed. Stored locally only.');
       }
     }
 
-    const defaultItems: NewsTickerItem[] = [
-      { text: 'Welcome to TMK London - Celebrating Tamil Culture and Heritage', priority: 'high' },
-      { text: 'Follow us on social media for the latest updates and events', priority: 'medium' },
-      { text: 'Tamil School registration is now open for the new academic year', priority: 'high' },
-      { text: 'Join us for our upcoming cultural events and celebrations', priority: 'medium' },
-    ];
-    setNewsItems(defaultItems);
-    localStorage.setItem('newsTickerItems', JSON.stringify(defaultItems));
-  };
-
-  const saveNewsItems = (items: NewsTickerItem[]) => {
-    if (typeof window === 'undefined') return;
-    
     localStorage.setItem('newsTickerItems', JSON.stringify(items));
     setNewsItems(items);
-    
-    showMessage('success', '💾 News items saved successfully!');
-    
-    // Trigger a custom event to notify NewsTicker component
+    showMessage('success', '💾 Saved locally (this browser only). Set API key below to save to live site.');
     window.dispatchEvent(new CustomEvent('newsTickerUpdated'));
+  };
+
+  const saveApiKey = () => {
+    const val = apiKeyInput.trim();
+    if (val) {
+      localStorage.setItem(API_KEY_STORAGE, val);
+      setApiKey(val);
+      setApiKeyInput('');
+      showMessage('success', 'API key saved. Future saves will update the live site.');
+    }
+  };
+
+  const clearApiKey = () => {
+    localStorage.removeItem(API_KEY_STORAGE);
+    setApiKey('');
+    setApiKeyInput('');
+    showMessage('success', 'API key cleared. Saves will be local only.');
   };
 
   const showMessage = (type: string, text: string) => {
@@ -170,6 +224,43 @@ export default function AdminNews() {
               {message.text}
             </div>
           )}
+
+          {/* Cloudflare KV API key (optional) */}
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-primary-200">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Live site (Cloudflare KV)</h2>
+            <p className="text-sm text-gray-600 mb-3">
+              To save ticker items so <strong>all visitors</strong> see them, set the API key from your Cloudflare Pages secret <code className="bg-gray-100 px-1 rounded">TMK_ADMIN_API_KEY</code>. See <code className="bg-gray-100 px-1 rounded">KV_SETUP.md</code> in the repo.
+            </p>
+            {apiKey ? (
+              <div className="flex items-center gap-2">
+                <span className="text-green-600 font-medium">API key set — saves will update the live site.</span>
+                <button
+                  type="button"
+                  onClick={clearApiKey}
+                  className="text-sm text-gray-500 hover:text-red-600 underline"
+                >
+                  Clear key
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-2 items-center">
+                <input
+                  type="password"
+                  value={apiKeyInput}
+                  onChange={(e) => setApiKeyInput(e.target.value)}
+                  placeholder="Paste TMK_ADMIN_API_KEY value"
+                  className="flex-1 min-w-[200px] px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-500"
+                />
+                <button
+                  type="button"
+                  onClick={saveApiKey}
+                  className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                >
+                  Save key
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* Add New Item */}
           <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
