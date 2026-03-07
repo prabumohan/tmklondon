@@ -852,46 +852,52 @@ const logoUrl = '/logo.png';
     const ticker = document.getElementById('news-ticker');
     if (!ticker) return;
 
-    var stored = localStorage.getItem('newsTickerItems');
-    var raw: TickerItem[] = [];
-    if (stored) {
-      try {
-        var parsed = JSON.parse(stored);
-        raw = Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        console.error('Error parsing news items:', e);
-      }
-    }
-    var newsItems = raw.map(normalizeTickerItem).filter(function (x) { return x.text; });
-
-    if (newsItems.length > 0) {
-      renderTicker(ticker, newsItems);
-      return;
-    }
-
-    // No localStorage: try KV-backed API first, then static JSON, then inline default
-    fetch('/api/ticker')
+    // Prefer KV-backed API so live site always shows saved messages (cache-bust so updates show)
+    fetch('/api/ticker?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (arr) {
+        var newsItems: { text: string; priority: string }[] = [];
         if (Array.isArray(arr) && arr.length > 0) {
           newsItems = arr.map(normalizeTickerItem).filter(function (x) { return x.text; });
+        }
+        if (newsItems.length === 0) {
+          var stored = localStorage.getItem('newsTickerItems');
+          var raw: TickerItem[] = [];
+          if (stored) {
+            try {
+              var parsed = JSON.parse(stored);
+              raw = Array.isArray(parsed) ? parsed : [];
+            } catch (e) { /* ignore */ }
+          }
+          newsItems = raw.map(normalizeTickerItem).filter(function (x) { return x.text; });
         }
         if (newsItems.length === 0) newsItems = DEFAULT_ITEMS;
         renderTicker(ticker, newsItems);
       })
       .catch(function () {
-        fetch('/news-ticker.json')
-          .then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (arr) {
-            if (Array.isArray(arr) && arr.length > 0) {
-              newsItems = arr.map(normalizeTickerItem).filter(function (x) { return x.text; });
-            }
-            if (newsItems.length === 0) newsItems = DEFAULT_ITEMS;
-            renderTicker(ticker, newsItems);
-          })
-          .catch(function () {
-            renderTicker(ticker, DEFAULT_ITEMS);
-          });
+        var stored = localStorage.getItem('newsTickerItems');
+        var raw: TickerItem[] = [];
+        if (stored) {
+          try {
+            var parsed = JSON.parse(stored);
+            raw = Array.isArray(parsed) ? parsed : [];
+          } catch (e) { /* ignore */ }
+        }
+        var newsItems = raw.map(normalizeTickerItem).filter(function (x) { return x.text; });
+        if (newsItems.length === 0) {
+          fetch('/news-ticker.json', { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (arr) {
+              if (Array.isArray(arr) && arr.length > 0) {
+                newsItems = arr.map(normalizeTickerItem).filter(function (x) { return x.text; });
+              }
+              if (newsItems.length === 0) newsItems = DEFAULT_ITEMS;
+              renderTicker(ticker, newsItems);
+            })
+            .catch(function () { renderTicker(ticker, DEFAULT_ITEMS); });
+        } else {
+          renderTicker(ticker, newsItems);
+        }
       });
   }
 
