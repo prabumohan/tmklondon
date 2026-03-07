@@ -1,0 +1,68 @@
+/* TMK London – Theme variables. Set on <html data-theme="..."> by script. */
+:root,
+html[data-theme="classic"] {
+  --tmk-bg-body: linear-gradient(165deg, #6B2D3C 0%, #5C1A1B 25%, #451a1a 60%, #1a0a0c 100%);
+  --tmk-bg-overlay: linear-gradient(160deg, rgba(107, 45, 60, 0.75) 0%, rgba(92, 26, 27, 0.85) 100%);
+  --tmk-bg-section: linear-gradient(to bottom right, #fafaf9, #f5f5f4);
+  --tmk-bg-cta: linear-gradient(135deg, #6B2D3C 0%, #5C1A1B 50%, #451a1a 100%);
+  --tmk-primary: #6B2D3C;
+  --tmk-primary-dark: #5C1A1B;
+  --tmk-accent: #0d9488;
+  --tmk-header-bg: linear-gradient(to right, #5C1A1B, #6B2D3C);
+  --tmk-nav-bg: rgba(92, 26, 27, 0.95);
+  --tmk-text-on-dark: #ffffff;
+  --tmk-pattern-opacity: 0.12;
+}
+
+/* Modern – light page, maroon primary (Riyadh-style) */
+html[data-theme="modern"] {
+  --tmk-bg-body: #fdf2f2;
+  --tmk-bg-overlay: rgba(253, 242, 242, 0.98);
+  --tmk-bg-section: #ffffff;
+  --tmk-bg-cta: linear-gradient(135deg, #5C1A1B 0%, #6B2D3C 100%);
+  --tmk-primary: #6B2D3C;
+  --tmk-primary-dark: #5C1A1B;
+  --tmk-accent: #0d9488;
+  --tmk-header-bg: linear-gradient(to right, #5C1A1B, #6B2D3C);
+  --tmk-nav-bg: linear-gradient(to right, #5C1A1B, #6B2D3C);
+  --tmk-text-on-dark: #ffffff;
+  --tmk-pattern-opacity: 0;
+}
+
+/* Heritage – green/saffron, warm sections */
+html[data-theme="heritage"] {
+  --tmk-bg-body: linear-gradient(145deg, #14532d 0%, #166534 30%, #1e3a2e 100%);
+  --tmk-bg-overlay: linear-gradient(160deg, rgba(251, 146, 60, 0.12) 0%, rgba(34, 197, 94, 0.08) 50%, rgba(18, 38, 61, 0.75) 100%);
+  --tmk-bg-section: linear-gradient(to bottom, #fffbeb, #fef3c7);
+  --tmk-bg-cta: linear-gradient(135deg, #ea580c 0%, #c2410c 50%, #166534 100%);
+  --tmk-primary: #166534;
+  --tmk-primary-dark: #14532d;
+  --tmk-accent: #ea580c;
+  --tmk-header-bg: linear-gradient(90deg, #1e3a2e, #166534);
+  --tmk-nav-bg: rgba(22, 101, 52, 0.96);
+  --tmk-text-on-dark: #fef3c7;
+  --tmk-pattern-opacity: 0.15;
+}
+
+/* London – slate blue, cool grey sections */
+html[data-theme="london"] {
+  --tmk-bg-body: linear-gradient(165deg, #1e293b 0%, #0f172a 40%, #020617 100%);
+  --tmk-bg-overlay: linear-gradient(160deg, rgba(30, 41, 59, 0.88) 0%, rgba(15, 23, 42, 0.92) 100%);
+  --tmk-bg-section: #f1f5f9;
+  --tmk-bg-cta: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+  --tmk-primary: #1e40af;
+  --tmk-primary-dark: #1e3a8a;
+  --tmk-accent: #f59e0b;
+  --tmk-header-bg: linear-gradient(90deg, #1e293b, #334155);
+  --tmk-nav-bg: rgba(30, 41, 59, 0.97);
+  --tmk-text-on-dark: #f8fafc;
+  --tmk-pattern-opacity: 0.08;
+}
+
+/* Section backgrounds from theme */
+.theme-section-events {
+  background: var(--tmk-bg-section);
+}
+.theme-section-cta {
+  background: var(--tmk-bg-cta);
+}

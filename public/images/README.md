@@ -26,8 +26,32 @@ Place your logo at:
 
 ## Gallery Images
 
-For the gallery page, you can organize images in:
-- `public/images/gallery/`
+For the gallery page, organize images in the following folders:
+
+### Teachers (எங்கள் ஆசிரியர்கள்)
+Place teacher photos in `public/images/gallery/teachers/`:
+- `teacher-1.jpg`, `teacher-2.jpg`, etc.
+- Recommended: Square or portrait orientation, minimum 400x400px
+
+### School Activities (பள்ளி நடவடிக்கைகள்)
+Place school activity photos in `public/images/gallery/school/`:
+- `activity-1.jpg`, `activity-2.jpg`, etc.
+- Recommended: Any orientation, minimum 600px on shortest side
+
+### Events (நிகழ்வுகள்)
+Place event photos in `public/images/gallery/events/`:
+- `event-1.jpg`, `event-2.jpg`, etc.
+- Recommended: Any orientation, minimum 600px on shortest side
+
+### Community Gatherings (சமூக கூட்டங்கள்)
+Place community photos in `public/images/gallery/community/`:
+- `gathering-1.jpg`, `gathering-2.jpg`, etc.
+- Recommended: Any orientation, minimum 600px on shortest side
+
+**To copy images from original WordPress site:**
+1. Download images from: https://tmklondon.com/wp-content/uploads/
+2. Rename them according to the patterns above
+3. Place them in the appropriate folders
 
 ## Other Images
 

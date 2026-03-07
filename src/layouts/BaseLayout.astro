@@ -4,6 +4,8 @@ import Footer from '../components/Footer.astro';
 import SEO from '../components/SEO.astro';
 import { getSEOConfig, getOrganizationSchema } from '../utils/seo';
 import type { Language } from '../utils/i18n';
+import { themeColors, activeModernBackground, modernBackgroundOptions } from '../config/theme-colors';
+import '../styles/themes.css';
 
 interface Props {
   title?: string;
@@ -11,16 +13,24 @@ interface Props {
   image?: string;
   lang?: Language;
   schema?: object | object[];
+  theme?: string;
 }
 
 const { title, description, image, lang = 'ta', schema } = Astro.props;
-const seoConfig = getSEOConfig(title, description, image);
+const currentUrl = new URL(Astro.url.pathname, Astro.site || 'https://tmklondon.com');
+const canonicalUrl = `${currentUrl.origin}${Astro.url.pathname}${Astro.url.search}`;
+const seoConfig = getSEOConfig(title, description, image, undefined, canonicalUrl);
 const orgSchema = getOrganizationSchema();
 const allSchemas = schema ? (Array.isArray(schema) ? [...schema, orgSchema] : [schema, orgSchema]) : [orgSchema];
+
+// Single theme only: always use the maroon/Riyadh-style theme (no switcher)
+const effectiveThemeColors = { ...themeColors };
+const modernBg = activeModernBackground in modernBackgroundOptions ? modernBackgroundOptions[activeModernBackground] : modernBackgroundOptions.warm;
+effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg };
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth">
+<html lang={lang} class="scroll-smooth" data-theme="modern">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -29,14 +39,42 @@ const allSchemas = schema ? (Array.isArray(schema) ? [...schema, orgSchema] : [s
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <SEO {...seoConfig} schema={allSchemas} />
+    <!-- hreflang for Tamil/English – helps Google index both language versions -->
+    <link rel="alternate" hreflang="ta" href={`https://tmklondon.com${Astro.url.pathname}`} />
+    <link rel="alternate" hreflang="en" href={`https://tmklondon.com${Astro.url.pathname}?lang=en`} />
+    <link rel="alternate" hreflang="x-default" href={`https://tmklondon.com${Astro.url.pathname}`} />
+    <script is:inline set:html={`window.__TMK_THEME_COLORS__ = ${JSON.stringify(effectiveThemeColors)}`} />
+    <script is:inline>
+      (function(){
+        document.documentElement.setAttribute('data-theme', 'modern');
+        var colors = window.__TMK_THEME_COLORS__ || {};
+        var c = colors.modern || { body: '#fdf2f2', fallback: 'linear-gradient(165deg,#fef7f7 0%,#fde8e8 30%,#fef7f7 100%)', overlay: 'linear-gradient(180deg, rgba(254,247,247,0.96) 0%, rgba(253,232,232,0.95) 100%)', heroOverlay: 'linear-gradient(to bottom, rgba(200, 75, 50, 0.2) 0%, rgba(160, 55, 45, 0.35) 25%, rgba(80, 35, 30, 0.55) 55%, rgba(25, 18, 18, 0.78) 80%, rgba(12, 10, 10, 0.88) 100%)' };
+        var hero = c.heroOverlay || c.overlay;
+        var id = 'tmk-theme-inline';
+        var el = document.getElementById(id);
+        if (!el) { el = document.createElement('style'); el.id = id; document.head.appendChild(el); }
+        el.textContent = 'body.theme-body-bg{background:' + c.body + '!important}.site-bg-fallback,.theme-bg-fallback{background:' + c.fallback + '!important}.site-bg-overlay,.theme-bg-overlay{background:' + c.overlay + '!important}.hero-overlay{background:' + hero + '!important}';
+      })();
+    </script>
     <script defer data-domain="tmklondon.com" src="https://plausible.io/js/script.js" is:inline></script>
   </head>
-  <body class="font-sans antialiased">
+  <body class="font-sans antialiased text-gray-800 min-h-screen theme-body-bg" id="theme-body">
+    <!-- Theme-aware background (vars from themes.css) -->
+    <div class="fixed inset-0 -z-10 site-bg" aria-hidden="true">
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat site-bg-image theme-bg-image" style="--bg-url: url('https://images.unsplash.com/photo-1513635269975-59663e0ac291?w=1920&q=80'); background-image: var(--bg-url);"></div>
+      <div class="absolute inset-0 site-bg-fallback theme-bg-fallback"></div>
+      <div class="absolute inset-0 site-bg-overlay theme-bg-overlay"></div>
+      <div class="absolute inset-0 tamil-cluster-pattern theme-pattern" aria-hidden="true"></div>
+      <div class="absolute inset-0 tamil-cluster-glow" aria-hidden="true"></div>
+    </div>
     <Header lang={lang} />
-    <main>
-      <slot />
-    </main>
-    <Footer lang={lang} />
+    <div class="relative min-h-screen">
+      <!-- Spacer so content starts below fixed header (LTS-style, same as lts-bqd.pages.dev) -->
+      <main class="main-below-header main-content-in pt-[9.5rem] sm:pt-[10rem] md:pt-[11rem]">
+        <slot />
+      </main>
+      <Footer lang={lang} />
+    </div>
   </body>
 </html>
 
@@ -48,4 +86,136 @@ const allSchemas = schema ? (Array.isArray(schema) ? [...schema, orgSchema] : [s
   .font-tamil {
     font-family: 'Noto Sans Tamil', system-ui, sans-serif;
   }
+  
+  .site-bg-fallback,
+  .theme-bg-fallback {
+    background: var(--tmk-bg-body);
+    background-attachment: fixed;
+  }
+  
+  .site-bg-image {
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+  }
+  html[data-theme="modern"] .theme-bg-image { opacity: 0.12; }
+  html[data-theme="heritage"] .theme-bg-image,
+  html[data-theme="london"] .theme-bg-image { opacity: 0.35; }
+  
+  .site-bg-overlay,
+  .theme-bg-overlay {
+    background: var(--tmk-bg-overlay);
+    background-attachment: fixed;
+  }
+  
+  .theme-pattern { opacity: var(--tmk-pattern-opacity, 0.12); }
+  html[data-theme="modern"] .theme-pattern { display: none; }
+
+  /* Body background by theme – impossible to miss */
+  .theme-body-bg { background: #0e1f32; }
+  html[data-theme="modern"] .theme-body-bg { background: #e2e8f0 !important; }
+  html[data-theme="heritage"] .theme-body-bg { background: #14532d !important; }
+  html[data-theme="london"] .theme-body-bg { background: #0f172a !important; }
+
+  /* Direct theme overrides – these always win so the body background clearly changes */
+  html[data-theme="modern"] .site-bg-fallback,
+  html[data-theme="modern"] .theme-bg-fallback {
+    background: #e2e8f0 !important;
+  }
+  html[data-theme="modern"] .site-bg-overlay,
+  html[data-theme="modern"] .theme-bg-overlay {
+    background: rgba(248, 250, 252, 0.98) !important;
+  }
+  html[data-theme="heritage"] .site-bg-fallback,
+  html[data-theme="heritage"] .theme-bg-fallback {
+    background: linear-gradient(145deg, #14532d 0%, #166534 30%, #1e3a2e 100%) !important;
+  }
+  html[data-theme="heritage"] .site-bg-overlay,
+  html[data-theme="heritage"] .theme-bg-overlay {
+    background: linear-gradient(160deg, rgba(251, 146, 60, 0.12) 0%, rgba(34, 197, 94, 0.08) 50%, rgba(18, 38, 61, 0.75) 100%) !important;
+  }
+  html[data-theme="london"] .site-bg-fallback,
+  html[data-theme="london"] .theme-bg-fallback {
+    background: linear-gradient(165deg, #1e293b 0%, #0f172a 40%, #020617 100%) !important;
+  }
+  html[data-theme="london"] .site-bg-overlay,
+  html[data-theme="london"] .theme-bg-overlay {
+    background: linear-gradient(160deg, rgba(30, 41, 59, 0.88) 0%, rgba(15, 23, 42, 0.92) 100%) !important;
+  }
+
+  /* Animated Tamil cluster background: kolam-inspired dot grid + saffron/green glow */
+  .tamil-cluster-pattern {
+    background-image:
+      radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 1.2px, transparent 1.2px),
+      radial-gradient(circle at center, rgba(251, 191, 36, 0.1) 1px, transparent 1px),
+      radial-gradient(circle at center, rgba(34, 197, 94, 0.06) 0.8px, transparent 0.8px);
+    background-size: 40px 40px, 56px 56px, 72px 72px;
+    background-position: 0 0, 28px 28px, 12px 12px;
+    animation: tamilPatternDrift 60s linear infinite;
+    pointer-events: none;
+  }
+  .tamil-cluster-glow {
+    background: linear-gradient(135deg,
+      rgba(251, 191, 36, 0.04) 0%,
+      transparent 30%,
+      rgba(34, 197, 94, 0.035) 50%,
+      transparent 70%,
+      rgba(251, 191, 36, 0.05) 100%);
+    background-size: 220% 220%;
+    animation: tamilGlowShift 25s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes tamilPatternDrift {
+    0% { background-position: 0 0, 28px 28px, 12px 12px; }
+    100% { background-position: 40px 0, 68px 28px, 84px 12px; }
+  }
+  @keyframes tamilGlowShift {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+  }
+
+  ::selection {
+    background-color: rgba(79, 70, 229, 0.2);
+  }
+  
+  /* Content starts below fixed header (LTS-style) */
+  .main-below-header {
+    min-height: 50vh;
+  }
+
+  /* Professional content entrance */
+  @keyframes contentFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .main-content-in {
+    animation: contentFadeIn 0.5s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  /* Reusable staggered fade-in for sections (add animate-in-section + delay class) */
+  @keyframes sectionFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-in-section {
+    animation: sectionFadeIn 0.6s ease-out forwards;
+    opacity: 0;
+  }
+  .animate-in-section.delay-1 { animation-delay: 0.1s; }
+  .animate-in-section.delay-2 { animation-delay: 0.2s; }
+  .animate-in-section.delay-3 { animation-delay: 0.3s; }
+  .animate-in-section.delay-4 { animation-delay: 0.4s; }
 </style>

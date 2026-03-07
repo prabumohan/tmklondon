@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const themes = [
+  {
+    id: 'classic',
+    name: 'Classic Professional',
+    nameTa: 'பாரம்பரிய நேர்த்தி',
+    desc: 'Navy and teal with warm accents. Trustworthy, established look. Best for tradition and credibility.',
+    descTa: 'நீலம் மற்றும் பச்சை நிற அணி. நம்பகமான, நிறுவப்பட்ட தோற்றம்.',
+    gradient: 'from-slate-800 via-slate-700 to-slate-800',
+    accent: 'bg-teal-500',
+  },
+  {
+    id: 'modern',
+    name: 'Modern Minimal',
+    nameTa: 'நவீன மென்மை',
+    desc: 'Clean, light background with bold typography. Spacious and contemporary. Ideal for a fresh, approachable feel.',
+    descTa: 'தெளிவான பின்னணி, தடித்த அச்சு. நவீன மற்றும் அணுகக்கூடிய.',
+    gradient: 'from-slate-100 to-gray-100',
+    accent: 'bg-teal-600',
+  },
+  {
+    id: 'heritage',
+    name: 'Heritage Tamil',
+    nameTa: 'பாரம்பரிய தமிழ்',
+    desc: 'Saffron and green palette. Cultural, proud, and recognisably Tamil. Strong identity for community.',
+    descTa: 'குங்குமம் மற்றும் பச்சை. கலாச்சாரம், பெருமை, தமிழ் அடையாளம்.',
+    gradient: 'from-amber-100 via-green-50 to-amber-50',
+    accent: 'bg-green-700',
+  },
+  {
+    id: 'london',
+    name: 'London Contemporary',
+    nameTa: 'லண்டன் நவீனம்',
+    desc: 'Urban slate and blue-grey. Professional, London-ready. Suits a global city presence.',
+    descTa: 'நகர சாம்பல் நீலம். தொழில்முறை, லண்டன் சார்ந்த.',
+    gradient: 'from-slate-700 via-slate-600 to-slate-800',
+    accent: 'bg-blue-800',
+  },
+];
+---
+
+<BaseLayout
+  title="Choose site style"
+  description="Preview and choose the visual style for TMK London website"
+  lang="en"
+>
+  <div class="min-h-screen py-12 md:py-16 px-4">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold text-center mb-3 font-tamil text-gray-800">
+        Choose site style
+      </h1>
+      <p class="text-center text-gray-600 mb-4 text-lg">
+        Preview each theme, then click <strong>Use this style</strong> to apply it across the site. Your choice is saved.
+      </p>
+      <p class="text-center text-sm text-gray-500 mb-10" id="current-theme-display">
+        Current theme: <span id="current-theme-name">—</span>
+      </p>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        {themes.map((t) => (
+          <div
+            class="rounded-2xl border-2 border-gray-200 bg-white shadow-lg overflow-hidden hover:border-primary hover:shadow-xl transition-all"
+          >
+            <div class={`h-24 bg-gradient-to-r ${t.gradient} flex items-center justify-center`}>
+              <span class="text-white font-bold text-lg">{t.name}</span>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4 text-sm leading-relaxed">{t.desc}</p>
+              <div class="flex flex-wrap gap-3">
+                <a
+                  href={`/?theme=${t.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center px-4 py-2 rounded-lg border-2 border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                >
+                  Preview in new tab
+                </a>
+                <button
+                  type="button"
+                  class={`inline-flex items-center px-4 py-2 rounded-lg ${t.accent} text-white font-medium hover:opacity-90 transition-opacity theme-apply-btn`}
+                  data-theme={t.id}
+                >
+                  Use this style
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p class="text-center text-gray-500 text-sm mt-10">
+        You can change the style anytime by visiting this page again: <a href="/style-options" class="text-primary-600 underline">/style-options</a>
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  (function() {
+    var t = document.documentElement.getAttribute('data-theme') || localStorage.getItem('tmkSiteTheme') || 'classic';
+    var names = { classic: 'Classic Professional', modern: 'Modern Minimal', heritage: 'Heritage Tamil', london: 'London Contemporary' };
+    var el = document.getElementById('current-theme-name');
+    if (el) el.textContent = names[t] || t;
+  })();
+  document.querySelectorAll('.theme-apply-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var theme = btn.getAttribute('data-theme');
+      if (theme) {
+        localStorage.setItem('tmkSiteTheme', theme);
+        window.location.href = '/?theme=' + theme;
+      }
+    });
+  });
+</script>

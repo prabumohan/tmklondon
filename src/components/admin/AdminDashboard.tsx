@@ -63,7 +63,7 @@ export default function AdminDashboard() {
             </button>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <a 
               href="/admin/students" 
               className="block p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 border-2 border-primary-500/20 hover:border-primary-600"
@@ -80,6 +80,24 @@ export default function AdminDashboard() {
               <div className="text-3xl mb-3">📰</div>
               <h2 className="text-xl font-semibold text-gray-800 mb-2">News Ticker</h2>
               <p className="text-gray-600">Update news ticker messages</p>
+            </a>
+            
+            <a 
+              href="/admin/gallery" 
+              className="block p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 border-2 border-primary-500/20 hover:border-primary-600"
+            >
+              <div className="text-3xl mb-3">🖼️</div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">Gallery</h2>
+              <p className="text-gray-600">Upload and manage gallery images</p>
+            </a>
+            
+            <a 
+              href="/menu-options" 
+              className="block p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 border-2 border-primary-500/20 hover:border-primary-600"
+            >
+              <div className="text-3xl mb-3">📋</div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">Menu bar options</h2>
+              <p className="text-gray-600">Choose menu style, layout, dropdown, mobile, and ticker</p>
             </a>
             
             <div className="block p-6 bg-white rounded-xl shadow-lg border-2 border-gray-200">

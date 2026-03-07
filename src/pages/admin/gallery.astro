@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdminGallery from '../../components/admin/AdminGallery';
+
+const seoConfig = {
+  title: 'Gallery Management - TMK London Admin',
+  description: 'Upload and manage gallery images',
+  noindex: true,
+};
+---
+
+<BaseLayout {...seoConfig}>
+  <AdminGallery client:load />
+</BaseLayout>

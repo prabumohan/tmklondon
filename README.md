@@ -46,6 +46,27 @@ pnpm build
 pnpm preview
 ```
 
+### Running on WSL (Windows Subsystem for Linux)
+
+If `npm install` fails in WSL with errors like `Cannot read properties of null (reading 'matches')`, use **pnpm** instead:
+
+```bash
+# 1. Go to your project (use your actual Windows path under /mnt/c/...)
+cd /mnt/c/Users/prabu/OneDrive/Personal_Cursor_Sites/tmklondon
+
+# 2. Enable pnpm (comes with Node.js 16.13+)
+corepack enable
+corepack prepare pnpm@latest --activate
+
+# 3. Install dependencies with pnpm
+pnpm install
+
+# 4. Start the dev server
+pnpm dev
+```
+
+Then open **http://localhost:4321** in your browser.
+
 ## Project Structure
 
 ```

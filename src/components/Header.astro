@@ -27,7 +27,7 @@ const logoUrl = '/logo.png';
 
 <header class="fixed top-0 left-0 right-0 w-full z-[100] shadow-lg bg-transparent header-fixed-lts" id="site-header">
   <!-- Header Banner: background image with gradient fallback if image 404s -->
-  <div class="relative min-h-[100px] md:min-h-[110px] header-banner-custom overflow-hidden" style="background: linear-gradient(135deg, #1e3a5f 0%, #162d49 50%, #12263d 100%);">
+  <div class="relative min-h-[100px] md:min-h-[110px] header-banner-custom overflow-hidden" style="background: linear-gradient(135deg, #6B2D3C 0%, #5C1A1B 50%, #451a1a 100%);">
     <img
       src={headerBgImage}
       alt=""
@@ -230,7 +230,7 @@ const logoUrl = '/logo.png';
   </nav>
 
   <!-- News Ticker/Scroller Bar -->
-  <div class="text-white py-2 overflow-hidden -mt-px" style="background: linear-gradient(to right, #162d49, #1e3a5f);">
+  <div class="text-white py-2 overflow-hidden -mt-px" style="background: linear-gradient(to right, #5C1A1B, #6B2D3C);">
     <div class="container mx-auto px-4">
       <div class="flex items-center">
         <!-- LATEST NEWS Label -->
@@ -563,9 +563,9 @@ const logoUrl = '/logo.png';
 
   /* ========== Menu bar: moved up, new style, responsive ========== */
   .site-nav {
-    background: linear-gradient(to right, #1e3a5f 0%, #162d49 100%);
+    background: linear-gradient(to right, #5C1A1B 0%, #6B2D3C 100%);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    border-bottom: 3px solid rgba(245, 158, 11, 0.6);
+    border-bottom: 3px solid rgba(13, 148, 136, 0.6);
     border-top: 1px solid rgba(255, 255, 255, 0.12);
   }
   .site-nav-desktop {
@@ -604,11 +604,11 @@ const logoUrl = '/logo.png';
   }
   .site-nav-link:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-bottom-color: rgba(245, 158, 11, 0.9);
+    border-bottom-color: rgba(13, 148, 136, 0.9);
   }
   .site-nav-link-active {
-    background: rgba(245, 158, 11, 0.2);
-    border-bottom-color: #f59e0b;
+    background: rgba(13, 148, 136, 0.2);
+    border-bottom-color: #0d9488;
   }
   .site-nav-link-has-dropdown {
     padding-right: 0.5rem;
@@ -641,14 +641,14 @@ const logoUrl = '/logo.png';
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #1e3a5f;
+    color: #5C1A1B;
     text-decoration: none;
     border-radius: 0.5rem;
     transition: background 0.15s, color 0.15s;
   }
   .site-nav-dropdown-item:hover {
-    background: rgba(30, 58, 95, 0.08);
-    color: #1e3a5f;
+    background: rgba(107, 45, 60, 0.08);
+    color: #5C1A1B;
   }
   .site-nav-util {
     display: inline-flex;
@@ -672,7 +672,7 @@ const logoUrl = '/logo.png';
     background: rgba(255, 255, 255, 0.15);
   }
   .site-nav-util-active {
-    background: rgba(245, 158, 11, 0.35);
+    background: rgba(13, 148, 136, 0.35);
   }
   .site-nav-mobile .site-nav-inner {
     padding-left: 0.75rem;
@@ -754,16 +754,44 @@ const logoUrl = '/logo.png';
   }
 
   #news-ticker {
-    animation: scroll 40s linear infinite;
+    animation: scroll 22s linear infinite;
   }
 
   #news-ticker:hover {
     animation-play-state: paused;
   }
 
-  /* Most recent ticker message – distinct color */
-  .ticker-latest {
-    color: #fcd34d; /* amber-300 – stands out from white */
+  /* Global so they apply to dynamically injected ticker spans (not scoped) */
+  /* Latest (first) message – bold, bright yellow */
+  :global(#news-ticker .ticker-latest) {
+    color: #fef08a !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(254, 240, 138, 0.5);
+  }
+
+  :global(#news-ticker .ticker-priority-high) {
+    color: #fca5a5 !important;
+    font-weight: 700 !important;
+  }
+  :global(#news-ticker .ticker-priority-medium) {
+    color: #fde047 !important;
+    font-weight: 600 !important;
+  }
+  :global(#news-ticker .ticker-priority-low) {
+    color: rgba(255, 255, 255, 0.88) !important;
+    font-weight: 500 !important;
+  }
+  :global(#news-ticker .ticker-latest.ticker-priority-high) {
+    color: #fef08a !important;
+    font-weight: 800 !important;
+  }
+  :global(#news-ticker .ticker-latest.ticker-priority-medium) {
+    color: #fef08a !important;
+    font-weight: 700 !important;
+  }
+  :global(#news-ticker .ticker-latest.ticker-priority-low) {
+    color: #fef9c3 !important;
+    font-weight: 700 !important;
   }
 
   /* Hide scrollbar but keep functionality */
@@ -791,52 +819,61 @@ const logoUrl = '/logo.png';
     mobileMenu?.classList.toggle('hidden');
   });
 
-  // Load news ticker items
+  // Normalize stored item to { text, priority }
+  function normalizeTickerItem(item) {
+    if (typeof item === 'string') return { text: item, priority: 'medium' };
+    return { text: item.text || '', priority: item.priority || 'medium' };
+  }
+
   function loadNewsTicker() {
     const ticker = document.getElementById('news-ticker');
     if (!ticker) return;
 
-    // Get news items from localStorage
-    const stored = localStorage.getItem('newsTickerItems');
-    let newsItems = [];
-    
+    var stored = localStorage.getItem('newsTickerItems');
+    var raw = [];
     if (stored) {
       try {
-        newsItems = JSON.parse(stored);
+        var parsed = JSON.parse(stored);
+        raw = Array.isArray(parsed) ? parsed : [];
       } catch (e) {
         console.error('Error parsing news items:', e);
       }
     }
+    var newsItems = raw.map(normalizeTickerItem).filter(function (x) { return x.text; });
 
-    // Default items if none stored
     if (newsItems.length === 0) {
       newsItems = [
-        'Welcome to TMK London - Celebrating Tamil Culture and Heritage',
-        'Follow us on social media for the latest updates and events',
-        'Tamil School registration is now open for the new academic year',
-        'Join us for our upcoming cultural events and celebrations'
+        { text: 'Welcome to TMK London - Celebrating Tamil Culture and Heritage', priority: 'high' },
+        { text: 'Follow us on social media for the latest updates and events', priority: 'medium' },
+        { text: 'Tamil School registration is now open for the new academic year', priority: 'high' },
+        { text: 'Join us for our upcoming cultural events and celebrations', priority: 'medium' }
       ];
     }
 
-    // Escape so news text can't break the DOM (inline to avoid script type-check)
-    const items = [...newsItems, ...newsItems];
-    ticker.innerHTML = items.map((item, index) => {
-      const isLast = index === items.length - 1;
-      const isLatest = newsItems.length > 0 && (index % newsItems.length) === 0;
-      const spanClass = isLatest ? 'text-sm font-bold ticker-latest' : 'text-sm text-white/90';
-      let text = '';
-      if (typeof item === 'string') {
-        const el = document.createElement('div');
-        el.textContent = item;
-        text = el.innerHTML;
-      }
+    var items = newsItems.concat(newsItems);
+    ticker.innerHTML = items.map(function (item, index) {
+      var isLast = index === items.length - 1;
+      var isLatest = index % newsItems.length === 0;
+      var priorityClass = 'ticker-priority-' + item.priority;
+      var latestClass = isLatest ? ' ticker-latest' : '';
+      var spanClass = 'text-sm ' + priorityClass + latestClass;
+      var div = document.createElement('div');
+      div.textContent = item.text;
+      var text = div.innerHTML;
       return '<span class="' + spanClass + '">' + text + '</span>' + (!isLast ? '<span class="text-gray-400">•</span>' : '');
     }).join('');
   }
 
-  // Load on page load
   loadNewsTicker();
 
-  // Listen for updates from admin panel
+  // Same-tab: admin dispatches this when saving
   window.addEventListener('newsTickerUpdated', loadNewsTicker);
+
+  // Other tab: storage event when admin saves elsewhere
+  window.addEventListener('storage', function (e) {
+    if (e.key === 'newsTickerItems') loadNewsTicker();
+  });
+
+  // Fallback poll every 8s so ticker updates without refresh (e.g. after admin save in same tab in some edge cases)
+  setInterval(loadNewsTicker, 8000);
 </script>

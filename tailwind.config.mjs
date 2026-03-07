@@ -4,35 +4,45 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Riyadh Tamil Sangam–style: maroon primary, saffron accent
         primary: {
-          DEFAULT: '#0f766e', // Modern Teal
-          dark: '#0d9488',     // Dark Teal
-          light: '#14b8a6',    // Light Teal
-          50: '#f0fdfa',
-          100: '#ccfbf1',
-          200: '#99f6e4',
-          300: '#5eead4',
-          400: '#2dd4bf',
-          500: '#14b8a6',
-          600: '#0d9488',
-          700: '#0f766e',
-          800: '#115e59',
-          900: '#134e4a',
+          DEFAULT: '#6B2D3C',
+          dark: '#5C1A1B',
+          light: '#8B3A4B',
+          50: '#fdf2f2',
+          100: '#fde8e8',
+          200: '#fbd5d5',
+          300: '#f8b4b4',
+          400: '#e85d5d',
+          500: '#b91c1c',
+          600: '#7f1d1d',
+          700: '#6B2D3C',
+          800: '#5C1A1B',
+          900: '#451a1a',
         },
         secondary: {
-          DEFAULT: '#475569',  // Slate Gray
-          dark: '#334155',     // Dark Slate
-          light: '#64748b',    // Light Slate
+          DEFAULT: '#475569',
+          dark: '#334155',
+          light: '#64748b',
         },
         accent: {
-          DEFAULT: '#f59e0b',  // Warm Amber
-          dark: '#d97706',     // Dark Amber
-          light: '#fbbf24',    // Light Amber
+          DEFAULT: '#0d9488', // Teal – primary CTA and nav highlight (single theme)
+          dark: '#0f766e',
+          light: '#14b8a6',
+        },
+        warm: {
+          50: '#fff7ed',
+          100: '#ffedd5',
+          200: '#fed7aa',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         tamil: ['Noto Sans Tamil', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        'trust': '0 4px 14px 0 rgba(107, 45, 60, 0.12)',
+        'trust-lg': '0 10px 40px -10px rgba(92, 26, 27, 0.15)',
       },
     },
   },

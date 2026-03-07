@@ -1,10 +1,30 @@
 import { useState, useEffect } from 'react';
 
+export type TickerPriority = 'high' | 'medium' | 'low';
+
+export interface NewsTickerItem {
+  text: string;
+  priority: TickerPriority;
+}
+
+const PRIORITIES: { value: TickerPriority; label: string }[] = [
+  { value: 'high', label: 'High' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'low', label: 'Low' },
+];
+
+function normalizeItem(item: string | NewsTickerItem): NewsTickerItem {
+  if (typeof item === 'string') return { text: item, priority: 'medium' };
+  return { text: item.text, priority: item.priority || 'medium' };
+}
+
 export default function AdminNews() {
-  const [newsItems, setNewsItems] = useState<string[]>([]);
+  const [newsItems, setNewsItems] = useState<NewsTickerItem[]>([]);
   const [newItem, setNewItem] = useState('');
+  const [newPriority, setNewPriority] = useState<TickerPriority>('high');
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
+  const [editPriority, setEditPriority] = useState<TickerPriority>('medium');
   const [message, setMessage] = useState({ type: '', text: '' });
 
   // Check authentication
@@ -19,36 +39,34 @@ export default function AdminNews() {
   const loadNewsItems = () => {
     if (typeof window === 'undefined') return;
     
-    // Try localStorage first
     const stored = localStorage.getItem('newsTickerItems');
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        setNewsItems(parsed);
+        const items = Array.isArray(parsed)
+          ? parsed.map(normalizeItem)
+          : [];
+        setNewsItems(items);
         return;
       } catch (e) {
         console.error('Error parsing stored news items:', e);
       }
     }
 
-    // Default items
-    const defaultItems = [
-      'Welcome to TMK London - Celebrating Tamil Culture and Heritage',
-      'Follow us on social media for the latest updates and events',
-      'Tamil School registration is now open for the new academic year',
-      'Join us for our upcoming cultural events and celebrations'
+    const defaultItems: NewsTickerItem[] = [
+      { text: 'Welcome to TMK London - Celebrating Tamil Culture and Heritage', priority: 'high' },
+      { text: 'Follow us on social media for the latest updates and events', priority: 'medium' },
+      { text: 'Tamil School registration is now open for the new academic year', priority: 'high' },
+      { text: 'Join us for our upcoming cultural events and celebrations', priority: 'medium' },
     ];
     setNewsItems(defaultItems);
     localStorage.setItem('newsTickerItems', JSON.stringify(defaultItems));
-    localStorage.setItem('newsMessages', JSON.stringify(defaultItems));
   };
 
-  const saveNewsItems = async (items: string[]) => {
+  const saveNewsItems = (items: NewsTickerItem[]) => {
     if (typeof window === 'undefined') return;
     
-    // Save to localStorage immediately for instant updates
     localStorage.setItem('newsTickerItems', JSON.stringify(items));
-    localStorage.setItem('newsMessages', JSON.stringify(items));
     setNewsItems(items);
     
     showMessage('success', '💾 News items saved successfully!');
@@ -64,8 +82,7 @@ export default function AdminNews() {
 
   const handleAdd = () => {
     if (newItem.trim()) {
-      // Prepend so the most recent is always first (index 0)
-      const updated = [newItem.trim(), ...newsItems];
+      const updated = [{ text: newItem.trim(), priority: newPriority }, ...newsItems];
       saveNewsItems(updated);
       setNewItem('');
     }
@@ -80,13 +97,14 @@ export default function AdminNews() {
 
   const handleEdit = (index: number) => {
     setEditingIndex(index);
-    setEditValue(newsItems[index]);
+    setEditValue(newsItems[index].text);
+    setEditPriority(newsItems[index].priority);
   };
 
   const handleSaveEdit = (index: number) => {
     if (editValue.trim()) {
       const updated = [...newsItems];
-      updated[index] = editValue.trim();
+      updated[index] = { text: editValue.trim(), priority: editPriority };
       saveNewsItems(updated);
       setEditingIndex(null);
       setEditValue('');
@@ -112,6 +130,12 @@ export default function AdminNews() {
       [updated[index], updated[index + 1]] = [updated[index + 1], updated[index]];
       saveNewsItems(updated);
     }
+  };
+
+  const handlePriorityChange = (index: number, priority: TickerPriority) => {
+    const updated = [...newsItems];
+    updated[index] = { ...updated[index], priority };
+    saveNewsItems(updated);
   };
 
   useEffect(() => {
@@ -150,15 +174,25 @@ export default function AdminNews() {
           {/* Add New Item */}
           <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Add New News Item</h2>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3 items-center">
               <input
                 type="text"
                 value={newItem}
                 onChange={(e) => setNewItem(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
                 placeholder="Enter news item text..."
-                className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-600 transition-colors"
+                className="flex-1 min-w-[200px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-600 transition-colors"
               />
+              <select
+                value={newPriority}
+                onChange={(e) => setNewPriority(e.target.value as TickerPriority)}
+                className="px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-600 bg-white"
+                title="Priority (affects style on ticker)"
+              >
+                {PRIORITIES.map((p) => (
+                  <option key={p.value} value={p.value}>{p.label}</option>
+                ))}
+              </select>
               <button
                 onClick={handleAdd}
                 className="px-6 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition-colors shadow-md hover:shadow-lg"
@@ -166,6 +200,7 @@ export default function AdminNews() {
                 Add
               </button>
             </div>
+            <p className="mt-2 text-sm text-gray-500">Priority: High = bold/red, Medium = amber, Low = subtle. Latest (first) item gets extra highlight.</p>
           </div>
 
           {/* News Items List */}
@@ -184,7 +219,7 @@ export default function AdminNews() {
                     className="border-2 border-gray-200 rounded-lg p-4 hover:border-primary-500/50 transition-colors"
                   >
                     {editingIndex === index ? (
-                      <div className="flex gap-3 items-start">
+                      <div className="flex flex-wrap gap-3 items-center">
                         <input
                           type="text"
                           value={editValue}
@@ -193,9 +228,18 @@ export default function AdminNews() {
                             if (e.key === 'Enter') handleSaveEdit(index);
                             if (e.key === 'Escape') handleCancelEdit();
                           }}
-                          className="flex-1 px-4 py-2 border-2 border-primary-600 rounded-lg focus:outline-none focus:border-primary-700"
+                          className="flex-1 min-w-[200px] px-4 py-2 border-2 border-primary-600 rounded-lg focus:outline-none focus:border-primary-700"
                           autoFocus
                         />
+                        <select
+                          value={editPriority}
+                          onChange={(e) => setEditPriority(e.target.value as TickerPriority)}
+                          className="px-3 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-600 bg-white"
+                        >
+                          {PRIORITIES.map((p) => (
+                            <option key={p.value} value={p.value}>{p.label}</option>
+                          ))}
+                        </select>
                         <button
                           onClick={() => handleSaveEdit(index)}
                           className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
@@ -212,14 +256,21 @@ export default function AdminNews() {
                     ) : (
                       <div className="flex items-start gap-3">
                         <div className="flex-1">
-                          <div className="text-sm text-gray-500 mb-1 flex items-center gap-2">
+                          <div className="text-sm text-gray-500 mb-1 flex items-center gap-2 flex-wrap">
                             {index === 0 ? (
                               <span className="px-2 py-0.5 rounded bg-primary-100 text-primary-700 font-semibold text-xs">Latest (shows first)</span>
                             ) : (
                               <>Item #{index + 1}</>
                             )}
+                            <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                              item.priority === 'high' ? 'bg-red-100 text-red-700' :
+                              item.priority === 'medium' ? 'bg-amber-100 text-amber-800' :
+                              'bg-gray-100 text-gray-600'
+                            }`}>
+                              {item.priority}
+                            </span>
                           </div>
-                          <div className="text-gray-800 font-medium">{item}</div>
+                          <div className="text-gray-800 font-medium">{item.text}</div>
                         </div>
                         <div className="flex gap-2">
                           <button
@@ -238,6 +289,16 @@ export default function AdminNews() {
                           >
                             ↓
                           </button>
+                          <select
+                            value={item.priority}
+                            onChange={(e) => handlePriorityChange(index, e.target.value as TickerPriority)}
+                            className="text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:border-primary-500"
+                            title="Priority"
+                          >
+                            {PRIORITIES.map((p) => (
+                              <option key={p.value} value={p.value}>{p.label}</option>
+                            ))}
+                          </select>
                           <button
                             onClick={() => handleEdit(index)}
                             className="p-2 text-blue-600 hover:text-blue-700 transition-colors"
@@ -267,7 +328,7 @@ export default function AdminNews() {
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">Preview</h2>
               <div className="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800 p-4 rounded-lg">
                 <div className="text-white text-sm font-medium whitespace-nowrap overflow-hidden">
-                  Latest News: {newsItems.join(' • ')}
+                  Latest News: {newsItems.map((i) => i.text).join(' • ')}
                 </div>
               </div>
             </div>

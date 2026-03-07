@@ -1,6 +1,5 @@
 ---
 import { getTranslation, type Language } from '../utils/i18n';
-import { siteConfig } from '../utils/seo';
 
 interface Props {
   lang?: Language;
@@ -8,269 +7,116 @@ interface Props {
 
 const { lang = 'ta' } = Astro.props;
 
+// Full-screen hero background (London / Tamil heritage)
 const carouselImages = [
-  '/images/hero-banner.jpg',
-  '/images/hero-banner.jpg', // Can add more images later
+  '/static/content/london-skyline-sunset.jpg',
+  '/static/content/background-london.jpg',
+  '/static/content/london-skyline-colorful.png',
 ];
 
+// Riyadh-style: 4 stats in a row
 const stats = [
   {
     value: '50+',
-    label: {
-      ta: 'ஆண்டுகள் சேவை',
-      en: 'Years of Service'
-    }
+    label: { ta: 'சேவை ஆண்டுகள்', en: 'Years of Service' }
   },
   {
     value: '400+',
-    label: {
-      ta: 'சமூக உறுப்பினர்கள்',
-      en: 'Community Members'
-    }
+    label: { ta: 'சமூக உறுப்பினர்கள்', en: 'Community Members' }
   },
   {
     value: '1',
-    label: {
-      ta: 'பள்ளி இடம்',
-      en: 'School Location'
-    }
-  }
-];
-
-const events = [
-  {
-    date: 'Dec 15, 2024',
-    title: {
-      ta: 'பொங்கல் கொண்டாட்டம்',
-      en: 'Pongal Celebration'
-    },
-    description: {
-      ta: 'பாரம்பரிய பொங்கல் விழாவில் எங்களுடன் சேரவும்',
-      en: 'Join us for traditional Pongal festivities'
-    }
+    label: { ta: 'பள்ளி இடம்', en: 'School Location' }
   },
   {
-    date: 'Dec 20, 2024',
-    title: {
-      ta: 'தமிழ் மொழி பட்டறை',
-      en: 'Tamil Language Workshop'
-    },
-    description: {
-      ta: 'தமிழ் எழுத்து மற்றும் உரையாடலை கற்றுக்கொள்ளுங்கள்',
-      en: 'Learn Tamil script and conversation'
-    }
-  },
-  {
-    date: 'Jan 5, 2025',
-    title: {
-      ta: 'கலாச்சார நடன நிகழ்ச்சி',
-      en: 'Cultural Dance Performance'
-    },
-    description: {
-      ta: 'மாணவர்களின் பரதநாட்டியம் நிகழ்ச்சி',
-      en: 'Bharatanatyam showcase by students'
-    }
+    value: '100+',
+    label: { ta: 'நிகழ்வுகள்', en: 'Events Organised' }
   }
 ];
 ---
 
-<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-2 md:pt-4 pb-20">
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-2 md:pt-4 pb-16 md:pb-20">
+  <!-- Background -->
   <div class="absolute inset-0 z-0">
     {carouselImages.map((img, index) => (
       <div
-        class={`absolute inset-0 transition-opacity duration-1000 ${
-          index === 0 ? 'opacity-100' : 'opacity-0'
-        }`}
+        class={`absolute inset-0 transition-opacity duration-1000 ${index === 0 ? 'opacity-100' : 'opacity-0'}`}
         style={`background-image: url(${img}); background-size: cover; background-position: center;`}
       />
     ))}
-    <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(15, 118, 110, 0.95), rgba(13, 148, 136, 0.90));"></div>
+    <div class="absolute inset-0 hero-overlay" style="background: linear-gradient(to bottom, rgba(200, 75, 50, 0.2) 0%, rgba(160, 55, 45, 0.35) 25%, rgba(80, 35, 30, 0.55) 55%, rgba(25, 18, 18, 0.78) 80%, rgba(12, 10, 10, 0.88) 100%);"></div>
   </div>
 
-  <div class="relative z-10 w-full">
-    <div class="relative">
-      <!-- Left Side Panel - Upcoming Events (Desktop) -->
-      <div class="hidden lg:block absolute left-0 top-0 w-64 xl:w-72 z-20">
-        <div class="bg-white/10 backdrop-blur-md rounded-r-2xl p-6 border border-white/20 border-l-0 shadow-xl sticky top-24">
-          <h3 class="text-xl font-bold mb-4 text-white border-b border-white/30 pb-3">
-            {getTranslation('upcomingEvent', lang)}
-          </h3>
-          <div class="space-y-4">
-            {events.map((event) => (
-              <div class="bg-white/5 rounded-lg p-3 border border-white/10">
-                <div class="text-xs text-white/70 mb-1">{event.date}</div>
-                <div class="text-sm font-semibold text-white">{event.title[lang]}</div>
-                <div class="text-xs text-white/80 mt-1">{event.description[lang]}</div>
-              </div>
-            ))}
+  <!-- Riyadh-style: single centered column, no side panels -->
+  <div class="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center text-white">
+    <!-- Est. badge -->
+    <p class="text-sm md:text-base font-medium tracking-[0.2em] uppercase text-white/90 mb-4">
+      [ {lang === 'ta' ? 'நிறுவப்பட்டது 1975 · லண்டன், UK' : 'Est. 1975 · London, UK'} ]
+    </p>
+
+    <!-- Main title: London Tamil Sangam for SEO + welcome -->
+    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 leading-tight">
+      {lang === 'ta' ? (
+        <span class="block font-tamil">வணக்கம்!</span>
+      ) : (
+        <span class="block">Welcome to London Tamil Sangam</span>
+      )}
+    </h1>
+    <p class="text-xl md:text-2xl font-tamil text-white/95 mb-2">
+      {lang === 'ta'
+        ? 'லண்டன் தமிழ் சங்கம் – தமிழர் முன்னேற்றக் கழகம் லண்டன் தங்களை அன்புடன் வரவேற்கிறது'
+        : 'London Tamil Sangam – TMK London welcomes you'}
+    </p>
+
+    <!-- Tagline (bilingual) -->
+    <p class="text-base md:text-lg lg:text-xl text-white/90 max-w-3xl mx-auto mb-4 leading-relaxed">
+      {lang === 'ta'
+        ? '1975 முதல் லண்டனில் தமிழ் மொழி, இலக்கியம் மற்றும் கலாச்சாரத்தை வளர்க்கிறோம்'
+        : 'Promoting Tamil language, literature & culture in London since 1975'}
+    </p>
+
+    <!-- Inspirational quote (Riyadh-style) -->
+    <p class="text-sm md:text-base italic text-white/85 max-w-2xl mx-auto mb-8 md:mb-10">
+      "{lang === 'ta'
+        ? 'தமிழருடன் தமிழில் பேசி, நம் தாய் மொழியைச் சிறப்பிப்போமாக!'
+        : 'Let us speak Tamil with Tamilians and glorify our mother tongue!'}"
+    </p>
+
+    <!-- Primary links: About Us | Our Events (Riyadh-style: primary = maroon) -->
+    <div class="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-10 md:mb-12">
+      <a
+        href={`/about${lang === 'en' ? '?lang=en' : ''}`}
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-white/15 backdrop-blur-md border border-white/30 hover:bg-white/25 transition-all text-white"
+      >
+        {getTranslation('about', lang)}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+      <a
+        href="#activities"
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-accent text-white border border-accent-dark hover:bg-accent-dark transition-all shadow-lg"
+      >
+        {lang === 'ta' ? 'எங்கள் நிகழ்வுகள்' : 'Our Events'}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+      </a>
+    </div>
+
+    <!-- Stats row: 4 cards (Riyadh-style) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
+      {stats.map((stat) => (
+        <div class="bg-black/35 backdrop-blur-md rounded-2xl p-5 md:p-6 border border-white/15 hover:bg-black/45 transition-all duration-300 hover:scale-[1.02] shadow-lg">
+          <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-amber-400" data-stat-value={stat.value}>
+            {stat.value}
           </div>
-          <a href="#activities" class="block mt-4 text-center text-sm text-accent hover:text-white transition-colors font-semibold">
-            {lang === 'ta' ? 'அனைத்து நிகழ்வுகளையும் பார்க்க →' : 'View All Events →'}
-          </a>
+          <div class="text-sm md:text-base text-white/90 font-medium mt-2">{stat.label[lang]}</div>
         </div>
-      </div>
-
-      <!-- Center Content -->
-      <div class="w-full max-w-7xl mx-auto text-center text-white flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 lg:pl-[280px] lg:pr-[280px] xl:pl-[320px] xl:pr-[320px]">
-        <div class="inline-block px-6 py-3 bg-white/20 backdrop-blur-md rounded-full mb-8 border border-white/30 shadow-lg">
-          <span class="text-sm md:text-base font-semibold">
-            {lang === 'ta' ? 'உருவாக்கப்பட்டது 1975 • UK இன் பழமையான தமிழ் அமைப்புகளில் ஒன்று' : 'Estd. 1975 • One of UK\'s Oldest Tamil Organizations'}
-          </span>
-        </div>
-
-        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-          {lang === 'ta' ? (
-            <span class="block mb-2 font-tamil">வணக்கம்!</span>
-          ) : (
-            <span class="block mb-2">Welcome!</span>
-          )}
-          <span class="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 font-light">Welcome to TMK London</span>
-        </h1>
-
-        <p class="text-lg md:text-xl lg:text-2xl mb-12 max-w-3xl mx-auto text-white/95 leading-relaxed">
-          {lang === 'ta' 
-            ? 'UK இல் 50 ஆண்டுகளுக்கும் மேலாக தமிழ் கலாச்சாரம், மொழி மற்றும் பாரம்பரியத்தை பாதுகாத்து வருகிறோம்'
-            : 'Preserving Tamil culture, language, and heritage in the UK for over 50 years'}
-        </p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-12 max-w-4xl mx-auto">
-          {stats.map((stat) => (
-            <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-              <div class="flex items-baseline justify-center">
-                <span class="text-4xl md:text-5xl lg:text-6xl font-bold text-accent" data-stat-value={stat.value}>{stat.value}</span>
-              </div>
-              <div class="text-sm md:text-base text-white/90 font-medium text-center mt-2">{stat.label[lang]}</div>
-            </div>
-          ))}
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-          <a 
-            href="#activities" 
-            class="px-8 py-4 text-white rounded-lg font-semibold text-lg transition-all shadow-md hover:shadow-lg hover:bg-primary-dark min-w-[200px] text-center"
-            style="background: #0f766e;"
-          >
-            {lang === 'ta' ? 'எங்கள் சேவைகளை ஆராயுங்கள்' : 'Explore Our Services'}
-          </a>
-          <a 
-            href={`/contact${lang === 'en' ? '?lang=en' : ''}`}
-            class="px-8 py-4 bg-white text-primary rounded-lg font-semibold text-lg hover:bg-gray-50 transition-all shadow-md hover:shadow-lg min-w-[200px] text-center border border-gray-300"
-          >
-            {lang === 'ta' ? 'தொடர்பு கொள்ள' : 'Get in Touch'}
-          </a>
-        </div>
-      </div>
-
-      <!-- Mobile Side Panels - Below Center Content -->
-      <div class="lg:hidden w-full px-4 mt-8 space-y-6">
-        <!-- Mobile Upcoming Events -->
-        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 shadow-xl">
-          <h3 class="text-lg font-bold mb-4 text-white border-b border-white/30 pb-3">
-            {getTranslation('upcomingEvent', lang)}
-          </h3>
-          <div class="space-y-3">
-            {events.map((event) => (
-              <div class="bg-white/5 rounded-lg p-3 border border-white/10">
-                <div class="text-xs text-white/70 mb-1">{event.date}</div>
-                <div class="text-sm font-semibold text-white">{event.title[lang]}</div>
-                <div class="text-xs text-white/80 mt-1">{event.description[lang]}</div>
-              </div>
-            ))}
-          </div>
-          <a href="#activities" class="block mt-4 text-center text-sm text-accent hover:text-white transition-colors font-semibold">
-            {lang === 'ta' ? 'அனைத்து நிகழ்வுகளையும் பார்க்க →' : 'View All Events →'}
-          </a>
-        </div>
-
-        <!-- Mobile Quick Links -->
-        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 shadow-xl">
-          <h3 class="text-lg font-bold mb-4 text-white border-b border-white/30 pb-3">
-            {lang === 'ta' ? 'விரைவு இணைப்புகள்' : 'Quick Links'}
-          </h3>
-          <div class="space-y-3">
-            <a href={`/tamil-school${lang === 'en' ? '?lang=en' : ''}`} class="block bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/15 transition-all group">
-              <div class="text-sm font-semibold text-white group-hover:text-accent">{getTranslation('tamilSchool', lang)}</div>
-              <div class="text-xs text-white/70 mt-1">{lang === 'ta' ? 'வகுப்புகளுக்கு பதிவு செய்ய' : 'Register for classes'}</div>
-            </a>
-            <a href={`/student-registration${lang === 'en' ? '?lang=en' : ''}`} class="block bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/15 transition-all group">
-              <div class="text-sm font-semibold text-white group-hover:text-accent">{getTranslation('studentRegistration', lang)}</div>
-              <div class="text-xs text-white/70 mt-1">{lang === 'ta' ? 'மாணவர் பதிவு செய்ய' : 'Register as a student'}</div>
-            </a>
-            <a href={`/publications${lang === 'en' ? '?lang=en' : ''}`} class="block bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/15 transition-all group">
-              <div class="text-sm font-semibold text-white group-hover:text-accent">{getTranslation('publications', lang)}</div>
-              <div class="text-xs text-white/70 mt-1">{lang === 'ta' ? 'எங்கள் வெளியீடுகளைப் பார்வையிட' : 'Browse our publications'}</div>
-            </a>
-            <a href={`/about${lang === 'en' ? '?lang=en' : ''}`} class="block bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/15 transition-all group">
-              <div class="text-sm font-semibold text-white group-hover:text-accent">{getTranslation('about', lang)}</div>
-              <div class="text-xs text-white/70 mt-1">{lang === 'ta' ? 'எங்களைப் பற்றி அறிய' : 'Learn about us'}</div>
-            </a>
-          </div>
-          
-          <div class="mt-6 pt-6 border-t border-white/20">
-            <h4 class="text-sm font-semibold text-white mb-3">{lang === 'ta' ? 'தொடர்பு கொள்ள' : 'Contact Us'}</h4>
-            <div class="space-y-2 text-xs text-white/80">
-              <div class="flex items-center gap-2">
-                <span>📞</span>
-                <a href={`tel:${siteConfig.contact.phone}`} class="hover:text-white transition-colors">{siteConfig.contact.phone}</a>
-              </div>
-              <div class="flex items-center gap-2">
-                <span>✉️</span>
-                <a href={`mailto:${siteConfig.contact.email}`} class="hover:text-white transition-colors">{siteConfig.contact.email}</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Side Panel - Quick Links (Desktop) -->
-      <div class="hidden lg:block absolute right-0 top-0 w-64 xl:w-72 z-20">
-        <div class="bg-white/10 backdrop-blur-md rounded-l-2xl p-6 border border-white/20 border-r-0 shadow-xl sticky top-24 mr-0">
-          <h3 class="text-xl font-bold mb-4 text-white border-b border-white/30 pb-3">
-            {lang === 'ta' ? 'விரைவு இணைப்புகள்' : 'Quick Links'}
-          </h3>
-          <div class="space-y-3">
-            <a href={`/tamil-school${lang === 'en' ? '?lang=en' : ''}`} class="block bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/15 transition-all group">
-              <div class="text-sm font-semibold text-white group-hover:text-accent">{getTranslation('tamilSchool', lang)}</div>
-              <div class="text-xs text-white/70 mt-1">{lang === 'ta' ? 'வகுப்புகளுக்கு பதிவு செய்ய' : 'Register for classes'}</div>
-            </a>
-            <a href={`/student-registration${lang === 'en' ? '?lang=en' : ''}`} class="block bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/15 transition-all group">
-              <div class="text-sm font-semibold text-white group-hover:text-accent">{getTranslation('studentRegistration', lang)}</div>
-              <div class="text-xs text-white/70 mt-1">{lang === 'ta' ? 'மாணவர் பதிவு செய்ய' : 'Register as a student'}</div>
-            </a>
-            <a href={`/publications${lang === 'en' ? '?lang=en' : ''}`} class="block bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/15 transition-all group">
-              <div class="text-sm font-semibold text-white group-hover:text-accent">{getTranslation('publications', lang)}</div>
-              <div class="text-xs text-white/70 mt-1">{lang === 'ta' ? 'எங்கள் வெளியீடுகளைப் பார்வையிட' : 'Browse our publications'}</div>
-            </a>
-            <a href={`/about${lang === 'en' ? '?lang=en' : ''}`} class="block bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/15 transition-all group">
-              <div class="text-sm font-semibold text-white group-hover:text-accent">{getTranslation('about', lang)}</div>
-              <div class="text-xs text-white/70 mt-1">{lang === 'ta' ? 'எங்களைப் பற்றி அறிய' : 'Learn about us'}</div>
-            </a>
-          </div>
-          
-          <div class="mt-6 pt-6 border-t border-white/20">
-            <h4 class="text-sm font-semibold text-white mb-3">{lang === 'ta' ? 'தொடர்பு கொள்ள' : 'Contact Us'}</h4>
-            <div class="space-y-2 text-xs text-white/80">
-              <div class="flex items-center gap-2">
-                <span>📞</span>
-                <a href={`tel:${siteConfig.contact.phone}`} class="hover:text-white transition-colors">{siteConfig.contact.phone}</a>
-              </div>
-              <div class="flex items-center gap-2">
-                <span>✉️</span>
-                <a href={`mailto:${siteConfig.contact.email}`} class="hover:text-white transition-colors">{siteConfig.contact.email}</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>
 
 <script>
-  // Animated counter for stats
   document.addEventListener('DOMContentLoaded', () => {
     const statElements = document.querySelectorAll('[data-stat-value]');
-    
     statElements.forEach((element) => {
       const valueText = element.getAttribute('data-stat-value') || '0';
       const targetValue = parseInt(valueText.replace('+', ''));
@@ -278,18 +124,11 @@ const events = [
       const steps = 60;
       const stepDuration = duration / steps;
       let currentStep = 0;
-      
       const counterInterval = setInterval(() => {
         currentStep++;
         const progress = currentStep / steps;
         const currentValue = Math.floor(targetValue * progress);
-        
-        if (valueText.includes('+')) {
-          element.textContent = currentValue + '+';
-        } else {
-          element.textContent = String(currentValue);
-        }
-        
+        element.textContent = valueText.includes('+') ? currentValue + '+' : String(currentValue);
         if (currentStep >= steps) {
           clearInterval(counterInterval);
           element.textContent = valueText;

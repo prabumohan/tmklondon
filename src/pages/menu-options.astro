@@ -1,0 +1,320 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Menu bar options – TMK London" description="Choose your preferred menu bar style and behaviour." lang="en">
+  <main class="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
+    <h1 class="text-2xl md:text-3xl font-bold text-primary-800 mb-2">Menu bar options</h1>
+    <p class="text-gray-600 mb-8">Choose one option per section. Your choices are saved in this browser so we can apply them to the menu.</p>
+
+    <form id="menu-options-form" class="space-y-10">
+      <!-- 1. Visual style -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-1">1. Visual style</h2>
+        <p class="text-sm text-gray-500 mb-4">How the menu bar looks (colour, gradient, accents).</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="visual" value="A" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">A – Keep current</span>
+              <p class="mt-0.5 text-sm text-gray-600">Indigo gradient, white text, rounded hover, underline animation.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="visual" value="B" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">B – Flat / minimal</span>
+              <p class="mt-0.5 text-sm text-gray-600">Solid indigo, lighter hover, no underline animation.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="visual" value="C" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">C – Tamil accent</span>
+              <p class="mt-0.5 text-sm text-gray-600">Same bar + thin saffron/amber stripe at bottom or top.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="visual" value="D" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">D – Light bar</span>
+              <p class="mt-0.5 text-sm text-gray-600">White/light grey bar, dark text, indigo for active/hover.</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- 2. Layout -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-1">2. Layout</h2>
+        <p class="text-sm text-gray-500 mb-4">How links are arranged (one row, centered, mega menu, etc.).</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="layout" value="A" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">A – Keep current</span>
+              <p class="mt-0.5 text-sm text-gray-600">One row; Tamil School has dropdown (Donation).</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="layout" value="B" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">B – Centred nav</span>
+              <p class="mt-0.5 text-sm text-gray-600">Main links centred; Language + Admin on the right.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="layout" value="C" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">C – Mega menu</span>
+              <p class="mt-0.5 text-sm text-gray-600">Tamil School opens a wide panel with descriptions/icons.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="layout" value="D" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">D – Two rows</span>
+              <p class="mt-0.5 text-sm text-gray-600">Primary links on top; secondary in a second row or “More” dropdown.</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- 3. Active / Hover -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-1">3. Active / Hover</h2>
+        <p class="text-sm text-gray-500 mb-4">How the current page and hover state look.</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="active" value="A" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">A – Keep current</span>
+              <p class="mt-0.5 text-sm text-gray-600">Bottom line grows on hover; active = light background.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="active" value="B" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">B – Pill / tab</span>
+              <p class="mt-0.5 text-sm text-gray-600">Active link in a pill; hover = lighter background.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="active" value="C" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">C – Bold + underline</span>
+              <p class="mt-0.5 text-sm text-gray-600">Active = bold + bottom border; hover = underline.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="active" value="D" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">D – Background only</span>
+              <p class="mt-0.5 text-sm text-gray-600">No underline; stronger background on hover/active.</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- 4. Dropdown (Tamil School) -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-1">4. Dropdown (Tamil School)</h2>
+        <p class="text-sm text-gray-500 mb-4">How the Tamil School sub-menu behaves.</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="dropdown" value="A" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">A – Keep current</span>
+              <p class="mt-0.5 text-sm text-gray-600">Hover opens white card with Donation.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="dropdown" value="B" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">B – More items</span>
+              <p class="mt-0.5 text-sm text-gray-600">Same style; add more sub-links if you have them.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="dropdown" value="C" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">C – Click to open</span>
+              <p class="mt-0.5 text-sm text-gray-600">Dropdown opens on click (better for touch); arrow rotates.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="dropdown" value="D" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">D – Inline sub-links</span>
+              <p class="mt-0.5 text-sm text-gray-600">Tamil School + Donation as two items in the same bar (no dropdown).</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- 5. Language & Admin -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-1">5. Language & Admin</h2>
+        <p class="text-sm text-gray-500 mb-4">Right side of the bar (தமிழ் | English, Admin).</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="language" value="A" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">A – Keep current</span>
+              <p class="mt-0.5 text-sm text-gray-600">தமிழ் | English and Admin on the right.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="language" value="B" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">B – Separator</span>
+              <p class="mt-0.5 text-sm text-gray-600">Vertical line or extra space between nav and Language/Admin.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="language" value="C" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">C – Admin in “Tools”</span>
+              <p class="mt-0.5 text-sm text-gray-600">Admin under a Tools or icon menu for a cleaner bar.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="language" value="D" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">D – Labels</span>
+              <p class="mt-0.5 text-sm text-gray-600">E.g. “Language: தமிழ் | English” and “Admin” with icon.</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- 6. Mobile menu -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-1">6. Mobile menu</h2>
+        <p class="text-sm text-gray-500 mb-4">How the menu behaves on phones (hamburger, drawer, etc.).</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="mobile" value="A" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">A – Keep current</span>
+              <p class="mt-0.5 text-sm text-gray-600">Hamburger opens full menu below with links + contact/social.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="mobile" value="B" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">B – Slide-in drawer</span>
+              <p class="mt-0.5 text-sm text-gray-600">Menu slides in from right (or left) as overlay.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="mobile" value="C" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">C – Accordion</span>
+              <p class="mt-0.5 text-sm text-gray-600">Tamil School expands in-place to show Donation.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="mobile" value="D" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">D – Bottom nav</span>
+              <p class="mt-0.5 text-sm text-gray-600">4–5 key links in a fixed bottom bar; rest in hamburger.</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <!-- 7. News ticker -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-lg font-semibold text-gray-900 mb-1">7. News ticker</h2>
+        <p class="text-sm text-gray-500 mb-4">Where the “Latest news” ticker sits.</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="ticker" value="A" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">A – Below nav</span>
+              <p class="mt-0.5 text-sm text-gray-600">As now: nav bar, then news ticker.</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="ticker" value="B" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">B – Above nav</span>
+              <p class="mt-0.5 text-sm text-gray-600">Ticker first, then main nav (news more prominent).</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="ticker" value="C" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">C – Inside nav (desktop)</span>
+              <p class="mt-0.5 text-sm text-gray-600">On desktop, ticker in same bar (e.g. left: links, right: ticker + language + admin).</p>
+            </div>
+          </label>
+          <label class="menu-option-card flex cursor-pointer items-start gap-3 rounded-xl border-2 border-gray-200 bg-gray-50/50 p-4 transition-all hover:border-primary-200 hover:bg-primary-50/30 has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:ring-2 has-[:checked]:ring-primary-200">
+            <input type="radio" name="ticker" value="D" class="mt-1 h-4 w-4 text-primary-600" />
+            <div>
+              <span class="font-medium text-gray-900">D – Remove from header</span>
+              <p class="mt-0.5 text-sm text-gray-600">Ticker only on homepage or another section, not in header.</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button type="submit" class="rounded-xl bg-primary-600 px-6 py-3 font-semibold text-white shadow-md transition-all hover:bg-primary-700 hover:shadow-lg">
+          Save my choices
+        </button>
+        <a href="/" class="rounded-xl border border-gray-300 px-6 py-3 font-medium text-gray-700 transition-all hover:bg-gray-50">Back to home</a>
+      </div>
+    </form>
+
+    <div id="save-result" class="mt-8 hidden rounded-xl border border-green-200 bg-green-50 p-4 text-green-800" role="status" aria-live="polite">
+      <p class="font-medium">Choices saved.</p>
+      <p id="save-summary" class="mt-1 text-sm text-green-700"></p>
+    </div>
+  </main>
+</BaseLayout>
+
+<script define:vars={{}}>
+  const STORAGE_KEY = 'tmkMenuOptions';
+
+  function getSelections(): Record<string, string> {
+    const form = document.getElementById('menu-options-form') as HTMLFormElement;
+    if (!form) return {};
+    const data: Record<string, string> = {};
+    const names = ['visual', 'layout', 'active', 'dropdown', 'language', 'mobile', 'ticker'];
+    names.forEach((name) => {
+      const el = form.elements.namedItem(name) as RadioNodeList;
+      const val = el?.value;
+      if (val) data[name] = val;
+    });
+    return data;
+  }
+
+  function loadSelections(): void {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw) as Record<string, string>;
+      Object.entries(saved).forEach(([name, value]) => {
+        const input = document.querySelector(`input[name="${name}"][value="${value}"]`) as HTMLInputElement;
+        if (input) input.checked = true;
+      });
+    } catch (_) {}
+  }
+
+  document.getElementById('menu-options-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const selections = getSelections();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(selections));
+    const summary = document.getElementById('save-summary');
+    const result = document.getElementById('save-result');
+    if (summary && result) {
+      summary.textContent = `Visual: ${selections.visual || '–'}, Layout: ${selections.layout || '–'}, Active: ${selections.active || '–'}, Dropdown: ${selections.dropdown || '–'}, Language: ${selections.language || '–'}, Mobile: ${selections.mobile || '–'}, Ticker: ${selections.ticker || '–'}`;
+      result.classList.remove('hidden');
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  });
+
+  loadSelections();
+</script>

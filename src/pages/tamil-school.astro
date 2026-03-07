@@ -8,8 +8,10 @@ const schoolSchema = getLocalBusinessSchema();
 ---
 
 <BaseLayout 
-  title={getTranslation('tamilSchool', lang)}
-  description="TMK Tamil School - Learn Tamil language and culture in London. Register your child for Tamil language classes."
+  title={lang === 'ta' ? 'தமிழ்ப் பள்ளி - London Tamil Sangam Tamil School' : 'Tamil School - London Tamil Sangam | TMK Tamil School London'}
+  description={lang === 'ta' 
+    ? 'லண்டன் தமிழ் சங்கம் தமிழ்ப் பள்ளி – லண்டனில் தமிழ் மொழி மற்றும் கலாச்சாரம். குழந்தைகள் மற்றும் பெரியவர்களுக்கான தமிழ் வகுப்புகள். Tamil school London, Tamil Sangam London.'
+    : 'London Tamil Sangam Tamil School – TMK Tamil School London. Learn Tamil language and culture. Tamil classes for children and adults. Tamil Sangam London, Tamil school East London.'}
   lang={lang}
   schema={schoolSchema}
 >

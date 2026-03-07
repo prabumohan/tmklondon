@@ -40,6 +40,22 @@ export const translations: Translations = {
     ta: 'வண்ணக் களஞ்சியம்',
     en: 'Gallery',
   },
+  galleryTeachers: {
+    ta: 'எங்கள் ஆசிரியர்கள்',
+    en: 'Our Teachers',
+  },
+  gallerySchoolActivities: {
+    ta: 'பள்ளி நடவடிக்கைகள்',
+    en: 'School Activities',
+  },
+  galleryEvents: {
+    ta: 'நிகழ்வுகள்',
+    en: 'Events',
+  },
+  galleryCommunity: {
+    ta: 'சமூக கூட்டங்கள்',
+    en: 'Community Gatherings',
+  },
   contact: {
     ta: 'தொடர்பு கொள்ள',
     en: 'Contact',
