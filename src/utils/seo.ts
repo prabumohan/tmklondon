@@ -20,10 +20,10 @@ export const siteConfig = {
     },
   },
   social: {
-    facebook: 'https://facebook.com/tmklondon',
-    instagram: 'https://instagram.com/tmklondon',
-    youtube: 'https://youtube.com/tmklondon',
-    whatsapp: '+447459528739',
+    facebook: 'https://www.facebook.com/tmktamilschool/',
+    instagram: 'https://www.instagram.com/tmk.london?igsh=MWJ5Z2Yzem9oYzk1cg==',
+    youtube: 'https://youtube.com/@tmklondon?si=8q3gtTDP-KnIszs5',
+    whatsapp: '+447459528739', // links use https://wa.me/447459528739
   },
 };
 

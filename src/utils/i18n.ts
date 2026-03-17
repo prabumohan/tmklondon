@@ -25,7 +25,7 @@ export const translations: Translations = {
     en: 'Tamil School',
   },
   schoolDonation: {
-    ta: 'பள்ளி நன்கொடை',
+    ta: 'பள்ளி-நன்கொடை',
     en: 'School Donation',
   },
   studentRegistration: {

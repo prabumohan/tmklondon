@@ -7,12 +7,18 @@ interface Props {
 
 const { lang = 'ta' } = Astro.props;
 
-// Full-screen hero background (London / Tamil heritage)
-const carouselImages = [
-  '/static/content/london-skyline-sunset.jpg',
-  '/static/content/background-london.jpg',
-  '/static/content/london-skyline-colorful.png',
+// Full-screen hero background – scrolling through these images (position = background-position for crop/focus)
+const carouselImages: { src: string; position?: string }[] = [
+  { src: '/static/content/london-skyline-sunset.jpg' },
+  { src: '/static/content/background-london.jpg' },
+  { src: '/static/content/london-skyline-colorful.png' },
+  { src: '/static/content/hero-banner.jpg' },
+  { src: '/static/content/header-carousel/fiery_sunset_sky_swirling-full.jpg' },
+  { src: '/static/content/banner-tam-2.jpg', position: 'left center' }, // crop to show circular image on left
 ];
+
+// YouTube video on the right. Default shown here; admin can override via Dashboard (stored in localStorage as heroYoutubeVideoId).
+const youtubeVideoId = 'dqw9Eto_3JU';
 
 // Riyadh-style: 4 stats in a row
 const stats = [
@@ -36,37 +42,64 @@ const stats = [
 ---
 
 <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-2 md:pt-4 pb-16 md:pb-20">
-  <!-- Background -->
-  <div class="absolute inset-0 z-0">
-    {carouselImages.map((img, index) => (
+  <!-- Full-screen background carousel – text and logo sit in front -->
+  <div class="absolute inset-0 z-0 hero-bg-slides" id="hero-bg-slides">
+    {carouselImages.map((slide, index) => (
       <div
-        class={`absolute inset-0 transition-opacity duration-1000 ${index === 0 ? 'opacity-100' : 'opacity-0'}`}
-        style={`background-image: url(${img}); background-size: cover; background-position: center;`}
+        class={`hero-bg-slide absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${index === 0 ? 'opacity-100' : 'opacity-0'}`}
+        data-slide-index={index}
+        style={`background-image: url(${slide.src}); background-size: cover; background-position: ${slide.position ?? 'center'};`}
+        aria-hidden={index !== 0}
       />
     ))}
-    <div class="absolute inset-0 hero-overlay" style="background: linear-gradient(to bottom, rgba(200, 75, 50, 0.2) 0%, rgba(160, 55, 45, 0.35) 25%, rgba(80, 35, 30, 0.55) 55%, rgba(25, 18, 18, 0.78) 80%, rgba(12, 10, 10, 0.88) 100%);"></div>
+    <div class="absolute inset-0 hero-overlay z-20 pointer-events-none" style="background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(80, 35, 30, 0.4) 40%, rgba(25, 18, 18, 0.75) 85%, rgba(12, 10, 10, 0.88) 100%);"></div>
   </div>
 
-  <!-- Riyadh-style: single centered column, no side panels -->
-  <div class="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center text-white">
-    <!-- Est. badge -->
-    <p class="text-sm md:text-base font-medium tracking-[0.2em] uppercase text-white/90 mb-4">
-      [ {lang === 'ta' ? 'நிறுவப்பட்டது 1975 · லண்டன், UK' : 'Est. 1975 · London, UK'} ]
-    </p>
+  <!-- Logo: full size, free on the left (absolute). Content + YouTube row on desktop; YouTube far right only. -->
+  <a href="/" class="absolute left-4 sm:left-8 md:left-12 lg:left-16 xl:left-24 top-[32%] md:top-[35%] -translate-y-1/2 z-30 hero-logo-link group" aria-label="TMK London - Home">
+    <img src="/logo.png" alt="TMK London - London Tamil Sangam" class="w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="320" height="320" loading="eager" decoding="async" />
+  </a>
 
-    <!-- Main title: London Tamil Sangam for SEO + welcome -->
-    <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 leading-tight">
-      {lang === 'ta' ? (
-        <span class="block font-tamil">வணக்கம்!</span>
-      ) : (
-        <span class="block">Welcome to London Tamil Sangam</span>
-      )}
-    </h1>
-    <p class="text-xl md:text-2xl font-tamil text-white/95 mb-2">
-      {lang === 'ta'
-        ? 'லண்டன் தமிழ் சங்கம் – தமிழர் முன்னேற்றக் கழகம் லண்டன் தங்களை அன்புடன் வரவேற்கிறது'
-        : 'London Tamil Sangam – TMK London welcomes you'}
-    </p>
+  <!-- YouTube: fixed at right extreme (absolute) so text can be centered. -->
+  {youtubeVideoId && (
+    <div class="absolute right-4 sm:right-6 lg:right-8 xl:right-12 top-1/2 -translate-y-1/2 z-20 hidden lg:block w-72 xl:w-80" data-hero-video-container>
+      <div class="rounded-2xl overflow-hidden shadow-2xl ring-2 ring-white/10 aspect-video bg-black">
+        <iframe
+          id="hero-youtube-embed"
+          title="TMK London YouTube"
+          src={`https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&playsinline=1&rel=0`}
+          class="w-full h-full"
+          data-video-id={youtubeVideoId}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        />
+      </div>
+    </div>
+  )}
+
+  <!-- Content: centered in viewport (logo left, YouTube right are absolute). -->
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center pt-32 sm:pt-36 lg:pt-0">
+    <div class="flex flex-col items-center text-center w-full max-w-2xl text-white">
+      <p class="text-sm md:text-base font-medium tracking-[0.2em] uppercase text-white/90 mb-5 md:mb-6 leading-snug min-h-[1.5em]">
+        [ {lang === 'ta' ? 'நிறுவப்பட்டது 1975 · லண்டன், UK' : 'Est. 1975 · London, UK'} ]
+      </p>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-1 mt-0">
+        {lang === 'ta' ? (
+          <span class="block font-tamil">வணக்கம்!</span>
+        ) : (
+          <span class="block">Welcome to London Tamil Sangam</span>
+        )}
+      </h1>
+      <p class="text-xl md:text-2xl font-tamil text-white/95 mb-2">
+        {lang === 'ta' ? (
+          <>
+            <span class="font-semibold text-amber-300 drop-shadow-sm" style="text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);">தமிழர் முன்னேற்றக் கழகம்</span>
+            {' '}லண்டன் தங்களை அன்புடன் வரவேற்கிறது
+          </>
+        ) : (
+          'London Tamil Sangam – TMK London welcomes you'
+        )}
+      </p>
 
     <!-- Tagline (bilingual) -->
     <p class="text-base md:text-lg lg:text-xl text-white/90 max-w-3xl mx-auto mb-4 leading-relaxed">
@@ -111,11 +144,41 @@ const stats = [
         </div>
       ))}
     </div>
+    </div>
   </div>
 </section>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Use admin-set hero video ID from localStorage if present
+    const savedId = typeof window !== 'undefined' && window.localStorage && window.localStorage.getItem('heroYoutubeVideoId');
+    if (savedId) {
+      const iframe = document.getElementById('hero-youtube-embed');
+      if (iframe && iframe.getAttribute('data-video-id') !== savedId) {
+        iframe.src = `https://www.youtube.com/embed/${savedId}?autoplay=1&mute=1&loop=1&playlist=${savedId}&playsinline=1&rel=0`;
+        iframe.setAttribute('data-video-id', savedId);
+      }
+    }
+
+    // Rotate hero background images every 5 seconds
+    const slidesEl = document.getElementById('hero-bg-slides');
+    if (slidesEl) {
+      const slides = slidesEl.querySelectorAll('.hero-bg-slide');
+      const total = slides.length;
+      if (total > 1) {
+        let current = 0;
+        setInterval(() => {
+          slides.forEach((s, i) => {
+            s.classList.toggle('opacity-100', i === current);
+            s.classList.toggle('opacity-0', i !== current);
+            s.setAttribute('aria-hidden', i !== current ? 'true' : 'false');
+          });
+          current = (current + 1) % total;
+        }, 5000);
+      }
+    }
+
+    // Stats counter animation
     const statElements = document.querySelectorAll('[data-stat-value]');
     statElements.forEach((element) => {
       const valueText = element.getAttribute('data-stat-value') || '0';

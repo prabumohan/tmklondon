@@ -7,6 +7,8 @@ export default function AdminDashboard() {
     newsItems: 0,
     events: 0
   });
+  const [heroVideoId, setHeroVideoId] = useState('');
+  const [heroVideoSaved, setHeroVideoSaved] = useState(false);
 
   useEffect(() => {
     // Check authentication
@@ -19,6 +21,9 @@ export default function AdminDashboard() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     loadStats();
+    if (typeof window !== 'undefined') {
+      setHeroVideoId(localStorage.getItem('heroYoutubeVideoId') || 'dqw9Eto_3JU');
+    }
   }, []);
 
   const loadStats = async () => {
@@ -37,6 +42,19 @@ export default function AdminDashboard() {
       }
     } catch (error) {
       console.error('Error loading stats:', error);
+    }
+  };
+
+  const handleSaveHeroVideo = () => {
+    const id = heroVideoId.trim();
+    if (typeof window !== 'undefined') {
+      if (id) {
+        localStorage.setItem('heroYoutubeVideoId', id);
+      } else {
+        localStorage.removeItem('heroYoutubeVideoId');
+      }
+      setHeroVideoSaved(true);
+      setTimeout(() => setHeroVideoSaved(false), 3000);
     }
   };
 
@@ -104,6 +122,27 @@ export default function AdminDashboard() {
               <div className="text-3xl mb-3">📊</div>
               <h2 className="text-xl font-semibold text-gray-800 mb-2">Analytics</h2>
               <p className="text-gray-600">Coming soon</p>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Hero YouTube Video</h2>
+            <p className="text-gray-600 mb-4">Video shown on the right side of the homepage hero. Use the video ID from the YouTube URL (e.g. <code className="bg-gray-100 px-1 rounded">dqw9Eto_3JU</code> from youtube.com/watch?v=dqw9Eto_3JU).</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <input
+                type="text"
+                value={heroVideoId}
+                onChange={(e) => setHeroVideoId(e.target.value)}
+                placeholder="e.g. dqw9Eto_3JU"
+                className="px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary-600 w-full max-w-md"
+              />
+              <button
+                onClick={handleSaveHeroVideo}
+                className="px-5 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+              >
+                Save
+              </button>
+              {heroVideoSaved && <span className="text-green-600 font-medium">Saved. Homepage will use this video.</span>}
             </div>
           </div>
 
