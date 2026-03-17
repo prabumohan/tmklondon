@@ -47,18 +47,31 @@ The output will show the new **Namespace ID**. Copy it.
 
 ---
 
-## 3. Add the admin API secret
+## 3. Add the admin API secret (server-side only)
 
-Only the admin should be able to write to KV. The `POST /api/ticker` endpoint checks a secret you set in Cloudflare.
+Only the admin should be able to write to KV. The secret **TMK_ADMIN_API_KEY** lives only in Cloudflare; the browser never stores it.
 
 1. In the dashboard, go to **Workers & Pages** → your **Pages** project.
 2. Open **Settings** → **Environment variables**.
 3. Under **Production** (and **Preview** if you use it), click **Add variable** → **Encrypt** (so it’s a secret).
 4. **Variable name:** `TMK_ADMIN_API_KEY` (must match exactly).
-5. **Value:** a long random string (e.g. `openssl rand -hex 24` or a password manager). Copy this value — you’ll paste it into the admin UI once.
+5. **Value:** a long random string — this is your **admin password**. You’ll use it only to log in at `/admin/login`; the server then sets an HTTP-only cookie so saving the ticker works without the key ever being stored in the browser.
 6. Save.
 
-You’ll use this **same value** in the admin UI (step 5) so the browser can send it when saving ticker items.
+### Creating a strong value
+
+Use a long random string. Examples:
+
+- **PowerShell:** `[Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }) -as [byte[]])`
+- **Node:** `node -e "console.log(require('crypto').randomBytes(24).toString('hex'))"`
+- Or generate one in a password manager and paste it.
+
+### Updating the key
+
+1. In **Cloudflare Dashboard** → your Pages project → **Settings** → **Environment variables**.
+2. Find **TMK_ADMIN_API_KEY** under Production (and Preview if you use it). Click **Edit**.
+3. Enter the new value and save. Redeploy the project so the new secret is active.
+4. Log in again at **/admin/login** with the new password. Old sessions (cookie) will stop working.
 
 ---
 
@@ -79,13 +92,13 @@ After the first deploy with KV bound, you can seed the key so the live site has 
 
 ---
 
-## 5. Set the API key in the admin UI
+## 5. Log in to the admin (no key in the browser)
 
 1. Deploy the site (with the new Functions and admin UI changes).
-2. Log in to the admin area (e.g. `/admin/news`).
-3. In the **News Ticker** admin page you’ll see a field for **Cloudflare API key** (or similar).
+2. Go to **/admin/login** and enter your **admin password** — the same value you set as `TMK_ADMIN_API_KEY` in step 3.
+3. The server sets an **HTTP-only cookie** (the key never leaves the server). In the **News Ticker** admin page you’ll see a field for **Cloudflare API key** (or similar).
 4. Paste the **same value** you set as `TMK_ADMIN_API_KEY` in step 3 and save it (stored only in your browser).
-5. When you click **Save** on ticker items, the app will send that key to `POST /api/ticker` and update KV so all visitors see the new content.
+5. When you click **Save** on ticker items, the app sends the cookie (no key in the browser) and the server updates KV so all visitors see the new content. The optional "API key" field on the News page is only a fallback; prefer logging in at **/admin/login** so the key stays server-side only.
 
 ---
 
@@ -95,8 +108,8 @@ After the first deploy with KV bound, you can seed the key so the live site has 
 |------|----------------|
 | 1 | Created a KV namespace and noted its **Namespace ID**. |
 | 2 | Bound that namespace to the Pages project as **TMK_KV** (dashboard or wrangler.jsonc). |
-| 3 | Set the secret **TMK_ADMIN_API_KEY** in the Pages project. |
+| 3 | Set the secret **TMK_ADMIN_API_KEY** in the Pages project (server-side only). |
 | 4 | (Optional) Seeded `newsTickerItems` in KV. |
-| 5 | Entered the same API key in the admin UI so saves go to KV. |
+| 5 | Log in at **/admin/login** with that value; cookie auth is used for saving the ticker. |
 
-After this, the ticker on the live site reads from KV (via `/api/ticker`), and admin saves from the News Ticker page update KV for everyone.
+After this, the ticker on the live site reads from KV (via `/api/ticker`), and admin saves from the News Ticker page (after logging in) update KV for everyone. The API key is never stored in the browser.

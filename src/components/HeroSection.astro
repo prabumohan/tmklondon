@@ -55,20 +55,19 @@ const stats = [
     <div class="absolute inset-0 hero-overlay z-20 pointer-events-none" style="background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(80, 35, 30, 0.4) 40%, rgba(25, 18, 18, 0.75) 85%, rgba(12, 10, 10, 0.88) 100%);"></div>
   </div>
 
-  <!-- Logo: full size, free on the left (absolute). Content + YouTube row on desktop; YouTube far right only. -->
-  <a href="/" class="absolute left-4 sm:left-8 md:left-12 lg:left-16 xl:left-24 top-[32%] md:top-[35%] -translate-y-1/2 z-30 hero-logo-link group" aria-label="TMK London - Home">
-    <img src="/logo.png" alt="TMK London - London Tamil Sangam" class="w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="320" height="320" loading="eager" decoding="async" />
+  <!-- Logo: on desktop only (lg+) so mobile has no overlap/clipping). Header shows logo on all sizes. -->
+  <a href="/" class="absolute left-16 xl:left-24 top-[35%] -translate-y-1/2 z-30 hero-logo-link group hidden lg:block" aria-label="TMK London - Home">
+    <img src="/logo.png" alt="TMK London - London Tamil Sangam" class="w-72 lg:w-72 xl:w-80 h-72 lg:h-72 xl:h-80 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="320" height="320" loading="eager" decoding="async" />
   </a>
 
-  <!-- YouTube: fixed at right extreme (absolute) so text can be centered. -->
+  <!-- YouTube desktop: fixed at right, aligned with logo (top 35%). Hidden on mobile. -->
   {youtubeVideoId && (
-    <div class="absolute right-4 sm:right-6 lg:right-8 xl:right-12 top-1/2 -translate-y-1/2 z-20 hidden lg:block w-72 xl:w-80" data-hero-video-container>
+    <div class="absolute right-4 sm:right-6 lg:right-8 xl:right-12 top-[35%] -translate-y-1/2 z-20 hidden lg:block w-72 xl:w-80" data-hero-video-container>
       <div class="rounded-2xl overflow-hidden shadow-2xl ring-2 ring-white/10 aspect-video bg-black">
         <iframe
-          id="hero-youtube-embed"
+          class="hero-youtube-embed w-full h-full"
           title="TMK London YouTube"
           src={`https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&playsinline=1&rel=0`}
-          class="w-full h-full"
           data-video-id={youtubeVideoId}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
@@ -77,61 +76,69 @@ const stats = [
     </div>
   )}
 
-  <!-- Content: centered in viewport (logo left, YouTube right are absolute). -->
-  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center pt-32 sm:pt-36 lg:pt-0">
+  <!-- Content: centered. On mobile no hero logo so less top padding; on desktop logo is left. -->
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center pt-24 sm:pt-28 lg:pt-0">
     <div class="flex flex-col items-center text-center w-full max-w-2xl text-white">
       <p class="text-sm md:text-base font-medium tracking-[0.2em] uppercase text-white/90 mb-5 md:mb-6 leading-snug min-h-[1.5em]">
-        [ {lang === 'ta' ? 'நிறுவப்பட்டது 1975 · லண்டன், UK' : 'Est. 1975 · London, UK'} ]
+        [ <span class="i18n-ta">நிறுவப்பட்டது 1975 · லண்டன், UK</span><span class="i18n-en">Est. 1975 · London, UK</span> ]
       </p>
       <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-1 mt-0">
-        {lang === 'ta' ? (
-          <span class="block font-tamil">வணக்கம்!</span>
-        ) : (
-          <span class="block">Welcome to London Tamil Sangam</span>
-        )}
+        <span class="i18n-ta block font-tamil">வணக்கம்!</span>
+        <span class="i18n-en block">Welcome to London Tamil Sangam</span>
       </h1>
       <p class="text-xl md:text-2xl font-tamil text-white/95 mb-2">
-        {lang === 'ta' ? (
-          <>
-            <span class="font-semibold text-amber-300 drop-shadow-sm" style="text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);">தமிழர் முன்னேற்றக் கழகம்</span>
-            {' '}லண்டன் தங்களை அன்புடன் வரவேற்கிறது
-          </>
-        ) : (
-          'London Tamil Sangam – TMK London welcomes you'
-        )}
+        <span class="i18n-ta">
+          <span class="font-semibold text-amber-300 drop-shadow-sm" style="text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);">தமிழர் முன்னேற்றக் கழகம்</span>
+          {' '}லண்டன் தங்களை அன்புடன் வரவேற்கிறது
+        </span>
+        <span class="i18n-en">London Tamil Sangam – TMK London welcomes you</span>
       </p>
 
     <!-- Tagline (bilingual) -->
     <p class="text-base md:text-lg lg:text-xl text-white/90 max-w-3xl mx-auto mb-4 leading-relaxed">
-      {lang === 'ta'
-        ? '1975 முதல் லண்டனில் தமிழ் மொழி, இலக்கியம் மற்றும் கலாச்சாரத்தை வளர்க்கிறோம்'
-        : 'Promoting Tamil language, literature & culture in London since 1975'}
+      <span class="i18n-ta">1975 முதல் லண்டனில் தமிழ் மொழி, இலக்கியம் மற்றும் கலாச்சாரத்தை வளர்க்கிறோம்</span>
+      <span class="i18n-en">Promoting Tamil language, literature & culture in London since 1975</span>
     </p>
 
     <!-- Inspirational quote (Riyadh-style) -->
     <p class="text-sm md:text-base italic text-white/85 max-w-2xl mx-auto mb-8 md:mb-10">
-      "{lang === 'ta'
-        ? 'தமிழருடன் தமிழில் பேசி, நம் தாய் மொழியைச் சிறப்பிப்போமாக!'
-        : 'Let us speak Tamil with Tamilians and glorify our mother tongue!'}"
+      "<span class="i18n-ta">தமிழருடன் தமிழில் பேசி, நம் தாய் மொழியைச் சிறப்பிப்போமாக!</span><span class="i18n-en">Let us speak Tamil with Tamilians and glorify our mother tongue!</span>"
     </p>
 
     <!-- Primary links: About Us | Our Events (Riyadh-style: primary = maroon) -->
     <div class="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-10 md:mb-12">
       <a
-        href={`/about${lang === 'en' ? '?lang=en' : ''}`}
+        href="/about"
+        data-preserve-lang
         class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-white/15 backdrop-blur-md border border-white/30 hover:bg-white/25 transition-all text-white"
       >
-        {getTranslation('about', lang)}
+        <span class="i18n-ta">எங்களைப் பற்றி</span><span class="i18n-en">About Us</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
       </a>
       <a
         href="#activities"
         class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-accent text-white border border-accent-dark hover:bg-accent-dark transition-all shadow-lg"
       >
-        {lang === 'ta' ? 'எங்கள் நிகழ்வுகள்' : 'Our Events'}
+        <span class="i18n-ta">எங்கள் நிகழ்வுகள்</span><span class="i18n-en">Our Events</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
       </a>
     </div>
+
+    <!-- YouTube mobile: in-flow below CTAs, slightly up. Hidden on desktop (lg+ has absolute version). -->
+    {youtubeVideoId && (
+      <div class="w-full max-w-sm mx-auto mt-4 mb-2 lg:hidden flex-shrink-0" data-hero-video-container>
+        <div class="rounded-2xl overflow-hidden shadow-2xl ring-2 ring-white/10 aspect-video bg-black">
+          <iframe
+            class="hero-youtube-embed w-full h-full"
+            title="TMK London YouTube"
+            src={`https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&playsinline=1&rel=0`}
+            data-video-id={youtubeVideoId}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
+        </div>
+      </div>
+    )}
 
     <!-- Stats row: 4 cards (Riyadh-style) -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-4xl mx-auto">
@@ -150,14 +157,15 @@ const stats = [
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Use admin-set hero video ID from localStorage if present
+    // Use admin-set hero video ID from localStorage if present (updates both mobile and desktop iframes)
     const savedId = typeof window !== 'undefined' && window.localStorage && window.localStorage.getItem('heroYoutubeVideoId');
     if (savedId) {
-      const iframe = document.getElementById('hero-youtube-embed');
-      if (iframe && iframe.getAttribute('data-video-id') !== savedId) {
-        iframe.src = `https://www.youtube.com/embed/${savedId}?autoplay=1&mute=1&loop=1&playlist=${savedId}&playsinline=1&rel=0`;
-        iframe.setAttribute('data-video-id', savedId);
-      }
+      document.querySelectorAll('.hero-youtube-embed').forEach((iframe) => {
+        if (iframe.getAttribute('data-video-id') !== savedId) {
+          iframe.src = `https://www.youtube.com/embed/${savedId}?autoplay=1&mute=1&loop=1&playlist=${savedId}&playsinline=1&rel=0`;
+          iframe.setAttribute('data-video-id', savedId);
+        }
+      });
     }
 
     // Rotate hero background images every 5 seconds

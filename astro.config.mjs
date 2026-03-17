@@ -10,6 +10,14 @@ export default defineConfig({
       watch: {
         usePolling: true,
       },
+      // In dev, /api/ticker 404s because CF Functions don't run. Proxy to static JSON so news ticker works.
+      proxy: {
+        '/api/ticker': {
+          target: 'http://localhost:4321',
+          changeOrigin: true,
+          rewrite: () => '/news-ticker.json',
+        },
+      },
     },
   },
   integrations: [

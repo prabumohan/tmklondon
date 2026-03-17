@@ -144,6 +144,9 @@ export default function AdminGallery() {
               </a>
               <h1 className="text-3xl md:text-4xl font-bold text-primary-700">Gallery Management</h1>
               <p className="text-gray-600 mt-1">Upload and manage gallery images</p>
+              <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3 max-w-xl">
+                <strong>Where are images stored?</strong> They are saved in <strong>this browser’s localStorage</strong> (as base64). They appear on the public gallery page only when viewed in the same browser/device where you uploaded them. Other visitors and other devices will not see them. Max ~2MB per image; total space is limited by the browser (~5–10 MB).
+              </p>
             </div>
             <div className="text-sm text-gray-500 bg-white px-4 py-2 rounded-lg shadow">
               Storage: {storage.used} MB / ~{storage.total} MB

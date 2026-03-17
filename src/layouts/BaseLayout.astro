@@ -31,7 +31,7 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth" data-theme="modern">
+<html lang={lang} class="scroll-smooth" data-theme="modern" data-lang-sync>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -60,6 +60,35 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
     </script>
     <!-- Plausible: privacy-friendly analytics (see plausible.io). Not related to ticker or KV. -->
     <script defer data-domain="tmklondon.com" src="https://plausible.io/js/script.js" is:inline></script>
+    <!-- Sync language with URL so ?lang=en works on static build -->
+    <script is:inline>
+      (function() {
+        function getLangFromUrl() {
+          var m = /[?&]lang=(en|ta)/i.exec(window.location.search || '');
+          return (m && m[1]) ? m[1].toLowerCase() : 'ta';
+        }
+        function applyLang(lang) {
+          var html = document.documentElement;
+          html.setAttribute('lang', lang);
+          html.classList.remove('lang-en', 'lang-ta');
+          html.classList.add('lang-' + lang);
+          var param = lang === 'en' ? '?lang=en' : '';
+          document.querySelectorAll('a[data-preserve-lang]').forEach(function(a) {
+            var href = a.getAttribute('href') || '';
+            var path = href.replace(/\?.*$/, '');
+            if (path.indexOf('/') === 0 && path.indexOf('//') !== 0) {
+              a.setAttribute('href', path + (lang === 'en' ? '?lang=en' : ''));
+            }
+          });
+        }
+        function run() {
+          applyLang(getLangFromUrl());
+        }
+        run();
+        window.addEventListener('popstate', run);
+        document.addEventListener('DOMContentLoaded', run);
+      })();
+    </script>
   </head>
   <body class="font-sans antialiased text-gray-800 min-h-screen theme-body-bg" id="theme-body">
     <!-- Theme-aware background (vars from themes.css) -->
@@ -81,6 +110,19 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
 </html>
 
 <style is:global>
+  /* Language switch: show/hide based on URL ?lang= (set by script) */
+  html:not(.lang-en) .i18n-en { display: none !important; }
+  html.lang-en .i18n-ta { display: none !important; }
+  html.lang-en .i18n-en { display: inline !important; }
+  html.lang-en .i18n-en.i18n-block { display: block !important; }
+  /* Active state for language switcher links (mobile bar and mobile menu) */
+  html:not(.lang-en) .lang-link-ta.site-nav-util { background: rgba(255,255,255,0.25); border-radius: 0.5rem; }
+  html.lang-en .lang-link-en.site-nav-util { background: rgba(255,255,255,0.25); border-radius: 0.5rem; }
+  html.lang-en #mobile-menu .lang-link-en { background: #6B2D3C; color: #fff; }
+  html.lang-en #mobile-menu .lang-link-ta { background: #f3f4f6; color: #374151; }
+  html:not(.lang-en) #mobile-menu .lang-link-ta { background: #6B2D3C; color: #fff; }
+  html:not(.lang-en) #mobile-menu .lang-link-en { background: #f3f4f6; color: #374151; }
+
   html {
     font-family: 'Inter', system-ui, sans-serif;
   }

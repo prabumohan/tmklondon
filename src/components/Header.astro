@@ -52,11 +52,11 @@ const initialTickerHtml = tickerItems.map((item, index) => {
       loading="eager"
       decoding="async"
     />
-    <div class="relative z-10 w-full px-3 sm:px-4 md:px-6 lg:px-8">
+    <div class="relative z-10 w-full pl-4 pr-3 sm:pl-4 sm:pr-4 md:px-6 lg:px-8">
       <div class="header-banner-row flex flex-nowrap items-center justify-between gap-2 sm:gap-3 md:gap-6 py-1.5 sm:py-2 min-h-[72px] sm:min-h-[80px]">
-        <!-- Logo (left) -->
-        <a href="/" class="header-logo flex-shrink-0 mr-2 sm:mr-3 md:mr-4 group" aria-label="Home">
-          <img src={logoUrl} alt="TMK London - London Tamil Sangam" class="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 lg:h-32 lg:w-32 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="128" height="128" loading="eager" decoding="async" />
+        <!-- Logo (left) – flex-shrink-0 so it never clips on mobile -->
+        <a href="/" class="header-logo flex-shrink-0 mr-2 sm:mr-3 md:mr-4 group min-w-[56px] sm:min-w-[72px]" aria-label="Home">
+          <img src={logoUrl} alt="TMK London - London Tamil Sangam" class="h-14 w-14 sm:h-20 sm:w-20 md:h-28 md:w-28 lg:h-32 lg:w-32 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="128" height="128" loading="eager" decoding="async" />
         </a>
         <!-- Name (center) -->
         <a href="/" class="header-name flex-1 flex items-center justify-center text-center min-w-0 px-1 sm:px-2 md:px-4 group ring-0 border-0 outline-none focus:ring-0 focus:outline-none focus:border-0">
@@ -155,50 +155,36 @@ const initialTickerHtml = tickerItems.map((item, index) => {
     <div class="site-nav-inner container mx-auto px-3 sm:px-4 md:px-5 lg:px-6 w-full max-w-[100%]">
       <div class="flex items-center justify-between gap-2 py-2 md:py-2.5 min-h-[48px]">
         <div class="flex items-center gap-0.5 sm:gap-0.5 flex-nowrap flex-1 min-w-0">
-          <a href={`/${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath === '/' ? 'site-nav-link-active' : ''}`}>
-            {getTranslation('home', lang)}
-          </a>
-          <a href={`/about${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath.startsWith('/about') ? 'site-nav-link-active' : ''}`}>
-            {getTranslation('about', lang)}
-          </a>
-          <div class="relative group">
-            <a href={`/tamil-school${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link site-nav-link-has-dropdown ${currentPath.startsWith('/tamil-school') ? 'site-nav-link-active' : ''}`}>
-              {getTranslation('tamilSchool', lang)}
+          <a href="/" data-preserve-lang class={`site-nav-link ${currentPath === '/' ? 'site-nav-link-active' : ''}`}><span class="i18n-ta">முகப்பு</span><span class="i18n-en">Home</span></a>
+          <a href="/about" data-preserve-lang class={`site-nav-link ${currentPath.startsWith('/about') ? 'site-nav-link-active' : ''}`}><span class="i18n-ta">எங்களைப் பற்றி</span><span class="i18n-en">About Us</span></a>
+          <div class="relative group" id="nav-tamil-school-wrap">
+            <a href="/tamil-school" data-preserve-lang class={`site-nav-link site-nav-link-has-dropdown ${currentPath.startsWith('/tamil-school') ? 'site-nav-link-active' : ''}`}>
+              <span class="i18n-ta">தமிழ்ப் பள்ளி</span><span class="i18n-en">Tamil School</span>
               <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </a>
             <div class="site-nav-dropdown">
-              <a href={`/tamil-school/donation${lang === 'en' ? '?lang=en' : ''}`} class="site-nav-dropdown-item">
-                {getTranslation('schoolDonation', lang)}
-              </a>
+              <a href="/tamil-school/donation" data-preserve-lang class="site-nav-dropdown-item"><span class="i18n-ta">பள்ளி-நன்கொடை</span><span class="i18n-en">School Donation</span></a>
             </div>
           </div>
-          <a href={`/student-registration${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath === '/student-registration' ? 'site-nav-link-active' : ''}`}>
-            {getTranslation('studentRegistration', lang)}
-          </a>
-          <a href={`/publications${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath === '/publications' ? 'site-nav-link-active' : ''}`}>
-            {getTranslation('publications', lang)}
-          </a>
-          <a href={`/gallery${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath === '/gallery' ? 'site-nav-link-active' : ''}`}>
-            {getTranslation('gallery', lang)}
-          </a>
-          <a href={`/contact${lang === 'en' ? '?lang=en' : ''}`} class={`site-nav-link ${currentPath === '/contact' ? 'site-nav-link-active' : ''}`}>
-            {getTranslation('contact', lang)}
-          </a>
+          <a href="/student-registration" data-preserve-lang class={`site-nav-link ${currentPath === '/student-registration' ? 'site-nav-link-active' : ''}`}><span class="i18n-ta">மாணவர் பதிவு</span><span class="i18n-en">Student Registration</span></a>
+          <a href="/publications" data-preserve-lang class={`site-nav-link ${currentPath === '/publications' ? 'site-nav-link-active' : ''}`}><span class="i18n-ta">எங்களின் பதிப்புக்கள்</span><span class="i18n-en">Publications</span></a>
+          <a href="/gallery" data-preserve-lang class={`site-nav-link ${currentPath === '/gallery' ? 'site-nav-link-active' : ''}`}><span class="i18n-ta">வண்ணக் களஞ்சியம்</span><span class="i18n-en">Gallery</span></a>
+          <a href="/contact" data-preserve-lang class={`site-nav-link ${currentPath === '/contact' ? 'site-nav-link-active' : ''}`}><span class="i18n-ta">தொடர்பு கொள்ள</span><span class="i18n-en">Contact</span></a>
         </div>
         <div class="flex items-center justify-end gap-2 flex-shrink-0 ml-4">
-          <!-- Language dropdown -->
-          <div class="relative group">
-            <button type="button" class="site-nav-link site-nav-link-has-dropdown flex items-center gap-1 min-w-0" aria-expanded="false" aria-haspopup="true" aria-label={lang === 'ta' ? 'மொழி தேர்வு' : 'Language'}>
-              <span class="truncate">{lang === 'ta' ? 'தமிழ்' : 'English'}</span>
+          <!-- Language dropdown: hover or click (id for JS) -->
+          <div class="relative group" id="lang-dropdown-wrap">
+            <button type="button" id="lang-dropdown-btn" class="site-nav-link site-nav-link-has-dropdown flex items-center gap-1 min-w-0" aria-expanded="false" aria-haspopup="true" aria-label="Language">
+              <span class="truncate"><span class="i18n-ta">தமிழ்</span><span class="i18n-en">English</span></span>
               <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            <div class="site-nav-dropdown right-0 left-auto min-w-[120px]">
-              <a href={getUrlWithLang('ta')} class={`site-nav-dropdown-item ${lang === 'ta' ? '!bg-teal-100 !text-teal-900 font-semibold' : ''}`}>தமிழ்</a>
-              <a href={getUrlWithLang('en')} class={`site-nav-dropdown-item ${lang === 'en' ? '!bg-teal-100 !text-teal-900 font-semibold' : ''}`}>English</a>
+            <div class="site-nav-dropdown right-0 left-auto min-w-[120px]" id="lang-dropdown-menu">
+              <a href={getUrlWithLang('ta')} class="site-nav-dropdown-item lang-option" data-lang="ta">தமிழ்</a>
+              <a href={getUrlWithLang('en')} class="site-nav-dropdown-item lang-option" data-lang="en">English</a>
             </div>
           </div>
           <a href="/admin/login" class="site-nav-util flex items-center gap-1.5 flex-shrink-0" title="Admin Login">
@@ -216,15 +202,15 @@ const initialTickerHtml = tickerItems.map((item, index) => {
   <nav class="site-nav site-nav-mobile md:hidden text-white z-50 -mt-px border-t border-white/10" aria-label="Mobile navigation">
     <div class="site-nav-inner container mx-auto px-3">
       <div class="flex items-center justify-between gap-2 py-3 min-h-[52px]">
-        <button type="button" class="site-nav-mobile-btn flex items-center gap-2.5 py-2.5 px-4 -ml-1 min-h-[44px] rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 transition-colors" id="mobile-nav-button" aria-expanded="false" aria-controls="mobile-menu" aria-label={lang === 'ta' ? 'பட்டியல்' : 'Menu'}>
+        <button type="button" class="site-nav-mobile-btn flex items-center gap-2.5 py-2.5 px-4 -ml-1 min-h-[44px] rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 transition-colors" id="mobile-nav-button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
-          <span class="text-sm font-bold">{lang === 'ta' ? 'பட்டியல்' : 'Menu'}</span>
+          <span class="text-sm font-bold"><span class="i18n-ta">பட்டியல்</span><span class="i18n-en">Menu</span></span>
         </button>
         <div class="flex items-center gap-1">
-          <a href={getUrlWithLang('ta')} class={`site-nav-util min-h-[44px] min-w-[44px] flex items-center justify-center ${lang === 'ta' ? 'site-nav-util-active' : ''}`}>தமிழ்</a>
-          <a href={getUrlWithLang('en')} class={`site-nav-util min-h-[44px] min-w-[44px] flex items-center justify-center px-3 ${lang === 'en' ? 'site-nav-util-active' : ''}`}>EN</a>
+          <a href={getUrlWithLang('ta')} class="site-nav-util lang-link-ta min-h-[44px] min-w-[44px] flex items-center justify-center">தமிழ்</a>
+          <a href={getUrlWithLang('en')} class="site-nav-util lang-link-en min-h-[44px] min-w-[44px] flex items-center justify-center px-3">EN</a>
           <a href="/admin/login" class="site-nav-util min-h-[44px] min-w-[44px] flex items-center justify-center px-3" title="Admin Login">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
           </a>
@@ -250,69 +236,65 @@ const initialTickerHtml = tickerItems.map((item, index) => {
     </div>
   </div>
 
-  <!-- Mobile Menu (slides down when opened) – solid background so contact/social read clearly -->
-  <div id="mobile-menu" class="hidden bg-white border-t border-gray-200 shadow-xl md:hidden">
+  <!-- Mobile Menu (slides down when opened) – solid background, high z-index so it appears above content -->
+  <div id="mobile-menu" class="hidden bg-white border-t border-gray-200 shadow-xl md:hidden relative z-[110]" role="dialog" aria-label="Main menu">
     <div class="container mx-auto px-4 py-4">
       <div class="flex flex-col space-y-2">
         <!-- Language Selector for Mobile -->
         <div class="flex items-center justify-center space-x-2 pb-3 border-b border-gray-200 mb-2">
-          <span class="text-sm text-gray-500">{lang === 'ta' ? 'மொழி:' : 'Language:'}</span>
-          <a href={getUrlWithLang('ta')} class={`px-4 py-2 text-sm rounded-lg transition-all font-semibold ${lang === 'ta' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
-            தமிழ்
-          </a>
-          <a href={getUrlWithLang('en')} class={`px-4 py-2 text-sm rounded-lg transition-all font-semibold ${lang === 'en' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
-            English
-          </a>
+          <span class="text-sm text-gray-500"><span class="i18n-ta">மொழி:</span><span class="i18n-en">Language:</span></span>
+          <a href={getUrlWithLang('ta')} class="px-4 py-2 text-sm rounded-lg transition-all font-semibold lang-link-ta bg-gray-100 text-gray-700 hover:bg-gray-200">தமிழ்</a>
+          <a href={getUrlWithLang('en')} class="px-4 py-2 text-sm rounded-lg transition-all font-semibold lang-link-en bg-gray-100 text-gray-700 hover:bg-gray-200">English</a>
         </div>
         
         <!-- Menu Items (order matches tmklondon.com: Home, About, Tamil School, …) -->
-        <a href={`/${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+        <a href="/" data-preserve-lang class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
-          {getTranslation('home', lang)}
+          <span class="i18n-ta">முகப்பு</span><span class="i18n-en">Home</span>
         </a>
-        <a href={`/about${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath.startsWith('/about') ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+        <a href="/about" data-preserve-lang class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath.startsWith('/about') ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          {getTranslation('about', lang)}
+          <span class="i18n-ta">எங்களைப் பற்றி</span><span class="i18n-en">About Us</span>
         </a>
-        <a href={`/tamil-school${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath.startsWith('/tamil-school') ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+        <a href="/tamil-school" data-preserve-lang class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath.startsWith('/tamil-school') ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
-          {getTranslation('tamilSchool', lang)}
+          <span class="i18n-ta">தமிழ்ப் பள்ளி</span><span class="i18n-en">Tamil School</span>
         </a>
-        <a href={`/tamil-school/donation${lang === 'en' ? '?lang=en' : ''}`} class="px-4 py-3 text-gray-700 hover:bg-primary-50 rounded-lg pl-12 font-medium flex items-center gap-3">
+        <a href="/tamil-school/donation" data-preserve-lang class="px-4 py-3 text-gray-700 hover:bg-primary-50 rounded-lg pl-12 font-medium flex items-center gap-3">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
           </svg>
-          {getTranslation('schoolDonation', lang)}
+          <span class="i18n-ta">பள்ளி-நன்கொடை</span><span class="i18n-en">School Donation</span>
         </a>
-        <a href={`/student-registration${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/student-registration' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+        <a href="/student-registration" data-preserve-lang class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/student-registration' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
           </svg>
-          {getTranslation('studentRegistration', lang)}
+          <span class="i18n-ta">மாணவர் பதிவு</span><span class="i18n-en">Student Registration</span>
         </a>
-        <a href={`/publications${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/publications' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+        <a href="/publications" data-preserve-lang class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/publications' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
           </svg>
-          {getTranslation('publications', lang)}
+          <span class="i18n-ta">எங்களின் பதிப்புக்கள்</span><span class="i18n-en">Publications</span>
         </a>
-        <a href={`/gallery${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/gallery' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
+        <a href="/gallery" data-preserve-lang class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/gallery' ? 'bg-primary-100 text-primary-700' : 'text-gray-800 hover:bg-primary-50'}`}>
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          {getTranslation('gallery', lang)}
+          <span class="i18n-ta">வண்ணக் களஞ்சியம்</span><span class="i18n-en">Gallery</span>
         </a>
-        <a href={`/contact${lang === 'en' ? '?lang=en' : ''}`} class={`px-4 py-3 rounded-lg font-medium flex items-center gap-3 ${currentPath === '/contact' ? 'bg-primary-600 text-white' : 'bg-primary-600 text-white hover:bg-primary-700'}`}>
+        <a href="/contact" data-preserve-lang class="px-4 py-3 rounded-lg font-medium flex items-center gap-3 bg-primary-600 text-white hover:bg-primary-700">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
-          {getTranslation('contact', lang)}
+          <span class="i18n-ta">தொடர்பு கொள்ள</span><span class="i18n-en">Contact</span>
         </a>
         <a href="/admin/login" class="px-4 py-3 rounded-lg font-medium flex items-center gap-3 text-gray-700 hover:bg-gray-100 border border-gray-200">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -628,7 +610,8 @@ const initialTickerHtml = tickerItems.map((item, index) => {
     z-index: 60;
     list-style: none;
   }
-  .group:hover .site-nav-dropdown {
+  .group:hover .site-nav-dropdown,
+  .group.lang-open .site-nav-dropdown {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -802,22 +785,56 @@ const initialTickerHtml = tickerItems.map((item, index) => {
   }
 </style>
 
-<script lang="ts">
-  // Handle both mobile menu buttons
-  const menuButton = document.getElementById('mobile-menu-button');
-  const mobileNavButton = document.getElementById('mobile-nav-button');
-  const mobileMenu = document.getElementById('mobile-menu');
+<script>
+  (function initMobileMenu() {
+    function run() {
+      var mobileNavButton = document.getElementById('mobile-nav-button');
+      var mobileMenu = document.getElementById('mobile-menu');
+      if (!mobileNavButton || !mobileMenu) return;
+      mobileNavButton.addEventListener('click', function () {
+        var isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          mobileNavButton.setAttribute('aria-expanded', 'true');
+        } else {
+          mobileMenu.classList.add('hidden');
+          mobileNavButton.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run);
+    } else {
+      run();
+    }
+  })();
 
-  menuButton?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
-  });
+  (function initLangDropdown() {
+    function run() {
+      var wrap = document.getElementById('lang-dropdown-wrap');
+      var btn = document.getElementById('lang-dropdown-btn');
+      var menu = document.getElementById('lang-dropdown-menu');
+      if (!wrap || !btn || !menu) return;
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        wrap.classList.toggle('lang-open');
+        btn.setAttribute('aria-expanded', wrap.classList.contains('lang-open') ? 'true' : 'false');
+      });
+      document.addEventListener('click', function () {
+        wrap.classList.remove('lang-open');
+        btn.setAttribute('aria-expanded', 'false');
+      });
+      menu.addEventListener('click', function (e) { e.stopPropagation(); });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run);
+    } else {
+      run();
+    }
+  })();
 
-  mobileNavButton?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
-  });
-
-  type TickerItem = string | { text: string; priority?: string };
-  function normalizeTickerItem(item: TickerItem): { text: string; priority: string } {
+  function normalizeTickerItem(item) {
     if (typeof item === 'string') return { text: item, priority: 'medium' };
     return { text: item.text || '', priority: item.priority || 'medium' };
   }
@@ -829,7 +846,7 @@ const initialTickerHtml = tickerItems.map((item, index) => {
     { text: 'Join us for our upcoming cultural events and celebrations', priority: 'medium' }
   ];
 
-  function renderTicker(ticker: HTMLElement, newsItems: { text: string; priority: string }[]) {
+  function renderTicker(ticker, newsItems) {
     if (newsItems.length === 0) newsItems = DEFAULT_ITEMS;
     var items = newsItems.concat(newsItems);
     ticker.innerHTML = items.map(function (item, index) {
@@ -853,13 +870,13 @@ const initialTickerHtml = tickerItems.map((item, index) => {
     fetch('/api/ticker?t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (arr) {
-        var newsItems: { text: string; priority: string }[] = [];
+        var newsItems = [];
         if (Array.isArray(arr) && arr.length > 0) {
           newsItems = arr.map(normalizeTickerItem).filter(function (x) { return x.text; });
         }
         if (newsItems.length === 0) {
           var stored = localStorage.getItem('newsTickerItems');
-          var raw: TickerItem[] = [];
+          var raw = [];
           if (stored) {
             try {
               var parsed = JSON.parse(stored);
@@ -873,7 +890,7 @@ const initialTickerHtml = tickerItems.map((item, index) => {
       })
       .catch(function () {
         var stored = localStorage.getItem('newsTickerItems');
-        var raw: TickerItem[] = [];
+        var raw = [];
         if (stored) {
           try {
             var parsed = JSON.parse(stored);

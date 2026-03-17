@@ -85,30 +85,38 @@ export default function AdminNews() {
     if (typeof window === 'undefined') return;
 
     const key = localStorage.getItem(API_KEY_STORAGE);
-    if (key) {
-      try {
-        const res = await fetch('/api/ticker', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-Admin-Key': key },
-          body: JSON.stringify(items),
-        });
-        if (res.ok) {
-          localStorage.setItem('newsTickerItems', JSON.stringify(items));
-          setNewsItems(items);
-          showMessage('success', '💾 Saved to live site (KV). All visitors will see this.');
-          window.dispatchEvent(new CustomEvent('newsTickerUpdated'));
-          return;
-        }
-        const err = await res.json().catch(() => ({}));
-        showMessage('error', err?.error || `Save failed (${res.status}). Check API key.`);
-      } catch (e) {
-        showMessage('error', 'Network error. Save to site failed. Stored locally only.');
+    const trySave = async (headers: Record<string, string>) => {
+      const res = await fetch('/api/ticker', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', ...headers },
+        body: JSON.stringify(items),
+      });
+      return res;
+    };
+
+    try {
+      // Prefer cookie auth (set by logging in at /admin/login); no key in browser
+      let res = await trySave({});
+      if (res.status === 401 && key) {
+        res = await trySave({ 'X-Admin-Key': key });
       }
+      if (res.ok) {
+        localStorage.setItem('newsTickerItems', JSON.stringify(items));
+        setNewsItems(items);
+        showMessage('success', '💾 Saved to live site (KV). All visitors will see this.');
+        window.dispatchEvent(new CustomEvent('newsTickerUpdated'));
+        return;
+      }
+      const err = await res.json().catch(() => ({}));
+      showMessage('error', err?.error === 'Unauthorized' ? 'Session expired or not authorized. Log in again at /admin/login, or use the API key below.' : (err?.error || `Save failed (${res.status}).`));
+    } catch (e) {
+      showMessage('error', 'Network error. Save to site failed. Stored locally only.');
     }
 
     localStorage.setItem('newsTickerItems', JSON.stringify(items));
     setNewsItems(items);
-    showMessage('success', '💾 Saved locally (this browser only). Set API key below to save to live site.');
+    showMessage('success', '💾 Saved locally (this browser only). Log in at /admin/login or set API key below to save to live site.');
     window.dispatchEvent(new CustomEvent('newsTickerUpdated'));
   };
 
@@ -225,11 +233,11 @@ export default function AdminNews() {
             </div>
           )}
 
-          {/* Cloudflare KV API key (optional) */}
+          {/* Optional: API key fallback if cookie auth isn't available */}
           <div className="bg-white rounded-xl shadow-lg p-6 mb-6 border-2 border-primary-200">
             <h2 className="text-xl font-semibold text-gray-800 mb-2">Live site (Cloudflare KV)</h2>
             <p className="text-sm text-gray-600 mb-3">
-              To save ticker items so <strong>all visitors</strong> see them, set the API key from your Cloudflare Pages secret <code className="bg-gray-100 px-1 rounded">TMK_ADMIN_API_KEY</code>. See <code className="bg-gray-100 px-1 rounded">KV_SETUP.md</code> in the repo.
+              If you logged in at <strong>/admin/login</strong> with your admin password (<code className="bg-gray-100 px-1 rounded">TMK_ADMIN_API_KEY</code>), saves above go to the live site automatically. Otherwise, paste the key here as a fallback (optional).
             </p>
             {apiKey ? (
               <div className="flex items-center gap-2">
