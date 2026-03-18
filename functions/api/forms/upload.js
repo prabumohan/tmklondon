@@ -82,14 +82,20 @@ export async function onRequestPost(context) {
 
   const file = formData.get('file');
   if (!file || typeof file === 'string') {
-    return jsonResponse({ error: 'No file provided' }, 400);
+    return jsonResponse({ error: 'No file provided. Choose a file and try again.' }, 400);
   }
 
-  const allowedTypes = type === 'donation'
-    ? ['application/pdf']
-    : ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
-  if (!allowedTypes.includes(file.type) && !file.name?.toLowerCase().endsWith(type === 'donation' ? '.pdf' : '.docx')) {
-    return jsonResponse({ error: type === 'donation' ? 'File must be a PDF' : 'File must be a Word document (.docx)' }, 400);
+  const name = (file.name || '').toLowerCase();
+  const extOk = type === 'donation' ? name.endsWith('.pdf') : name.endsWith('.docx');
+  const mimePdf = /^application\/(pdf|x-pdf)$/i.test(file.type || '');
+  const mimeDocx = /^application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document$|^application\/msword$/i.test(file.type || '');
+  const typeOk = type === 'donation' ? (mimePdf || extOk) : (mimeDocx || extOk);
+  if (!typeOk) {
+    return jsonResponse({ error: type === 'donation' ? 'File must be a PDF (.pdf)' : 'File must be a Word document (.docx)' }, 400);
+  }
+
+  if (file.size === 0) {
+    return jsonResponse({ error: 'File is empty' }, 400);
   }
 
   if (file.size > MAX_SIZE) {

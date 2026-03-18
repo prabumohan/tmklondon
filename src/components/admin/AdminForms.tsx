@@ -77,7 +77,14 @@ export default function AdminForms() {
         if (type === 'donation' && donationInput.current) donationInput.current.value = '';
         if (type === 'admission' && admissionInput.current) admissionInput.current.value = '';
       } else {
-        showMessage('error', data?.error || `Upload failed (${res.status}).`);
+        let msg = data?.error;
+        if (!msg) {
+          if (res.status === 401) msg = 'Session expired. Log in again at /admin/login.';
+          else if (res.status === 404 && typeof window !== 'undefined' && /localhost|127\.0\.0\.1/.test(window.location?.host || ''))
+            msg = 'Upload is not available locally. Deploy the site and use the live URL (e.g. your Cloudflare Pages URL) to upload forms.';
+          else msg = `Upload failed (${res.status}).`;
+        }
+        showMessage('error', msg);
       }
     } catch (e) {
       showMessage('error', 'Network error. Upload works on the deployed site once R2 is configured.');
@@ -128,13 +135,20 @@ export default function AdminForms() {
                     type="file"
                     accept={LABELS[type].accept}
                     className="block max-w-xs text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary-100 file:text-primary-700 file:font-medium hover:file:bg-primary-200"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const input = type === 'donation' ? donationInput.current : admissionInput.current;
+                      const f = input?.files?.[0];
                       if (f) handleUpload(type, f);
+                      else showMessage('error', 'Choose a file first.');
                     }}
                     disabled={uploading !== null}
-                  />
-                  {uploading === type && <span className="text-sm text-gray-500">Uploading…</span>}
+                    className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 disabled:opacity-50"
+                  >
+                    {uploading === type ? 'Uploading…' : 'Upload'}
+                  </button>
                 </div>
                 <p className="text-xs text-gray-400 mt-2">
                   Public link: <code className="bg-gray-100 px-1 rounded">{type === 'donation' ? '/api/forms/donation' : '/api/forms/admission'}</code>
