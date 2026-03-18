@@ -56,19 +56,46 @@ export default function AdminForms() {
     setTimeout(() => setMessage(null), 5000);
   };
 
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.includes(',') ? result.split(',')[1] : result;
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleUpload = async (type: FormType, file: File | null) => {
     if (!file) return;
     setUploading(type);
     setMessage(null);
-    const formData = new FormData();
-    formData.set('type', type);
-    formData.append('file', file, file.name || (type === 'donation' ? 'donation.pdf' : 'admission.docx'));
+
+    let body: string;
+    let contentType: string;
+    try {
+      const base64 = await fileToBase64(file);
+      body = JSON.stringify({
+        type,
+        file: base64,
+        filename: file.name || (type === 'donation' ? 'donation.pdf' : 'admission.docx'),
+      });
+      contentType = 'application/json';
+    } catch (_) {
+      showMessage('error', 'Could not read file.');
+      setUploading(null);
+      return;
+    }
 
     try {
       const res = await fetch('/api/forms/upload', {
         method: 'POST',
         credentials: 'include',
-        body: formData,
+        headers: { 'Content-Type': contentType },
+        body,
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
