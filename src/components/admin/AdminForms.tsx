@@ -62,7 +62,7 @@ export default function AdminForms() {
     setMessage(null);
     const formData = new FormData();
     formData.set('type', type);
-    formData.append('file', file);
+    formData.append('file', file, file.name || (type === 'donation' ? 'donation.pdf' : 'admission.docx'));
 
     try {
       const res = await fetch('/api/forms/upload', {

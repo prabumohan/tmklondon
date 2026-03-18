@@ -80,7 +80,15 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: 'type must be "donation" or "admission"' }, 400);
   }
 
-  const file = formData.get('file');
+  let file = formData.get('file');
+  if (!file || typeof file === 'string') {
+    for (const [, value] of formData.entries()) {
+      if (value && typeof value === 'object' && typeof value.arrayBuffer === 'function' && typeof value.size === 'number') {
+        file = value;
+        break;
+      }
+    }
+  }
   if (!file || typeof file === 'string') {
     return jsonResponse({ error: 'No file provided. Choose a file and try again.' }, 400);
   }
