@@ -17,6 +17,16 @@ export default defineConfig({
           changeOrigin: true,
           rewrite: () => '/news-ticker.json',
         },
+        '/api/forms/donation': {
+          target: 'http://localhost:4321',
+          changeOrigin: true,
+          rewrite: () => '/forms/Bankers_and_Member_Form_NOV_23.pdf',
+        },
+        '/api/forms/admission': {
+          target: 'http://localhost:4321',
+          changeOrigin: true,
+          rewrite: () => '/forms/Tamil_School_Admission_Form_New_V3.0.docx',
+        },
       },
     },
   },

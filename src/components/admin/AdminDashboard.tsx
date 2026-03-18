@@ -115,7 +115,7 @@ export default function AdminDashboard() {
             >
               <div className="text-3xl mb-3">📄</div>
               <h2 className="text-xl font-semibold text-gray-800 mb-2">Forms</h2>
-              <p className="text-gray-600">View form paths and how to update (replace file + redeploy)</p>
+              <p className="text-gray-600">Update donation PDF and admission form (stored in R2)</p>
             </a>
             
             <a 

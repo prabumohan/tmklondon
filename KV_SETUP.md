@@ -102,6 +102,16 @@ After the first deploy with KV bound, you can seed the key so the live site has 
 
 ---
 
+## 6. R2 bucket for Forms and Gallery (optional)
+
+One bucket **tmklondon-store** is used for forms and (later) gallery images. Object keys use folders: **forms/** for donation PDF and admission DOCX; you can add **gallery/** or other folders for images. Each time a file is served from R2 it counts as one read; the free tier includes **10 million reads/month** and **10 GB storage**.
+
+1. **Create an R2 bucket:** Cloudflare Dashboard → **R2** → **Create bucket** → name **tmklondon-store** (or CLI: `npx wrangler r2 bucket create tmklondon-store`).
+2. **Bind it to Pages:** Pages project → **Settings** → **Functions** → **R2 bucket bindings** → **Add** → Variable name **TMK_STORE**, select the bucket **tmklondon-store**.
+3. Deploy. Use **/admin/forms** to upload the PDF and DOCX; they are stored as `forms/donation.pdf` and `forms/admission.docx`. The site serves them from `/api/forms/donation` and `/api/forms/admission`; if R2 is empty, those URLs redirect to the static files in `public/forms/`. For gallery, you can store images under keys like `gallery/teachers/...`, `gallery/events/...`, etc.
+
+---
+
 ## Summary
 
 | Step | What you did |
@@ -111,5 +121,6 @@ After the first deploy with KV bound, you can seed the key so the live site has 
 | 3 | Set the secret **TMK_ADMIN_API_KEY** in the Pages project (server-side only). |
 | 4 | (Optional) Seeded `newsTickerItems` in KV. |
 | 5 | Log in at **/admin/login** with that value; cookie auth is used for saving the ticker. |
+| 6 | (Optional) Create R2 bucket **tmklondon-store**, bind as **TMK_STORE**; use **/admin/forms** to upload forms (stored under `forms/`). Same bucket can hold gallery images in other folders. |
 
-After this, the ticker on the live site reads from KV (via `/api/ticker`), and admin saves from the News Ticker page (after logging in) update KV for everyone. The API key is never stored in the browser. Donation and admission forms are static files in `public/forms/`; to update them, replace the files and redeploy (see **/admin/forms** for paths).
+After this, the ticker reads from KV and admin can update it after logging in. Forms are stored in R2 under `forms/`; each download = 1 R2 read (free tier: 10M reads/month). Use **TMK_STORE** for gallery images later (e.g. `gallery/` prefix).

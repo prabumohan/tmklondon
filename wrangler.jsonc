@@ -6,5 +6,8 @@
       "binding": "TMK_KV",
       "id": "4d12fa8734d54ace85d54faaaa7b7b0c"
     }
+  ],
+  "r2_buckets": [
+    { "binding": "TMK_STORE", "bucket_name": "tmklondon-store" }
   ]
 }
