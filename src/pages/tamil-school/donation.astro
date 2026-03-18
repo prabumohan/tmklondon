@@ -25,6 +25,26 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
           </p>
         </div>
 
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <h2 class="text-2xl font-bold mb-4 font-tamil">
+            {lang === 'ta' ? 'நன்கொடை படிவம் (PDF)' : 'Donation Form (PDF)'}
+          </h2>
+          <p class="text-gray-700 mb-4">
+            {lang === 'ta' 
+              ? 'பள்ளி நன்கொடை / உறுப்பினர் படிவத்தைப் பதிவிறக்கம் செய்யுங்கள் (நவம்பர் 2023).'
+              : 'Download the Bankers & Member donation form (November 2023).'}
+          </p>
+          <a 
+            href="/forms/Bankers_and_Member_Form_NOV_23.pdf" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors shadow-md"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            {lang === 'ta' ? 'நன்கொடை படிவம் PDF பதிவிறக்கம்' : 'Download Donation Form (PDF)'}
+          </a>
+        </div>
+
         <div class="bg-white rounded-lg shadow-lg p-8">
           <h2 class="text-2xl font-bold mb-4 font-tamil">
             {lang === 'ta' ? 'நன்கொடை அளிக்க' : 'Make a Donation'}

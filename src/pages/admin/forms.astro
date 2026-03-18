@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdminForms from '../../components/admin/AdminForms';
+
+const seoConfig = {
+  title: 'Forms - TMK London Admin',
+  description: 'Update donation and admission forms',
+  noindex: true,
+};
+---
+
+<BaseLayout {...seoConfig}>
+  <AdminForms client:load />
+</BaseLayout>

@@ -23,6 +23,25 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
               ? 'TMK தமிழ்ப் பள்ளியில் பதிவு செய்ய, தயவுசெய்து கீழ்க்கண்ட விவரங்களுடன் தொடர்பு கொள்ளவும்:'
               : 'To register at TMK Tamil School, please contact us with the following details:'}
           </p>
+          <div class="border-t border-gray-200 pt-6">
+            <h2 class="text-xl font-bold mb-3 font-tamil">
+              {lang === 'ta' ? 'மாணவர் சேர்க்கை படிவம் (V3.0)' : 'Tamil School Admission Form (V3.0)'}
+            </h2>
+            <p class="text-gray-700 mb-4">
+              {lang === 'ta' 
+                ? 'பள்ளி சேர்க்கை படிவத்தைப் பதிவிறக்கம் செய்து நிரப்பி, தொடர்பு விவரங்களுக்கு அனுப்பவும்.'
+                : 'Download the admission form, fill it in, and submit it using the contact details below.'}
+            </p>
+            <a 
+              href="/forms/Tamil_School_Admission_Form_New_V3.0.docx" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors shadow-md"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              {lang === 'ta' ? 'சேர்க்கை படிவம் பதிவிறக்கம் (Word)' : 'Download Admission Form (Word)'}
+            </a>
+          </div>
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-8">

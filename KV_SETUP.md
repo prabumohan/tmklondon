@@ -112,4 +112,4 @@ After the first deploy with KV bound, you can seed the key so the live site has 
 | 4 | (Optional) Seeded `newsTickerItems` in KV. |
 | 5 | Log in at **/admin/login** with that value; cookie auth is used for saving the ticker. |
 
-After this, the ticker on the live site reads from KV (via `/api/ticker`), and admin saves from the News Ticker page (after logging in) update KV for everyone. The API key is never stored in the browser.
+After this, the ticker on the live site reads from KV (via `/api/ticker`), and admin saves from the News Ticker page (after logging in) update KV for everyone. The API key is never stored in the browser. Donation and admission forms are static files in `public/forms/`; to update them, replace the files and redeploy (see **/admin/forms** for paths).
