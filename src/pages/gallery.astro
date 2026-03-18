@@ -167,17 +167,35 @@ const gallerySections = [
   let currentLightboxIndex = 0;
   let currentLightboxCategory = '';
 
-  function loadGalleryImages() {
+  async function loadGalleryImages() {
+    try {
+      const res = await fetch('/api/gallery');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          allImages = data.map(function (item) {
+            return { id: item.id, src: item.url, category: item.category, title: item.filename || 'Image' };
+          });
+          renderGalleryGrids();
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Error loading gallery from API:', e);
+    }
     const stored = localStorage.getItem('galleryImages');
     if (stored) {
       try {
-        allImages = JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        allImages = Array.isArray(parsed) ? parsed.map(function (i) { return { id: i.id, src: i.src, category: i.category, title: i.title || '' }; }) : [];
       } catch (e) {
-        console.error('Error loading gallery images:', e);
         allImages = [];
       }
     }
+    renderGalleryGrids();
+  }
 
+  function renderGalleryGrids() {
     // Populate each category grid
     const categories = ['teachers', 'school', 'events', 'community'];
     categories.forEach(category => {
@@ -225,7 +243,7 @@ const gallerySections = [
     });
   }
 
-  function openLightbox(category: string, index: number) {
+  function openLightbox(category, index) {
     currentLightboxCategory = category;
     currentLightboxIndex = index;
     updateLightboxImage();
