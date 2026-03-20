@@ -35,6 +35,22 @@ const gallerySections = [
     descEn: 'Gatherings of the Tamil community in London.',
   }
 ];
+
+/** Same Unsplash samples as `functions/api/gallery/index.js` — URLs verified reachable (some older Unsplash IDs now 404). */
+const galleryClientFallbacks = [
+  { id: 'sample-teachers-f1', category: 'teachers', filename: 'learning.jpg', src: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-teachers-f2', category: 'teachers', filename: 'study.jpg', src: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-teachers-f3', category: 'teachers', filename: 'books.jpg', src: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-school-f1', category: 'school', filename: 'classroom.jpg', src: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-school-f2', category: 'school', filename: 'children.jpg', src: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-school-f3', category: 'school', filename: 'activity.jpg', src: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-events-f1', category: 'events', filename: 'celebration.jpg', src: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-events-f2', category: 'events', filename: 'lights.jpg', src: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-events-f3', category: 'events', filename: 'gathering.jpg', src: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-community-f1', category: 'community', filename: 'temple.jpg', src: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-community-f2', category: 'community', filename: 'architecture.jpg', src: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80' },
+  { id: 'sample-community-f3', category: 'community', filename: 'community.jpg', src: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=900&q=80' },
+];
 ---
 
 <BaseLayout 
@@ -58,15 +74,21 @@ const gallerySections = [
     </div>
   </section>
 
-  <!-- Gallery Navigation -->
-  <section class="sticky top-0 z-40 bg-white shadow-md">
+  <!-- Sticky below fixed site header (matches main pt in BaseLayout); hash #teachers etc. must NOT match a panel id or the browser scrolls tabs away -->
+  <section
+    id="gallery-tabs"
+    class="sticky z-[60] bg-white/98 backdrop-blur-sm shadow-md border-b border-gray-200/90 top-[7.5rem] sm:top-[8rem] md:top-[8.5rem]"
+  >
     <div class="container mx-auto px-4">
-      <div class="flex items-center justify-center space-x-2 md:space-x-4 py-4 overflow-x-auto scrollbar-hide">
+      <div class="flex items-center justify-center gap-2 md:gap-3 py-3 md:py-4 overflow-x-auto scrollbar-hide">
         {gallerySections.map((section) => (
           <a 
-            href={`#${section.id}`}
-            class="gallery-nav-link px-4 py-2 text-sm md:text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all whitespace-nowrap"
+            id={`tab-${section.id}`}
+            href="#"
+            class={`gallery-nav-link px-4 py-2 text-sm md:text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all whitespace-nowrap border-2 border-transparent ${section.id === 'teachers' ? 'is-active' : ''}`}
             data-section={section.id}
+            role="tab"
+            aria-selected={section.id === 'teachers' ? 'true' : 'false'}
           >
             {lang === 'ta' ? section.titleTa : section.titleEn}
           </a>
@@ -75,9 +97,17 @@ const gallerySections = [
     </div>
   </section>
 
-  <!-- Gallery Sections -->
+  <!-- One panel visible at a time (controlled by JS + hash) -->
+  <div id="gallery-panels-root" class="bg-gray-50 min-h-[min(70vh,560px)]">
   {gallerySections.map((section, sectionIndex) => (
-    <section id={section.id} class={`py-12 md:py-16 ${sectionIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
+    <section
+      id={`gallery-panel-${section.id}`}
+      data-panel={section.id}
+      class={`gallery-panel py-10 md:py-14 ${sectionIndex !== 0 ? 'hidden' : ''}`}
+      role="tabpanel"
+      aria-labelledby={`tab-${section.id}`}
+      aria-hidden={sectionIndex !== 0 ? 'true' : 'false'}
+    >
       <div class="container mx-auto px-4">
         <div class="max-w-6xl mx-auto">
           <!-- Section Header -->
@@ -90,24 +120,41 @@ const gallerySections = [
             </p>
           </div>
 
-          <!-- Image Grid (populated by JavaScript) -->
-          <div 
-            id={`gallery-grid-${section.id}`}
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
-            data-category={section.id}
-          >
-            <!-- Images will be loaded dynamically -->
-            <div class="gallery-placeholder col-span-full text-center py-12 text-gray-400">
-              <svg class="w-16 h-16 mx-auto mb-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <p>{lang === 'ta' ? 'படங்களை ஏற்றுகிறது...' : 'Loading images...'}</p>
+          <!-- Horizontal image scroller (populated by JavaScript) -->
+          <div class="relative gallery-scroll-shell" data-category-wrap={section.id}>
+            <button
+              type="button"
+              class="gallery-scroll-prev absolute left-0 top-1/2 z-10 -translate-y-1/2 -translate-x-1 md:-translate-x-2 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-lg border border-gray-200 text-primary-700 hover:bg-primary-50 hover:border-primary-200 items-center justify-center hidden sm:flex transition-opacity disabled:opacity-30 disabled:pointer-events-none"
+              aria-label={lang === 'ta' ? 'முந்தைய படங்கள்' : 'Scroll images left'}
+            >
+              <span class="text-2xl leading-none pb-0.5" aria-hidden="true">&#8249;</span>
+            </button>
+            <button
+              type="button"
+              class="gallery-scroll-next absolute right-0 top-1/2 z-10 -translate-y-1/2 translate-x-1 md:translate-x-2 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-lg border border-gray-200 text-primary-700 hover:bg-primary-50 hover:border-primary-200 items-center justify-center hidden sm:flex transition-opacity disabled:opacity-30 disabled:pointer-events-none"
+              aria-label={lang === 'ta' ? 'அடுத்த படங்கள்' : 'Scroll images right'}
+            >
+              <span class="text-2xl leading-none pb-0.5" aria-hidden="true">&#8250;</span>
+            </button>
+            <div
+              id={`gallery-grid-${section.id}`}
+              class="gallery-scroll-track flex gap-4 md:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-3 pt-1 px-1 -mx-1 scrollbar-hide min-h-[200px]"
+              data-category={section.id}
+              tabindex="0"
+            >
+              <div class="gallery-placeholder flex-shrink-0 w-full flex flex-col items-center justify-center py-12 text-gray-400 min-h-[200px]">
+                <svg class="w-16 h-16 mb-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <p>{lang === 'ta' ? 'படங்களை ஏற்றுகிறது...' : 'Loading images...'}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
   ))}
+  </div>
 
   <!-- Call to Action -->
   <section class="py-16 bg-gradient-to-r from-primary-600 to-primary-700">
@@ -149,9 +196,19 @@ const gallerySections = [
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+  .gallery-scroll-track {
+    -webkit-overflow-scrolling: touch;
+  }
+  .gallery-nav-link.is-active {
+    background-color: #fff;
+    color: #6b2d3c;
+    border-color: rgba(107, 45, 60, 0.45);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+  }
 </style>
 
-<script>
+<script define:vars={{ galleryClientFallbacks }}>
   // Gallery image loading and display (KV + R2 folders per category; API adds samples if a folder is empty)
   const lang = new URLSearchParams(window.location.search).get('lang') || 'ta';
 
@@ -159,6 +216,8 @@ const gallerySections = [
   let allImages = [];
   let currentLightboxIndex = 0;
   let currentLightboxCategory = '';
+
+  var GALLERY_SECTION_IDS = ['teachers', 'school', 'events', 'community'];
 
   async function loadGalleryImages() {
     try {
@@ -188,52 +247,162 @@ const gallerySections = [
     renderGalleryGrids();
   }
 
-  function renderGalleryGrids() {
-    // Populate each category grid
-    const categories = ['teachers', 'school', 'events', 'community'];
-    categories.forEach(category => {
-      const grid = document.getElementById(`gallery-grid-${category}`);
-      if (!grid) return;
+  function setupScrollButtons(track) {
+    const shell = track.closest('.gallery-scroll-shell');
+    if (!shell) return;
+    const prev = shell.querySelector('.gallery-scroll-prev');
+    const next = shell.querySelector('.gallery-scroll-next');
+    if (!prev || !next) return;
 
-      const categoryImages = allImages.filter(img => img.category === category);
-      
-      // Clear placeholder
-      grid.innerHTML = '';
+    const step = function () {
+      return Math.max(260, Math.floor(track.clientWidth * 0.75));
+    };
+
+    const updateDisabled = function () {
+      var max = track.scrollWidth - track.clientWidth;
+      if (max <= 4) {
+        prev.disabled = true;
+        next.disabled = true;
+        return;
+      }
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max - 2;
+    };
+
+    prev.onclick = function () {
+      track.scrollBy({ left: -step(), behavior: 'smooth' });
+    };
+    next.onclick = function () {
+      track.scrollBy({ left: step(), behavior: 'smooth' });
+    };
+    track.addEventListener('scroll', updateDisabled, { passive: true });
+    updateDisabled();
+    if (typeof ResizeObserver !== 'undefined') {
+      var ro = new ResizeObserver(updateDisabled);
+      ro.observe(track);
+    }
+  }
+
+  function mergeClientSamplesForEmptyCategories() {
+    GALLERY_SECTION_IDS.forEach(function (cat) {
+      var has = allImages.some(function (i) {
+        return i.category === cat;
+      });
+      if (has) return;
+      galleryClientFallbacks.forEach(function (item) {
+        if (item.category !== cat) return;
+        allImages.push({
+          id: item.id,
+          src: item.src,
+          category: item.category,
+          title: item.filename || 'Image',
+        });
+      });
+    });
+  }
+
+  function renderGalleryGrids() {
+    mergeClientSamplesForEmptyCategories();
+    const categories = ['teachers', 'school', 'events', 'community'];
+    categories.forEach(function (category) {
+      const track = document.getElementById('gallery-grid-' + category);
+      if (!track) return;
+
+      const categoryImages = allImages.filter(function (img) {
+        return img.category === category;
+      });
+
+      track.innerHTML = '';
 
       if (categoryImages.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full text-center py-12">
-            <div class="inline-block p-8 bg-gradient-to-br from-primary-400/20 to-primary-600/20 rounded-2xl">
-              <svg class="w-16 h-16 mx-auto text-primary-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <p class="text-gray-500 font-medium">${lang === 'ta' ? 'புகைப்படங்கள் விரைவில் சேர்க்கப்படும்' : 'Photos coming soon'}</p>
-            </div>
-          </div>
-        `;
+        var empty = document.createElement('div');
+        empty.className =
+          'flex-shrink-0 w-full min-h-[220px] flex items-center justify-center snap-center rounded-2xl bg-gradient-to-br from-primary-400/15 to-primary-600/15 border border-primary-100/80';
+        empty.innerHTML =
+          '<div class="text-center px-6 py-10">' +
+          '<svg class="w-16 h-16 mx-auto text-primary-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>' +
+          '<p class="text-gray-600 font-medium">' +
+          (lang === 'ta' ? 'புகைப்படங்கள் விரைவில் சேர்க்கப்படும்' : 'Photos coming soon') +
+          '</p></div>';
+        track.appendChild(empty);
+        setupScrollButtons(track);
         return;
       }
 
-      categoryImages.forEach((image, index) => {
-        const div = document.createElement('div');
-        div.className = 'group relative aspect-square overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer';
-        div.innerHTML = `
-          <img 
-            src="${image.src}" 
-            alt="${image.title}"
-            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-            loading="lazy"
-          />
-          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-            <svg class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-50 group-hover:scale-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-            </svg>
-          </div>
-        `;
-        div.addEventListener('click', () => openLightbox(category, index));
-        grid.appendChild(div);
+      categoryImages.forEach(function (image, index) {
+        var card = document.createElement('div');
+        card.className =
+          'group relative flex-shrink-0 w-[min(82vw,300px)] sm:w-[min(72vw,340px)] md:w-[300px] lg:w-[320px] snap-start aspect-[4/3] overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 hover:shadow-xl hover:ring-primary-200/60 transition-all duration-300 cursor-pointer';
+        card.addEventListener('click', function () {
+          openLightbox(category, index);
+        });
+
+        var imgEl = document.createElement('img');
+        imgEl.src = image.src;
+        imgEl.alt = image.title || 'Gallery image';
+        imgEl.className =
+          'w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500';
+        imgEl.loading = 'lazy';
+        imgEl.decoding = 'async';
+
+        var overlay = document.createElement('div');
+        overlay.className =
+          'absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none';
+
+        card.appendChild(imgEl);
+        card.appendChild(overlay);
+        track.appendChild(card);
+      });
+
+      setupScrollButtons(track);
+    });
+  }
+
+  function showGalleryPanel(id) {
+    if (GALLERY_SECTION_IDS.indexOf(id) < 0) id = 'teachers';
+
+    document.querySelectorAll('.gallery-panel').forEach(function (panel) {
+      var show = panel.getAttribute('data-panel') === id;
+      panel.classList.toggle('hidden', !show);
+      panel.setAttribute('aria-hidden', show ? 'false' : 'true');
+    });
+
+    document.querySelectorAll('.gallery-nav-link').forEach(function (a) {
+      var on = a.getAttribute('data-section') === id;
+      if (on) {
+        a.classList.add('is-active');
+        a.setAttribute('aria-selected', 'true');
+      } else {
+        a.classList.remove('is-active');
+        a.setAttribute('aria-selected', 'false');
+      }
+    });
+
+    var track = document.getElementById('gallery-grid-' + id);
+    if (track) {
+      requestAnimationFrame(function () {
+        setupScrollButtons(track);
+      });
+    }
+  }
+
+  function initGalleryTabs() {
+    document.querySelectorAll('.gallery-nav-link').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        var id = a.getAttribute('data-section');
+        if (!id) return;
+        showGalleryPanel(id);
+        try {
+          history.replaceState(null, '', '#' + id);
+        } catch (err) {
+          window.location.hash = id;
+        }
       });
     });
+
+    var hash = (window.location.hash || '').replace('#', '');
+    showGalleryPanel(GALLERY_SECTION_IDS.indexOf(hash) >= 0 ? hash : 'teachers');
   }
 
   function openLightbox(category, index) {
@@ -281,7 +450,12 @@ const gallerySections = [
 
   // Event listeners
   document.addEventListener('DOMContentLoaded', () => {
+    initGalleryTabs();
     loadGalleryImages();
+    window.addEventListener('hashchange', function () {
+      var id = (window.location.hash || '').replace('#', '');
+      if (id && GALLERY_SECTION_IDS.indexOf(id) >= 0) showGalleryPanel(id);
+    });
 
     // Lightbox controls
     document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);

@@ -31,3 +31,6 @@ pnpm-debug.log*
 
 # Cloudflare
 .wrangler/
+
+# R2 upload script temp downloads
+scripts/.tmp-gallery-upload/

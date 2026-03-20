@@ -7,7 +7,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "upload:gallery-r2": "node scripts/upload-gallery-test-images.mjs",
+    "download:gallery-samples": "node scripts/download-gallery-samples.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.3",

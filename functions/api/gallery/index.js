@@ -12,21 +12,21 @@ const FALLBACK_BY_CATEGORY = {
   teachers: [
     { id: 'f1', filename: 'learning.jpg', url: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80' },
     { id: 'f2', filename: 'study.jpg', url: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80' },
-    { id: 'f3', filename: 'books.jpg', url: 'https://images.unsplash.com/photo-1523240795612-9a054b055db1?auto=format&fit=crop&w=900&q=80' },
+    { id: 'f3', filename: 'books.jpg', url: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80' },
   ],
   school: [
-    { id: 'f1', filename: 'classroom.jpg', url: 'https://images.unsplash.com/photo-1588072432836-e345651e9f55?auto=format&fit=crop&w=900&q=80' },
+    { id: 'f1', filename: 'classroom.jpg', url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80' },
     { id: 'f2', filename: 'children.jpg', url: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80' },
-    { id: 'f3', filename: 'activity.jpg', url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80' },
+    { id: 'f3', filename: 'activity.jpg', url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=900&q=80' },
   ],
   events: [
-    { id: 'f1', filename: 'celebration.jpg', url: 'https://images.unsplash.com/photo-151422213611-b43c27e51745?auto=format&fit=crop&w=900&q=80' },
-    { id: 'f2', filename: 'lights.jpg', url: 'https://images.unsplash.com/photo-1464366400609-40adb8c9b752?auto=format&fit=crop&w=900&q=80' },
+    { id: 'f1', filename: 'celebration.jpg', url: 'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80' },
+    { id: 'f2', filename: 'lights.jpg', url: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=900&q=80' },
     { id: 'f3', filename: 'gathering.jpg', url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=900&q=80' },
   ],
   community: [
-    { id: 'f1', filename: 'temple.jpg', url: 'https://images.unsplash.com/photo-1561361058-4bc6b9d3e42c?auto=format&fit=crop&w=900&q=80' },
-    { id: 'f2', filename: 'architecture.jpg', url: 'https://images.unsplash.com/photo-1582510003544-4d00b92fe456?auto=format&fit=crop&w=900&q=80' },
+    { id: 'f1', filename: 'temple.jpg', url: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=900&q=80' },
+    { id: 'f2', filename: 'architecture.jpg', url: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80' },
     { id: 'f3', filename: 'community.jpg', url: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=900&q=80' },
   ],
 };
