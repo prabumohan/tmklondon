@@ -42,15 +42,14 @@ const gallerySections = [
   description="London Tamil Sangam gallery – photos and videos from TMK London events, Tamil school activities, and Tamil Sangam community gatherings."
   lang={lang}
 >
-  <!-- Hero Section -->
-  <section class="relative py-16 md:py-20" style="background: linear-gradient(135deg, #1e3a5f 0%, #162d49 50%, #2a4a6f 100%);">
-    <div class="absolute inset-0 bg-black/20"></div>
-    <div class="container mx-auto px-4 relative z-10">
-      <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white font-tamil">
+  <!-- Page title — same visual language as the rest of the site (header already shows logo + nav) -->
+  <section class="bg-white border-b border-gray-200 pt-2 pb-5 md:pb-6">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold text-primary-800 font-tamil">
           {getTranslation('gallery', lang)}
         </h1>
-        <p class="text-lg md:text-xl text-white/90 font-tamil">
+        <p class="mt-2 text-gray-600 text-sm md:text-base font-tamil max-w-3xl">
           {lang === 'ta' 
             ? 'எங்கள் நிகழ்வுகள், பள்ளி நடவடிக்கைகள் மற்றும் சமூக கூட்டங்களின் புகைப்படங்கள்'
             : 'Photos from our events, school activities, and community gatherings'}
@@ -153,23 +152,17 @@ const gallerySections = [
 </style>
 
 <script>
-  // Gallery image loading and display
+  // Gallery image loading and display (KV + R2 folders per category; API adds samples if a folder is empty)
   const lang = new URLSearchParams(window.location.search).get('lang') || 'ta';
-  
-  interface GalleryImage {
-    id: string;
-    src: string;
-    category: string;
-    title: string;
-  }
-  
-  let allImages: GalleryImage[] = [];
+
+  /** @type {{ id: string, src: string, category: string, title: string }[]} */
+  let allImages = [];
   let currentLightboxIndex = 0;
   let currentLightboxCategory = '';
 
   async function loadGalleryImages() {
     try {
-      const res = await fetch('/api/gallery');
+      const res = await fetch('/api/gallery?t=' + Date.now(), { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
@@ -267,7 +260,7 @@ const gallerySections = [
     const categoryImages = allImages.filter(img => img.category === currentLightboxCategory);
     if (categoryImages.length === 0) return;
     
-    const img = document.getElementById('lightbox-img') as HTMLImageElement;
+    const img = document.getElementById('lightbox-img');
     if (img && categoryImages[currentLightboxIndex]) {
       img.src = categoryImages[currentLightboxIndex].src;
       img.alt = categoryImages[currentLightboxIndex].title;
