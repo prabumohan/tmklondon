@@ -227,7 +227,7 @@ export default function AdminGallery() {
   const handleDeleteR2 = async (id: string) => {
     if (!confirm('Remove this image from the gallery?')) return;
     try {
-      const res = await fetch(`/api/gallery/item/${id}`, {
+      const res = await fetch(`/api/gallery/item/${encodeURIComponent(id)}`, {
         method: 'DELETE',
         credentials: 'include',
       });

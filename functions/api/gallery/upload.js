@@ -1,7 +1,8 @@
 /**
  * POST /api/gallery/upload
  * JSON: { category, file, filename } or { category, files: [{ file, filename }] }
- * Auth: session cookie. Uploads image(s) to R2 (gallery/{category}/{id}.ext) and appends to KV galleryImages.
+ * Auth: session cookie. Uploads image(s) to R2 as gallery/{category}/{original-name.jpg} and appends to KV galleryImages.
+ * If the same filename already exists in that category, uses name_1.jpg, name_2.jpg, …
  */
 
 const COOKIE_NAME = 'tmk_admin_session';
@@ -55,6 +56,23 @@ function jsonResponse(data, status = 200) {
 function safeExt(filename) {
   const m = (filename || '').toLowerCase().match(/\.(jpe?g|png|gif|webp)$/);
   return m ? m[1].replace('jpeg', 'jpg') : 'jpg';
+}
+
+/** Sanitized base name + normalized extension, e.g. My Photo.JPG → my_photo.jpg */
+function normalizeStoredFilename(filename) {
+  const raw = (filename || 'image.jpg').replace(/[^a-zA-Z0-9._-]/g, '_').replace(/_+/g, '_');
+  if (!ALLOWED_EXT.test(raw)) return null;
+  const ext = safeExt(raw);
+  const stem = raw.replace(/\.[^.]+$/, '');
+  if (!stem) return null;
+  return `${stem}.${ext}`;
+}
+
+/** Stable id for KV + delete: category_stem_ext (e.g. teachers_summer_pic_jpg) */
+function makeGalleryItemId(category, storeName) {
+  const ext = safeExt(storeName);
+  const stem = storeName.replace(/\.[^.]+$/, '');
+  return `${category}_${stem}_${ext}`;
 }
 
 export async function onRequestPost(context) {
@@ -115,18 +133,38 @@ export async function onRequestPost(context) {
   const uploaded = [];
   for (const { file: b64, filename } of entries) {
     if (!b64 || typeof b64 !== 'string') continue;
-    const name = (filename || 'image.jpg').replace(/[^a-zA-Z0-9._-]/g, '_');
-    if (!ALLOWED_EXT.test(name)) continue;
+    const normalized = normalizeStoredFilename((filename || 'image.jpg').toString());
+    if (!normalized) continue;
+
+    const ext = safeExt(normalized);
+    const baseStem = normalized.replace(/\.[^.]+$/, '');
+    let storeName = normalized;
+    let n = 0;
+    while (true) {
+      const tryKey = `${R2_PREFIX}${category}/${storeName}`;
+      const inKv = list.some((i) => i.r2Key === tryKey);
+      let occupied = inKv;
+      if (!occupied && bucket) {
+        try {
+          const head = await bucket.head(tryKey);
+          occupied = head != null;
+        } catch (_) {
+          occupied = false;
+        }
+      }
+      if (!occupied) break;
+      n++;
+      storeName = `${baseStem}_${n}.${ext}`;
+    }
+
+    const r2Key = `${R2_PREFIX}${category}/${storeName}`;
+    const id = makeGalleryItemId(category, storeName);
 
     const clean = b64.replace(/^data:[^;]+;base64,/, '');
     const binary = atob(clean);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
     if (bytes.length > MAX_SIZE) continue;
-
-    const ext = safeExt(name);
-    const id = `${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
-    const r2Key = `${R2_PREFIX}${category}/${id}.${ext}`;
 
     try {
       await bucket.put(r2Key, bytes.buffer, {
@@ -139,7 +177,7 @@ export async function onRequestPost(context) {
     const item = {
       id,
       category,
-      filename: name,
+      filename: storeName,
       r2Key,
       url: `/api/gallery/image/${r2Key}`,
       uploadedAt: new Date().toISOString(),

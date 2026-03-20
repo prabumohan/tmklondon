@@ -1,10 +1,28 @@
 /**
- * DELETE /api/gallery/item/[id] — remove one gallery image from KV (and optionally R2). Auth: cookie.
+ * DELETE /api/gallery/item/[id] — remove gallery image from KV and delete the R2 object.
+ * Also handles R2-only objects (listed from bucket but not in KV) by scanning keys under gallery/.
+ * Auth: session cookie.
  */
 
 const COOKIE_NAME = 'tmk_admin_session';
 const MAX_AGE_DAYS = 7;
 const KV_KEY = 'galleryImages';
+const R2_PREFIX = 'gallery/';
+const CATEGORIES = ['teachers', 'school', 'events', 'community'];
+
+/** id from upload: teachers_summer_pic_jpg → { category, stem, ext } */
+function parseNewStyleGalleryId(id) {
+  const parts = id.split('_');
+  if (parts.length < 3) return null;
+  const cat = parts[0];
+  if (!CATEGORIES.includes(cat)) return null;
+  const extLast = parts[parts.length - 1].toLowerCase();
+  const extNorm = extLast === 'jpeg' ? 'jpg' : extLast;
+  if (!/^(jpe?g|png|gif|webp)$/.test(extNorm)) return null;
+  const stem = parts.slice(1, -1).join('_');
+  if (!stem) return null;
+  return { category: cat, stem, ext: extNorm };
+}
 
 async function verifySessionCookie(secret, cookieHeader) {
   if (!cookieHeader || !secret) return false;
@@ -48,8 +66,10 @@ function jsonResponse(data, status = 200) {
 
 export async function onRequestDelete(context) {
   const kv = context.env.TMK_KV;
+  const bucket = context.env.TMK_STORE;
   const secret = context.env.TMK_ADMIN_API_KEY;
-  const id = context.params.id;
+  const rawId = context.params?.id;
+  const id = rawId != null ? decodeURIComponent(String(rawId)) : '';
 
   if (!id || !kv) return jsonResponse({ error: 'Not found' }, 404);
   if (!secret) return jsonResponse({ error: 'Admin not configured' }, 503);
@@ -68,14 +88,65 @@ export async function onRequestDelete(context) {
     return jsonResponse({ error: 'Failed to load gallery' }, 500);
   }
 
-  const next = list.filter((item) => item.id !== id);
-  if (next.length === list.length) return jsonResponse({ error: 'Not found' }, 404);
-
-  try {
-    await kv.put(KV_KEY, JSON.stringify(next));
-  } catch (_) {
-    return jsonResponse({ error: 'Failed to save' }, 500);
+  const idx = list.findIndex((item) => item.id === id);
+  if (idx >= 0) {
+    const removed = list[idx];
+    if (bucket && removed.r2Key) {
+      try {
+        await bucket.delete(removed.r2Key);
+      } catch (_) {
+        return jsonResponse({ error: 'Failed to delete file from storage' }, 500);
+      }
+    }
+    const next = list.filter((_, i) => i !== idx);
+    try {
+      await kv.put(KV_KEY, JSON.stringify(next));
+    } catch (_) {
+      return jsonResponse({ error: 'Failed to save' }, 500);
+    }
+    return jsonResponse({ ok: true });
   }
 
-  return jsonResponse({ ok: true });
+  // KV miss: try new-style id → exact R2 key (orphan KV / direct delete)
+  if (bucket) {
+    const parsed = parseNewStyleGalleryId(id);
+    if (parsed) {
+      const r2Key = `${R2_PREFIX}${parsed.category}/${parsed.stem}.${parsed.ext}`;
+      try {
+        const head = await bucket.head(r2Key);
+        if (head) {
+          await bucket.delete(r2Key);
+          return jsonResponse({ ok: true });
+        }
+      } catch (_) {}
+    }
+  }
+
+  // R2-only (e.g. uploaded via wrangler, never in KV): find by filename stem matching id
+  if (bucket) {
+    let cursor;
+    let guard = 0;
+    do {
+      const listed = await bucket.list({ prefix: R2_PREFIX, limit: 1000, ...(cursor ? { cursor } : {}) });
+      for (const obj of listed.objects) {
+        const key = obj.key;
+        if (!/\.(jpe?g|png|gif|webp)$/i.test(key)) continue;
+        const file = key.split('/').pop() || '';
+        const base = file.replace(/\.[^.]+$/, '');
+        if (base === id) {
+          try {
+            await bucket.delete(key);
+            return jsonResponse({ ok: true });
+          } catch (_) {
+            return jsonResponse({ error: 'Failed to delete object' }, 500);
+          }
+        }
+      }
+      cursor = listed.truncated ? listed.cursor : undefined;
+      guard++;
+      if (guard > 50) break;
+    } while (cursor);
+  }
+
+  return jsonResponse({ error: 'Not found' }, 404);
 }
