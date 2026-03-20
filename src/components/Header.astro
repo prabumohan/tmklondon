@@ -4,11 +4,13 @@ import { siteConfig } from '../utils/seo';
 
 interface Props {
   lang?: Language;
+  /** Logo + Home only (e.g. /admin routes opened in a new tab) */
+  minimalHeader?: boolean;
 }
 
 // Extract language from URL query parameter first, then fall back to props
 const urlLang = Astro.url.searchParams.get('lang') as Language;
-const { lang: propLang = 'ta' } = Astro.props;
+const { lang: propLang = 'ta', minimalHeader = false } = Astro.props;
 const lang = urlLang || propLang;
 const currentPath = Astro.url.pathname;
 const currentUrl = Astro.url;
@@ -42,7 +44,30 @@ const initialTickerHtml = tickerItems.map((item, index) => {
 }).join('');
 ---
 
-<header class="fixed top-0 left-0 right-0 w-full z-[100] shadow-lg bg-transparent header-fixed-lts" id="site-header">
+<header
+  class:list={['fixed top-0 left-0 right-0 w-full z-[100] shadow-lg bg-transparent header-fixed-lts', minimalHeader && 'site-header-minimal']}
+  id="site-header"
+>
+  {minimalHeader ? (
+    <div class="relative min-h-[56px] sm:min-h-[60px] header-banner-custom overflow-hidden" style="background: linear-gradient(135deg, #6B2D3C 0%, #5C1A1B 50%, #451a1a 100%);">
+      <img
+        src={headerBgImage}
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none header-bg-position"
+        loading="eager"
+        decoding="async"
+      />
+      <div class="relative z-10 w-full px-4 sm:px-6 flex flex-nowrap items-center justify-between gap-3 py-2 min-h-[56px] sm:min-h-[60px]">
+        <a href="/" class="header-logo flex-shrink-0 group min-w-[48px] sm:min-w-[56px]" aria-label="Home">
+          <img src={logoUrl} alt="TMK London - London Tamil Sangam" class="h-12 w-12 sm:h-14 sm:w-14 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="128" height="128" loading="eager" decoding="async" />
+        </a>
+        <a href="/" data-preserve-lang class="text-white font-semibold text-sm sm:text-base hover:opacity-90 [text-shadow:0_1px_3px_rgba(0,0,0,0.9)] whitespace-nowrap">
+          <span class="i18n-ta">முகப்பு</span><span class="i18n-en">Home</span>
+        </a>
+      </div>
+    </div>
+  ) : (
+    <>
   <!-- Header Banner: background image with gradient fallback if image 404s -->
   <div class="relative min-h-[72px] sm:min-h-[80px] header-banner-custom overflow-hidden" style="background: linear-gradient(135deg, #6B2D3C 0%, #5C1A1B 50%, #451a1a 100%);">
     <img
@@ -349,6 +374,8 @@ const initialTickerHtml = tickerItems.map((item, index) => {
       </div>
     </div>
   </div>
+    </>
+  )}
 </header>
 
 <style>

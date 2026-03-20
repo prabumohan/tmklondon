@@ -5,7 +5,8 @@
 const R2_PREFIX = 'gallery/';
 
 export async function onRequestGet(context) {
-  const path = context.params.path;
+  let path = context.params.path;
+  if (Array.isArray(path)) path = path.join('/');
   if (!path || typeof path !== 'string') {
     return new Response('Not Found', { status: 404 });
   }

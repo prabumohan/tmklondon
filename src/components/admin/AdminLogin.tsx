@@ -61,11 +61,19 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-primary-600 to-primary-800 rounded-full flex items-center justify-center text-4xl">
-            🔐
+          <div className="mx-auto mb-6 flex justify-center">
+            <img
+              src="/logo.png"
+              alt="TMK London - London Tamil Sangam"
+              className="h-40 w-40 sm:h-44 sm:w-44 rounded-full object-cover shadow-xl ring-2 ring-primary-100"
+              width={176}
+              height={176}
+              loading="eager"
+              decoding="async"
+            />
           </div>
           <h1 className="text-3xl font-bold text-primary-700 mb-2">Admin Login</h1>
-          <p className="text-gray-600">Enter your admin password (same as Cloudflare <code className="bg-gray-100 px-1 rounded text-sm">TMK_ADMIN_API_KEY</code>)</p>
+          <p className="text-gray-600">Enter your admin password.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

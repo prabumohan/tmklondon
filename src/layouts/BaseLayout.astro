@@ -17,6 +17,7 @@ interface Props {
 }
 
 const { title, description, image, lang = 'ta', schema } = Astro.props;
+const isAdminRoute = Astro.url.pathname.startsWith('/admin');
 const currentUrl = new URL(Astro.url.pathname, Astro.site || 'https://tmklondon.com');
 const canonicalUrl = `${currentUrl.origin}${Astro.url.pathname}${Astro.url.search}`;
 const seoConfig = getSEOConfig(title, description, image, undefined, canonicalUrl);
@@ -37,6 +38,16 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
+    {isAdminRoute && (
+      <>
+        <link rel="manifest" href="/admin.webmanifest" />
+        <meta name="theme-color" content="#6B2D3C" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="TMK Admin" />
+      </>
+    )}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -99,13 +110,27 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
       <div class="absolute inset-0 tamil-cluster-pattern theme-pattern" aria-hidden="true"></div>
       <div class="absolute inset-0 tamil-cluster-glow" aria-hidden="true"></div>
     </div>
-    <Header lang={lang} />
+    <Header lang={lang} minimalHeader={isAdminRoute} />
     <div class="relative min-h-screen">
-      <main class="main-below-header main-content-in pt-[7.5rem] sm:pt-[8rem] md:pt-[8.5rem]">
+      <main
+        class:list={[
+          'main-below-header main-content-in',
+          isAdminRoute ? 'pt-[4.75rem] sm:pt-20' : 'pt-[7.5rem] sm:pt-[8rem] md:pt-[8.5rem]',
+        ]}
+      >
         <slot />
       </main>
       <Footer lang={lang} />
     </div>
+    {isAdminRoute && (
+      <script is:inline>
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/admin-sw.js', { scope: '/admin/' }).catch(function () {});
+          });
+        }
+      </script>
+    )}
   </body>
 </html>
 
