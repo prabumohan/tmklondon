@@ -98,21 +98,23 @@ export default function UpcomingEventsSection() {
           {events.map((event, index) => (
             <div
               key={`${event.date}-${index}`}
-              className="event-card group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-200 flex"
+              className="event-card group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-x-hidden border border-gray-100 hover:border-primary-200 flex min-w-0"
             >
               <div
                 className="w-1 rounded-l-2xl bg-primary shrink-0 self-stretch opacity-80 group-hover:opacity-100 transition-opacity"
                 aria-hidden
               />
-              <div className="p-6 flex-1">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-semibold text-primary uppercase tracking-wide">
+              <div className="p-6 flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
+                  <span className="text-xs font-semibold text-primary uppercase tracking-wide shrink-0">
                     <span className="i18n-ta">நிகழ்வு</span>
                     <span className="i18n-en">Event</span>
                   </span>
-                  <span className="text-gray-300">·</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center">
+                  <span className="text-gray-300 shrink-0" aria-hidden>
+                    ·
+                  </span>
+                  <div className="flex items-center gap-2 min-w-0 shrink-0">
+                    <div className="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
                       <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
                           strokeLinecap="round"
@@ -122,7 +124,7 @@ export default function UpcomingEventsSection() {
                         />
                       </svg>
                     </div>
-                    <span className="text-sm text-primary font-semibold">{event.date}</span>
+                    <span className="text-sm text-primary font-semibold break-words">{event.date}</span>
                   </div>
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-gray-900 font-tamil">

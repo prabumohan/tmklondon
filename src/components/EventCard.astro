@@ -14,19 +14,19 @@ interface Props {
 const { date, title, description } = Astro.props;
 ---
 
-<div class="event-card group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-200 flex">
+<div class="event-card group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-x-hidden border border-gray-100 hover:border-primary-200 flex min-w-0">
   <div class="w-1 rounded-l-2xl bg-primary shrink-0 self-stretch opacity-80 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
-  <div class="p-6 flex-1">
-    <div class="flex items-center gap-2 mb-3">
-      <span class="text-xs font-semibold text-primary uppercase tracking-wide"><span class="i18n-ta">நிகழ்வு</span><span class="i18n-en">Event</span></span>
-      <span class="text-gray-300">·</span>
-      <div class="flex items-center gap-2">
-        <div class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center">
+  <div class="p-6 flex-1 min-w-0">
+    <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
+      <span class="text-xs font-semibold text-primary uppercase tracking-wide shrink-0"><span class="i18n-ta">நிகழ்வு</span><span class="i18n-en">Event</span></span>
+      <span class="text-gray-300 shrink-0" aria-hidden="true">·</span>
+      <div class="flex items-center gap-2 min-w-0 shrink-0">
+        <div class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
           <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
         </div>
-        <span class="text-sm text-primary font-semibold">{date}</span>
+        <span class="text-sm text-primary font-semibold break-words">{date}</span>
       </div>
     </div>
     <h3 class="text-xl font-bold mb-3 text-gray-900 font-tamil"><span class="i18n-ta">{title.ta}</span><span class="i18n-en">{title.en}</span></h3>

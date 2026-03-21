@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getTranslation, type Language } from '../utils/i18n';
+import EventsCalendarPage from '../components/EventsCalendarPage';
+
+const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
+---
+
+<BaseLayout
+  title={getTranslation('eventsPage', 'ta')}
+  titleEn={getTranslation('eventsPage', 'en')}
+  description="London Tamil Sangam events calendar — Tamil school and community programmes. TMK London."
+  lang={lang}
+>
+  <section class="py-12 md:py-16 lg:py-20 theme-section-events">
+    <div class="container mx-auto px-4">
+      <p class="text-center text-primary font-semibold text-sm uppercase tracking-wide mb-2">
+        <span class="i18n-ta">கல்வி மற்றும் சமூகம்</span>
+        <span class="i18n-en">Education &amp; Community</span>
+      </p>
+      <h1 class="text-3xl md:text-4xl font-bold text-center mb-4 font-tamil text-gray-800">
+        <span class="i18n-ta">{getTranslation('eventsPage', 'ta')}</span><span class="i18n-en">{getTranslation('eventsPage', 'en')}</span>
+      </h1>
+      <p class="text-center text-gray-600 mb-10 md:mb-12 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+        <span class="i18n-ta">{getTranslation('eventsPageIntro', 'ta')}</span><span class="i18n-en">{getTranslation('eventsPageIntro', 'en')}</span>
+      </p>
+      <EventsCalendarPage client:load />
+      <p class="text-center mt-10">
+        <a
+          href="/"
+          data-preserve-lang
+          class="inline-flex items-center gap-2 text-primary font-semibold hover:underline"
+        >
+          <span class="i18n-ta">← முகப்புக்குத் திரும்ப</span>
+          <span class="i18n-en">← Back to home</span>
+        </a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

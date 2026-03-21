@@ -88,6 +88,15 @@ export const translations: Translations = {
     ta: 'தொடர்பு கொள்ள',
     en: 'Get in Touch',
   },
+  /** /activities — calendar of KV-driven events */
+  eventsPage: {
+    ta: 'நிகழ்வுகள்',
+    en: 'Events',
+  },
+  eventsPageIntro: {
+    ta: 'கல்வி மற்றும் சமூக நிகழ்வுகள் — கீழே உள்ள நாட்காட்டியில் வரவிருக்கும் நிகழ்வுகளைப் பார்க்கவும்.',
+    en: 'Education and community events — use the calendar below to see upcoming events.',
+  },
 };
 
 export function getTranslation(key: keyof typeof translations, lang: Language): string {
