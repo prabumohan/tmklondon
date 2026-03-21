@@ -20,6 +20,12 @@ The site uses a **London skyline** image with a **teal/saffron overlay** (Tamil 
 ## Logo
 
 - **logo.png** – Site logo (header, favicon, SEO). Prefer PNG with transparent background.
+- **logo-256.webp**, **logo-640.webp** – Generated WebP variants for the header/hero (`npm run optimize:images`). Keep these in sync when you replace `logo.png`.
+
+## Header carousel (banner strip)
+
+- **`header-carousel/fiery_sunset_sky_swirling-full.jpg`** – JPG fallback.
+- **`header-carousel/fiery_sunset_sky_swirling-full-{1200,1920}.webp`** – Run `npm run optimize:images` after changing the JPG.
 
 ## Gallery
 

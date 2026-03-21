@@ -1,0 +1,42 @@
+---
+/**
+ * WebP + PNG fallback for /logo.png — smaller transfer (see scripts/optimize-images.mjs).
+ */
+export interface Props {
+  mode: 'header-minimal' | 'header' | 'hero-small' | 'hero-large';
+  alt: string;
+  class: string;
+  width: number;
+  height: number;
+  /** Hint LCP for above-the-fold hero logos only */
+  fetchPriority?: 'high' | 'low' | 'auto';
+}
+
+const { mode, alt, class: className, width, height, fetchPriority } = Astro.props;
+
+const webpSrcset =
+  mode === 'hero-large' ? '/logo-256.webp 256w, /logo-640.webp 640w' : '/logo-256.webp 256w';
+
+const sizes =
+  mode === 'header-minimal'
+    ? '(max-width: 639px) 48px, 56px'
+    : mode === 'header'
+      ? '(max-width: 639px) 56px, (max-width: 767px) 80px, (max-width: 1023px) 112px, 128px'
+      : mode === 'hero-small'
+        ? '128px'
+        : '320px';
+---
+
+<picture>
+  <source type="image/webp" srcset={webpSrcset} sizes={sizes} />
+  <img
+    src="/logo.png"
+    alt={alt}
+    class={className}
+    width={width}
+    height={height}
+    loading="eager"
+    decoding="async"
+    {...(fetchPriority ? { fetchpriority: fetchPriority } : {})}
+  />
+</picture>

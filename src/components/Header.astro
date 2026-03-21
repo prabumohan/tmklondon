@@ -1,6 +1,7 @@
 ---
 import type { Language } from '../utils/i18n';
 import { siteConfig } from '../utils/seo';
+import LogoPicture from './LogoPicture.astro';
 
 interface Props {
   /** Logo + Home only (e.g. /admin routes opened in a new tab) */
@@ -18,10 +19,10 @@ function getUrlWithLang(langParam: Language): string {
   return url.pathname + (url.search ? url.search : '');
 }
 
-// Header: use paths that exist in repo (public/logo.png; static/ may be untracked on deploy)
-// Served from public/static/content/header-carousel/…
+// Header: PNG fallbacks in public/; WebP from scripts/optimize-images.mjs
 const headerBgImage = '/static/content/header-carousel/fiery_sunset_sky_swirling-full.jpg';
-const logoUrl = '/logo.png';
+const headerBgWebpSrcset =
+  '/static/content/header-carousel/fiery_sunset_sky_swirling-full-1200.webp 1200w, /static/content/header-carousel/fiery_sunset_sky_swirling-full-1920.webp 1920w';
 
 // Default ticker items (server-rendered so ticker is never empty; client may replace with /api/ticker)
 const defaultTickerItems = [
@@ -47,16 +48,25 @@ const initialTickerHtml = tickerItems.map((item, index) => {
 >
   {minimalHeader ? (
     <div class="relative min-h-[56px] sm:min-h-[60px] header-banner-custom overflow-hidden" style="background: linear-gradient(135deg, #6B2D3C 0%, #5C1A1B 50%, #451a1a 100%);">
-      <img
-        src={headerBgImage}
-        alt=""
-        class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none header-bg-position"
-        loading="eager"
-        decoding="async"
-      />
+      <picture class="absolute inset-0 block w-full h-full pointer-events-none">
+        <source type="image/webp" srcset={headerBgWebpSrcset} sizes="100vw" />
+        <img
+          src={headerBgImage}
+          alt=""
+          class="absolute inset-0 w-full h-full object-cover object-center header-bg-position"
+          loading="eager"
+          decoding="async"
+        />
+      </picture>
       <div class="relative z-10 w-full px-4 sm:px-6 flex flex-nowrap items-center justify-between gap-3 py-2 min-h-[56px] sm:min-h-[60px]">
         <a href="/" class="header-logo flex-shrink-0 group min-w-[48px] sm:min-w-[56px]" aria-label="Home">
-          <img src={logoUrl} alt="TMK London - London Tamil Sangam" class="h-12 w-12 sm:h-14 sm:w-14 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="128" height="128" loading="eager" decoding="async" />
+          <LogoPicture
+            mode="header-minimal"
+            alt="TMK London - London Tamil Sangam"
+            class="h-12 w-12 sm:h-14 sm:w-14 rounded-full object-cover transition-transform duration-300 group-hover:scale-105"
+            width={128}
+            height={128}
+          />
         </a>
         <a href="/" data-preserve-lang class="text-white font-semibold text-sm sm:text-base hover:opacity-90 [text-shadow:0_1px_3px_rgba(0,0,0,0.9)] whitespace-nowrap">
           <span class="i18n-ta">முகப்பு</span><span class="i18n-en">Home</span>
@@ -67,18 +77,27 @@ const initialTickerHtml = tickerItems.map((item, index) => {
     <>
   <!-- Header Banner: background image with gradient fallback if image 404s -->
   <div class="relative min-h-[72px] sm:min-h-[80px] header-banner-custom overflow-hidden" style="background: linear-gradient(135deg, #6B2D3C 0%, #5C1A1B 50%, #451a1a 100%);">
-    <img
-      src={headerBgImage}
-      alt=""
-      class="absolute inset-0 w-full h-full object-cover object-center pointer-events-none header-bg-position"
-      loading="eager"
-      decoding="async"
-    />
+    <picture class="absolute inset-0 block w-full h-full pointer-events-none">
+      <source type="image/webp" srcset={headerBgWebpSrcset} sizes="100vw" />
+      <img
+        src={headerBgImage}
+        alt=""
+        class="absolute inset-0 w-full h-full object-cover object-center header-bg-position"
+        loading="eager"
+        decoding="async"
+      />
+    </picture>
     <div class="relative z-10 w-full pl-4 pr-3 sm:pl-4 sm:pr-4 md:px-6 lg:px-8">
       <div class="header-banner-row flex flex-nowrap items-center justify-between gap-2 sm:gap-3 md:gap-6 py-1.5 sm:py-2 min-h-[72px] sm:min-h-[80px]">
         <!-- Logo (left) – flex-shrink-0 so it never clips on mobile -->
         <a href="/" class="header-logo flex-shrink-0 mr-2 sm:mr-3 md:mr-4 group min-w-[56px] sm:min-w-[72px]" aria-label="Home">
-          <img src={logoUrl} alt="TMK London - London Tamil Sangam" class="h-14 w-14 sm:h-20 sm:w-20 md:h-28 md:w-28 lg:h-32 lg:w-32 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="128" height="128" loading="eager" decoding="async" />
+          <LogoPicture
+            mode="header"
+            alt="TMK London - London Tamil Sangam"
+            class="h-14 w-14 sm:h-20 sm:w-20 md:h-28 md:w-28 lg:h-32 lg:w-32 rounded-full object-cover transition-transform duration-300 group-hover:scale-105"
+            width={128}
+            height={128}
+          />
         </a>
         <!-- Name (center) -->
         <a href="/" class="header-name flex-1 flex items-center justify-center text-center min-w-0 px-1 sm:px-2 md:px-4 group ring-0 border-0 outline-none focus:ring-0 focus:outline-none focus:border-0">

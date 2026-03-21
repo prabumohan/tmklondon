@@ -31,3 +31,11 @@ pnpm-debug.log*
 
 # Cloudflare
 .wrangler/
+
+# Local perf / debug artifacts
+.lighthouse-tmk.json
+.psi-desktop.json
+dev-server-log.txt
+
+# Ad-hoc script temp
+scripts/.tmp-gallery-upload/

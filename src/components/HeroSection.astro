@@ -1,5 +1,6 @@
 ---
 import { HERO_CAROUSEL_SLIDES } from '../config/hero-backgrounds';
+import LogoPicture from './LogoPicture.astro';
 
 // When R2 has ≥1 object under hero/, the client replaces slides with that list (GET /api/hero/list).
 // SSR defaults below are used if the list is empty or the API is unavailable (e.g. local dev).
@@ -48,7 +49,14 @@ const stats = [
 
   <!-- Logo: large left placement on lg+; below md we show a centered logo in the content column instead. -->
   <a href="/" class="absolute left-16 xl:left-24 top-[35%] -translate-y-1/2 z-30 hero-logo-link group hidden lg:block" aria-label="TMK London - Home">
-    <img src="/logo.png" alt="TMK London - London Tamil Sangam" class="w-72 lg:w-72 xl:w-80 h-72 lg:h-72 xl:h-80 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="320" height="320" loading="eager" decoding="async" />
+    <LogoPicture
+      mode="hero-large"
+      alt="TMK London - London Tamil Sangam"
+      class="w-72 lg:w-72 xl:w-80 h-72 lg:h-72 xl:h-80 rounded-full object-cover transition-transform duration-300 group-hover:scale-105"
+      width={320}
+      height={320}
+      fetchPriority="high"
+    />
   </a>
 
   <!-- YouTube desktop: fixed at right, aligned with logo (top 35%). Hidden on mobile. -->
@@ -78,14 +86,13 @@ const stats = [
         class="lg:hidden mb-5 sm:mb-6 flex justify-center shrink-0 group"
         aria-label="TMK London - Home"
       >
-        <img
-          src="/logo.png"
+        <LogoPicture
+          mode="hero-small"
           alt=""
           class="h-28 w-28 sm:h-32 sm:w-32 rounded-full object-cover ring-2 ring-white/25 shadow-xl transition-transform duration-300 group-hover:scale-105"
-          width="128"
-          height="128"
-          loading="eager"
-          decoding="async"
+          width={128}
+          height={128}
+          fetchPriority="high"
         />
       </a>
       <p class="text-sm md:text-base font-medium tracking-[0.2em] uppercase text-white/90 mb-5 md:mb-6 leading-snug min-h-[1.5em]">
