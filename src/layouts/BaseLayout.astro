@@ -52,13 +52,11 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Analytics: early in <head> + preconnect (Google / CWV guidance). Omitted on /admin. -->
+    <!-- Analytics: dns-prefetch only (not preconnect) to stay under PSI “few preconnects” budget; fonts keep preconnect below. -->
     {!isAdminRoute && (
       <>
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-        <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
       </>
     )}
     {!isAdminRoute && useGtm && (
@@ -102,7 +100,19 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
     )}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Non-blocking font CSS: avoids render-blocking on the main stylesheet (PSI “render-blocking resources”) -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@300;400;500;600;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@300;400;500;600;700&display=swap"
+      />
+    </noscript>
     <SEO {...seoConfig} schema={allSchemas} />
     <!-- hreflang for Tamil/English – helps Google index both language versions -->
     <link rel="alternate" hreflang="ta" href={`https://tmklondon.com${Astro.url.pathname}`} />
