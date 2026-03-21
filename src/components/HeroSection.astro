@@ -1,9 +1,10 @@
 ---
 import { HERO_CAROUSEL_SLIDES } from '../config/hero-backgrounds';
 
-// Full-screen hero carousel: /api/hero/image/{key} serves R2 upload if present, else static file from the repo.
+// When R2 has ≥1 object under hero/, the client replaces slides with that list (GET /api/hero/list).
+// SSR defaults below are used if the list is empty or the API is unavailable (e.g. local dev).
 const carouselImages = HERO_CAROUSEL_SLIDES.map((s) => ({
-  src: `/api/hero/image/${s.key}`,
+  src: `/api/hero/image/${s.key.split('/').map((p) => encodeURIComponent(p)).join('/')}`,
   position: s.position,
 }));
 
@@ -149,7 +150,46 @@ const stats = [
 </section>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  function heroImageUrl(key) {
+    return '/api/hero/image/' + key.split('/').map(encodeURIComponent).join('/');
+  }
+
+  async function applyHeroSlidesFromR2() {
+    const container = document.getElementById('hero-bg-slides');
+    if (!container) return;
+
+    let keys = [];
+    try {
+      const r = await fetch('/api/hero/list');
+      if (r.ok) {
+        const d = await r.json();
+        keys = Array.isArray(d.keys) ? d.keys : [];
+      }
+    } catch (_) {}
+
+    if (keys.length === 0) return;
+
+    const overlay = container.querySelector('.hero-overlay');
+    container.querySelectorAll('.hero-bg-slide').forEach((el) => el.remove());
+
+    keys.forEach((key, index) => {
+      const div = document.createElement('div');
+      div.className =
+        'hero-bg-slide absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ' +
+        (index === 0 ? 'opacity-100' : 'opacity-0');
+      div.setAttribute('data-slide-index', String(index));
+      div.style.backgroundImage = 'url(' + JSON.stringify(heroImageUrl(key)) + ')';
+      div.style.backgroundSize = 'cover';
+      div.style.backgroundPosition = 'center';
+      div.setAttribute('aria-hidden', index !== 0 ? 'true' : 'false');
+      if (overlay) container.insertBefore(div, overlay);
+      else container.appendChild(div);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await applyHeroSlidesFromR2();
+
     // Use admin-set hero video ID from localStorage if present (updates both mobile and desktop iframes)
     const savedId = typeof window !== 'undefined' && window.localStorage && window.localStorage.getItem('heroYoutubeVideoId');
     if (savedId) {
@@ -161,22 +201,21 @@ const stats = [
       });
     }
 
-    // Rotate hero background images every 5 seconds
+    // Rotate hero background images every 5 seconds (re-query slides after R2 may have replaced them)
     const slidesEl = document.getElementById('hero-bg-slides');
     if (slidesEl) {
-      const slides = slidesEl.querySelectorAll('.hero-bg-slide');
-      const total = slides.length;
-      if (total > 1) {
-        let current = 0;
-        setInterval(() => {
-          slides.forEach((s, i) => {
-            s.classList.toggle('opacity-100', i === current);
-            s.classList.toggle('opacity-0', i !== current);
-            s.setAttribute('aria-hidden', i !== current ? 'true' : 'false');
-          });
-          current = (current + 1) % total;
-        }, 5000);
-      }
+      let current = 0;
+      setInterval(() => {
+        const slides = slidesEl.querySelectorAll('.hero-bg-slide');
+        const total = slides.length;
+        if (total <= 1) return;
+        slides.forEach((s, i) => {
+          s.classList.toggle('opacity-100', i === current);
+          s.classList.toggle('opacity-0', i !== current);
+          s.setAttribute('aria-hidden', i !== current ? 'true' : 'false');
+        });
+        current = (current + 1) % total;
+      }, 5000);
     }
 
     // Stats counter animation

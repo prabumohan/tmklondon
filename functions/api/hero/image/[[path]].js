@@ -1,25 +1,24 @@
 /**
- * GET /api/hero/image/[[path]] — homepage hero backgrounds.
- * 1) R2 hero/{path} if present (admin uploads)
- * 2) Else static asset under /static/content/… (bundled defaults)
+ * GET /api/hero/image/[[path]] — hero backgrounds under R2 hero/{path}, else static default when it exists.
  */
 
 const R2_PREFIX = 'hero/';
 
-/** Must match src/config/hero-backgrounds.ts */
-const ALLOWED_KEYS = new Set([
-  'london-skyline-sunset.jpg',
-  'background-london.jpg',
-  'london-skyline-colorful.png',
-  'hero-banner.jpg',
-  'fiery_sunset_sky_swirling-full.jpg',
-  'banner-tam-2.jpg',
-]);
-
-/** Map API filename → path under /static/content/ */
+/** Map API filename → path under /static/content/ (legacy bundled defaults). */
 const STATIC_SUBPATH = {
   'fiery_sunset_sky_swirling-full.jpg': 'header-carousel/fiery_sunset_sky_swirling-full.jpg',
 };
+
+function isValidHeroRelativeKey(rel) {
+  if (!rel || typeof rel !== 'string' || rel.length > 220) return false;
+  if (rel.includes('..') || rel.startsWith('/') || rel.includes('//')) return false;
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9._/-]*$/.test(rel)) return false;
+  if (!/\.(jpe?g|png|gif|webp)$/i.test(rel)) return false;
+  for (const p of rel.split('/')) {
+    if (!p || p === '.' || p === '..') return false;
+  }
+  return true;
+}
 
 export async function onRequestGet(context) {
   let path = context.params.path;
@@ -29,7 +28,7 @@ export async function onRequestGet(context) {
   }
 
   const normalizedPath = path.replace(/^\/+/, '').replace(/^hero\//, '');
-  if (!ALLOWED_KEYS.has(normalizedPath)) {
+  if (!isValidHeroRelativeKey(normalizedPath)) {
     return new Response('Not Found', { status: 404 });
   }
 

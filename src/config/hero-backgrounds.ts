@@ -1,6 +1,6 @@
 /**
- * Homepage hero carousel — keys must match R2 objects at hero/{key} and static fallbacks under public/static/content/.
- * Keep in sync with functions/api/hero/upload.js and functions/api/hero/image/[[path]].js allowlists.
+ * Homepage hero carousel — used only when R2 has no images under hero/ (see GET /api/hero/list).
+ * Filenames should exist under public/static/content/ (or STATIC_SUBPATH in the hero image function).
  */
 export const HERO_CAROUSEL_SLIDES: readonly { key: string; label: string; position?: string }[] = [
   { key: 'london-skyline-sunset.jpg', label: '1 — London skyline (sunset)' },

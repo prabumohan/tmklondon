@@ -1,7 +1,7 @@
 /**
  * POST /api/hero/upload
- * Body JSON: { slot, file } — base64 image; slot must be an allowed filename (see ALLOWED_SLOTS).
- * Body JSON: { slot, action: "revert" } — delete hero/{slot} from R2 so the site uses the static default again.
+ * Body JSON: { slot, file } — base64 image; slot = relative key under hero/ (e.g. my-banner.jpg or slides/01.jpg).
+ * Body JSON: { slot, action: "revert" } — delete hero/{slot} from R2.
  * Auth: tmk_admin_session cookie (same as gallery).
  */
 
@@ -11,15 +11,16 @@ const R2_PREFIX = 'hero/';
 const MAX_SIZE = 8 * 1024 * 1024; // 8MB
 const ALLOWED_EXT = /\.(jpe?g|png|gif|webp)$/i;
 
-/** Must match src/config/hero-backgrounds.ts */
-const ALLOWED_SLOTS = new Set([
-  'london-skyline-sunset.jpg',
-  'background-london.jpg',
-  'london-skyline-colorful.png',
-  'hero-banner.jpg',
-  'fiery_sunset_sky_swirling-full.jpg',
-  'banner-tam-2.jpg',
-]);
+function isValidHeroRelativeKey(rel) {
+  if (!rel || typeof rel !== 'string' || rel.length > 220) return false;
+  if (rel.includes('..') || rel.startsWith('/') || rel.includes('//')) return false;
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9._/-]*$/.test(rel)) return false;
+  if (!ALLOWED_EXT.test(rel)) return false;
+  for (const p of rel.split('/')) {
+    if (!p || p === '.' || p === '..') return false;
+  }
+  return true;
+}
 
 async function verifySessionCookie(secret, cookieHeader) {
   if (!cookieHeader || !secret) return false;
@@ -92,9 +93,12 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: 'Invalid JSON' }, 400);
   }
 
-  const slot = (body.slot || '').toString().trim();
-  if (!slot || !ALLOWED_SLOTS.has(slot)) {
-    return jsonResponse({ error: 'Invalid slot' }, 400);
+  const slot = (body.slot || '').toString().trim().replace(/^\/+/, '');
+  if (!slot || !isValidHeroRelativeKey(slot)) {
+    return jsonResponse(
+      { error: 'Invalid slot: use letters, numbers, dots, dashes, underscores, optional subfolders; must end in .jpg/.png/.gif/.webp' },
+      400
+    );
   }
 
   if (body.action === 'revert') {
@@ -110,10 +114,6 @@ export async function onRequestPost(context) {
   if (!b64 || typeof b64 !== 'string') {
     return jsonResponse({ error: 'Missing file (base64)' }, 400);
   }
-  if (!ALLOWED_EXT.test(slot)) {
-    return jsonResponse({ error: 'Slot must be a supported image extension' }, 400);
-  }
-
   const clean = b64.replace(/^data:[^;]+;base64,/, '');
   let bytes;
   try {
@@ -136,5 +136,6 @@ export async function onRequestPost(context) {
     return jsonResponse({ error: 'Upload to R2 failed' }, 500);
   }
 
-  return jsonResponse({ ok: true, slot, url: `/api/hero/image/${slot}` });
+  const pathSegs = slot.split('/').map((s) => encodeURIComponent(s)).join('/');
+  return jsonResponse({ ok: true, slot, url: `/api/hero/image/${pathSegs}` });
 }
