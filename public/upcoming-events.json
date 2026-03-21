@@ -1,0 +1,29 @@
+[
+  {
+    "date": "Dec 15, 2024",
+    "title": { "ta": "பொங்கல் கொண்டாட்டம்", "en": "Pongal Celebration" },
+    "description": {
+      "ta": "பாரம்பரிய பொங்கல் விழாவில் எங்களுடன் சேரவும்",
+      "en": "Join us for traditional Pongal festivities"
+    },
+    "link": ""
+  },
+  {
+    "date": "Dec 20, 2024",
+    "title": { "ta": "தமிழ் மொழி பட்டறை", "en": "Tamil Language Workshop" },
+    "description": {
+      "ta": "தமிழ் எழுத்து மற்றும் உரையாடலை கற்றுக்கொள்ளுங்கள்",
+      "en": "Learn Tamil script and conversation"
+    },
+    "link": ""
+  },
+  {
+    "date": "Jan 5, 2025",
+    "title": { "ta": "கலாச்சார நடன நிகழ்ச்சி", "en": "Cultural Dance Performance" },
+    "description": {
+      "ta": "மாணவர்களின் பரதநாட்டியம் நிகழ்ச்சி",
+      "en": "Bharatanatyam showcase by students"
+    },
+    "link": ""
+  }
+]

@@ -17,6 +17,11 @@ export default defineConfig({
           changeOrigin: true,
           rewrite: () => '/news-ticker.json',
         },
+        '/api/upcoming-events': {
+          target: 'http://localhost:4321',
+          changeOrigin: true,
+          rewrite: () => '/upcoming-events.json',
+        },
         '/api/forms/donation': {
           target: 'http://localhost:4321',
           changeOrigin: true,

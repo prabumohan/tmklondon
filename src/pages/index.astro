@@ -3,49 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTranslation, type Language } from '../utils/i18n';
 import { getLocalBusinessSchema, getLocalBusinessSchemaForSEO } from '../utils/seo';
 import HeroSection from '../components/HeroSection.astro';
-import EventCard from '../components/EventCard.astro';
 import I18nPair from '../components/I18nPair.astro';
+import UpcomingEventsSection from '../components/UpcomingEventsSection';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 const schoolSchema = getLocalBusinessSchema();
 const localBusinessSchema = getLocalBusinessSchemaForSEO();
-
-// Events data
-const events = [
-  {
-    date: 'Dec 15, 2024',
-    title: {
-      ta: 'பொங்கல் கொண்டாட்டம்',
-      en: 'Pongal Celebration'
-    },
-    description: {
-      ta: 'பாரம்பரிய பொங்கல் விழாவில் எங்களுடன் சேரவும்',
-      en: 'Join us for traditional Pongal festivities'
-    }
-  },
-  {
-    date: 'Dec 20, 2024',
-    title: {
-      ta: 'தமிழ் மொழி பட்டறை',
-      en: 'Tamil Language Workshop'
-    },
-    description: {
-      ta: 'தமிழ் எழுத்து மற்றும் உரையாடலை கற்றுக்கொள்ளுங்கள்',
-      en: 'Learn Tamil script and conversation'
-    }
-  },
-  {
-    date: 'Jan 5, 2025',
-    title: {
-      ta: 'கலாச்சார நடன நிகழ்ச்சி',
-      en: 'Cultural Dance Performance'
-    },
-    description: {
-      ta: 'மாணவர்களின் பரதநாட்டியம் நிகழ்ச்சி',
-      en: 'Bharatanatyam showcase by students'
-    }
-  }
-];
 ---
 
 <BaseLayout 
@@ -56,41 +19,8 @@ const events = [
   <!-- Hero Section with LTS-style design -->
   <HeroSection />
 
-  <!-- Upcoming Events Section (Below Hero) -->
-  <section id="activities" class="py-16 md:py-24 theme-section-events">
-    <div class="container mx-auto px-4">
-      <p class="text-center text-primary font-semibold text-sm uppercase tracking-wide mb-2">
-        <I18nPair ta="கல்வி மற்றும் சமூகம்" en="Education & Community" />
-      </p>
-      <h2 class="text-3xl md:text-4xl font-bold text-center mb-3 font-tamil text-gray-800">
-        <span class="i18n-ta">{getTranslation('upcomingEvent', 'ta')}</span><span class="i18n-en">{getTranslation('upcomingEvent', 'en')}</span>
-      </h2>
-      <p class="text-center text-gray-600 mb-10 md:mb-14 text-base md:text-lg max-w-2xl mx-auto">
-        <I18nPair
-          block
-          ta="வரவிருக்கும் நிகழ்வுகளைப் பார்க்கவும்"
-          en="Check out our upcoming events"
-        />
-      </p>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
-        {events.map((event) => (
-          <EventCard {...event} />
-        ))}
-      </div>
-      <div class="text-center mt-10 md:mt-14">
-        <a
-          href="/activities"
-          data-preserve-lang
-          class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-all shadow-lg hover:shadow-xl"
-        >
-          <I18nPair ta="அனைத்து நிகழ்வுகளையும் பார்க்க" en="View All Events" />
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </a>
-      </div>
-    </div>
-  </section>
+  <!-- Upcoming events: KV via /api/upcoming-events; local dev uses public/upcoming-events.json (see astro proxy) -->
+  <UpcomingEventsSection client:load />
 
   <!-- Contact CTA Section -->
   <section class="py-16 md:py-24 text-white theme-section-cta">

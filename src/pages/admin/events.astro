@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdminUpcomingEvents from '../../components/admin/AdminUpcomingEvents';
+
+const seoConfig = {
+  title: 'Upcoming events - TMK London Admin',
+  description: 'Manage homepage upcoming events',
+  noindex: true,
+};
+---
+
+<BaseLayout {...seoConfig}>
+  <AdminUpcomingEvents client:load />
+</BaseLayout>

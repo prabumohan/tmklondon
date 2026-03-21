@@ -83,6 +83,15 @@ export default function AdminDashboard() {
                 <h2 className="text-xl font-semibold text-gray-800 mb-2">News Ticker</h2>
                 <p className="text-gray-600">Update news ticker messages</p>
               </a>
+
+              <a
+                href="/admin/events"
+                className="block p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 border-2 border-primary-500/20 hover:border-primary-600"
+              >
+                <div className="text-3xl mb-3">📅</div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">Upcoming events</h2>
+                <p className="text-gray-600">Home page “Education &amp; Community” event cards (KV)</p>
+              </a>
               
               <a 
                 href="/admin/gallery" 
