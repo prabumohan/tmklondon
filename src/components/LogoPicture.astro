@@ -27,7 +27,8 @@ const sizes =
         : '320px';
 ---
 
-<picture>
+<!-- `display: contents` so the inner <img> is the flex item; plain <picture> often collapses to 0×0 in WebKit flex layouts (mobile Safari). -->
+<picture class="contents">
   <source type="image/webp" srcset={webpSrcset} sizes={sizes} />
   <img
     src="/logo.png"
