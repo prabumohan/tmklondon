@@ -18,7 +18,7 @@ export async function onRequestGet(context) {
     if (!obj) return new Response('Not Found', { status: 404 });
     const headers = new Headers();
     headers.set('Content-Type', obj.httpMetadata?.contentType || 'image/jpeg');
-    headers.set('Cache-Control', 'public, max-age=86400');
+    headers.set('Cache-Control', 'public, max-age=604800, s-maxage=604800');
     return new Response(obj.body, { headers });
   } catch (_) {
     return new Response('Not Found', { status: 404 });

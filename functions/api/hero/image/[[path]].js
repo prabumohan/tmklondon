@@ -4,6 +4,11 @@
 
 const R2_PREFIX = 'hero/';
 
+/** Browser + edge cache for R2 objects (same key may be replaced in admin — keep < static TTL). */
+const CACHE_R2 = 'public, max-age=604800, s-maxage=604800';
+/** Bundled static defaults under /static/content/ — filenames stable per deploy; long TTL helps repeat visits (PSI “cache lifetimes”). */
+const CACHE_STATIC = 'public, max-age=2592000, s-maxage=2592000';
+
 /** Map API filename → path under /static/content/ (legacy bundled defaults). */
 const STATIC_SUBPATH = {
   'fiery_sunset_sky_swirling-full.jpg': 'header-carousel/fiery_sunset_sky_swirling-full.jpg',
@@ -43,7 +48,7 @@ export async function onRequestGet(context) {
       if (obj) {
         const headers = new Headers();
         headers.set('Content-Type', obj.httpMetadata?.contentType || 'image/jpeg');
-        headers.set('Cache-Control', 'public, max-age=600, s-maxage=600');
+        headers.set('Cache-Control', CACHE_R2);
         return new Response(obj.body, { headers });
       }
     } catch (_) {
@@ -60,7 +65,7 @@ export async function onRequestGet(context) {
       if (ct.startsWith('image/')) {
         const headers = new Headers();
         headers.set('Content-Type', ct);
-        headers.set('Cache-Control', 'public, max-age=3600');
+        headers.set('Cache-Control', CACHE_STATIC);
         return new Response(staticRes.body, { headers });
       }
     }

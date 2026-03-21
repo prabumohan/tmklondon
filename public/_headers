@@ -1,0 +1,14 @@
+# Cloudflare Pages: long cache for stable static assets (repeat visits, PageSpeed cache audit).
+# API routes set Cache-Control in functions; this covers direct /static/content URLs.
+
+/static/content/*
+  Cache-Control: public, max-age=2592000, s-maxage=2592000
+
+/logo.png
+  Cache-Control: public, max-age=2592000, s-maxage=2592000
+
+/logo-256.webp
+  Cache-Control: public, max-age=2592000, s-maxage=2592000
+
+/logo-640.webp
+  Cache-Control: public, max-age=2592000, s-maxage=2592000
