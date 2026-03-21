@@ -1,13 +1,15 @@
 import type { SEOProps } from 'astro-seo';
 
 export const siteConfig = {
-  /** Primary title for search: "London Tamil Sangam" first for Google ranking */
-  title: 'London Tamil Sangam | TMK London - Tamil School & Community Since 1975',
-  description: 'London Tamil Sangam (TMK London) – Tamil community and Tamil school in London, UK since 1975. Join the London Tamil Sangam for Tamil language classes, culture events, and Tamil sangam activities. Tamil Sangam London, Tamil society London, East London Tamil.',
+  /** Lead with "London Tamil" / org name — first ~60 chars matter most in SERPs */
+  title: 'London Tamil Sangam | TMK London – Tamil School & Community Since 1975',
+  description:
+    'London Tamil community & Tamil school in Manor Park, East London since 1975. TMK London (Thamizhar Munnetra Kazhagam): Tamil classes, culture events & Tamil sangam activities. Tamil London · Tamil UK · learn Tamil in London.',
   url: 'https://tmklondon.com',
   defaultLocale: 'ta',
   locales: ['ta', 'en'],
-  keywords: 'London Tamil Sangam, Tamil Sangam London, London Tamil Sangam UK, Tamil sangam, Tamil community London, TMK London, Thamizhar Munnetra Kazhagam London, Tamil school London, Tamil language classes London, Tamil society UK, Tamil cultural centre London, learn Tamil London, Tamil school East London, Manor Park Tamil, Tamil Sangam',
+  keywords:
+    'London Tamil, London Tamil Sangam, Tamil London, Tamil UK, Tamil community London, Tamil school London, Tamil classes London, Tamil Sangam London, TMK London, Thamizhar Munnetra Kazhagam, Tamil language London, East London Tamil, Manor Park Tamil, Tamil society UK, Tamil cultural events London, learn Tamil London, Tamil sangam UK',
   contact: {
     email: 'tmktamilschool@gmail.com',
     phone: '+447459528739',
@@ -115,10 +117,78 @@ export function getOrganizationSchema() {
       addressCountry: 'GB',
     },
     foundingDate: '1975',
+    knowsAbout: [
+      'Tamil language',
+      'Tamil culture',
+      'London Tamil community',
+      'Tamil school UK',
+    ],
     sameAs: [
       siteConfig.social.facebook,
       siteConfig.social.instagram,
       siteConfig.social.youtube,
+    ],
+  };
+}
+
+/** WebSite JSON-LD — ties the domain to the org (helps Google understand the brand entity). */
+export function getWebSiteSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${siteConfig.url}/#website`,
+    name: 'London Tamil Sangam | TMK London',
+    alternateName: [
+      'TMK London',
+      'Thamizhar Munnetra Kazhagam London',
+      'London Tamil community',
+      'Tamil Sangam London',
+    ],
+    url: siteConfig.url,
+    description: siteConfig.description,
+    inLanguage: ['ta', 'en'],
+    publisher: {
+      '@type': 'Organization',
+      name: 'London Tamil Sangam',
+      url: siteConfig.url,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteConfig.url}/logo.png`,
+      },
+    },
+  };
+}
+
+/** FAQ rich results — answers real “London Tamil / Tamil school” queries (no keyword stuffing). */
+export function getHomepageFAQSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is London Tamil Sangam (TMK London)?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'London Tamil Sangam — Thamizhar Munnetra Kazhagam (TMK London) — is a Tamil community and education organisation in Manor Park, East London, established in 1975. We promote Tamil language, literature and culture through classes, events and community activities.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Where can I learn Tamil in London?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'TMK London runs Tamil language classes and a Tamil school programme for children and families in East London (Manor Park). See the Tamil School pages on tmklondon.com for registration and term dates.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is TMK London a registered Tamil community organisation?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes. TMK London (London Tamil Sangam) is a long-standing Tamil community and education charity serving London since 1975, with contact details and activities listed on this official website.',
+        },
+      },
     ],
   };
 }

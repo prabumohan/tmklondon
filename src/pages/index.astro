@@ -1,7 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTranslation, type Language } from '../utils/i18n';
-import { getLocalBusinessSchema, getLocalBusinessSchemaForSEO } from '../utils/seo';
+import {
+  getLocalBusinessSchema,
+  getLocalBusinessSchemaForSEO,
+  getWebSiteSchema,
+  getHomepageFAQSchema,
+} from '../utils/seo';
 import HeroSection from '../components/HeroSection.astro';
 import I18nPair from '../components/I18nPair.astro';
 import UpcomingEventsSection from '../components/UpcomingEventsSection';
@@ -9,12 +14,14 @@ import UpcomingEventsSection from '../components/UpcomingEventsSection';
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 const schoolSchema = getLocalBusinessSchema();
 const localBusinessSchema = getLocalBusinessSchemaForSEO();
+const webSiteSchema = getWebSiteSchema();
+const faqSchema = getHomepageFAQSchema();
 ---
 
-<BaseLayout 
-  description="London Tamil Sangam (TMK London) – Tamil community and Tamil school in London since 1975. Join for Tamil language classes, culture events, and Tamil sangam activities. Tamil Sangam London, East London Tamil."
+<BaseLayout
+  description="London Tamil community & Tamil school in Manor Park, East London since 1975. TMK London: Tamil classes, culture & Tamil sangam. Tamil London · Tamil UK · learn Tamil."
   lang={lang}
-  schema={[schoolSchema, localBusinessSchema]}
+  schema={[webSiteSchema, faqSchema, schoolSchema, localBusinessSchema]}
 >
   <!-- Hero Section with LTS-style design -->
   <HeroSection />

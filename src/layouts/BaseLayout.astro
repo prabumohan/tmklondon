@@ -5,7 +5,11 @@ import SEO from '../components/SEO.astro';
 import { getSEOConfig, getOrganizationSchema } from '../utils/seo';
 import type { Language } from '../utils/i18n';
 import { themeColors, activeModernBackground, modernBackgroundOptions } from '../config/theme-colors';
+import { GA_MEASUREMENT_ID, useGtmContainer, getGtmContainerId } from '../config/analytics';
 import '../styles/themes.css';
+
+const gtmContainerId = getGtmContainerId();
+const useGtm = useGtmContainer();
 
 interface Props {
   title?: string;
@@ -48,6 +52,42 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Analytics: early in <head> + preconnect (Google / CWV guidance). Omitted on /admin. -->
+    {!isAdminRoute && (
+      <>
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+        <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+      </>
+    )}
+    {!isAdminRoute && useGtm && (
+      <script is:inline define:vars={{ gtmId: gtmContainerId }}>
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : '';
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', gtmId);
+      </script>
+    )}
+    {!isAdminRoute && !useGtm && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
+        <script is:inline define:vars={{ gaId: GA_MEASUREMENT_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', gaId);
+        </script>
+      </>
+    )}
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
     {isAdminRoute && (
@@ -119,6 +159,17 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
     </script>
   </head>
   <body class="font-sans antialiased text-gray-800 min-h-screen theme-body-bg" id="theme-body">
+    {!isAdminRoute && useGtm && (
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmContainerId)}`}
+          height="0"
+          width="0"
+          style="display:none;visibility:hidden"
+          title="Google Tag Manager"
+        />
+      </noscript>
+    )}
     <!-- Theme-aware background (vars from themes.css) -->
     <div class="fixed inset-0 -z-10 site-bg" aria-hidden="true">
       <div class="absolute inset-0 bg-cover bg-center bg-no-repeat site-bg-image theme-bg-image" style="--bg-url: url('https://images.unsplash.com/photo-1513635269975-59663e0ac291?w=1920&q=80'); background-image: var(--bg-url);"></div>
