@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTranslation, type Language } from '../utils/i18n';
+import I18nPair from '../components/I18nPair.astro';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 
@@ -38,7 +39,8 @@ const gallerySections = [
 ---
 
 <BaseLayout 
-  title={getTranslation('gallery', lang)}
+  title={getTranslation('gallery', 'ta')}
+  titleEn={getTranslation('gallery', 'en')}
   description="London Tamil Sangam gallery – photos and videos from TMK London events, Tamil school activities, and Tamil Sangam community gatherings."
   lang={lang}
 >
@@ -47,12 +49,14 @@ const gallerySections = [
     <div class="container mx-auto px-4">
       <div class="max-w-6xl mx-auto">
         <h1 class="text-3xl md:text-4xl font-bold text-primary-800 font-tamil">
-          {getTranslation('gallery', lang)}
+          <span class="i18n-ta">{getTranslation('gallery', 'ta')}</span><span class="i18n-en">{getTranslation('gallery', 'en')}</span>
         </h1>
         <p class="mt-2 text-gray-600 text-sm md:text-base font-tamil max-w-3xl">
-          {lang === 'ta' 
-            ? 'எங்கள் நிகழ்வுகள், பள்ளி நடவடிக்கைகள் மற்றும் சமூக கூட்டங்களின் புகைப்படங்கள்'
-            : 'Photos from our events, school activities, and community gatherings'}
+          <I18nPair
+            block
+            ta="எங்கள் நிகழ்வுகள், பள்ளி நடவடிக்கைகள் மற்றும் சமூக கூட்டங்களின் புகைப்படங்கள்"
+            en="Photos from our events, school activities, and community gatherings"
+          />
         </p>
       </div>
     </div>
@@ -74,7 +78,7 @@ const gallerySections = [
             role="tab"
             aria-selected={section.id === 'teachers' ? 'true' : 'false'}
           >
-            {lang === 'ta' ? section.titleTa : section.titleEn}
+            <span class="i18n-ta">{section.titleTa}</span><span class="i18n-en">{section.titleEn}</span>
           </a>
         ))}
       </div>
@@ -97,10 +101,10 @@ const gallerySections = [
           <!-- Section Header -->
           <div class="text-center mb-10">
             <h2 class="text-3xl md:text-4xl font-bold mb-4 font-tamil text-gray-800">
-              {lang === 'ta' ? section.titleTa : section.titleEn}
+              <span class="i18n-ta">{section.titleTa}</span><span class="i18n-en">{section.titleEn}</span>
             </h2>
             <p class="text-gray-600 max-w-2xl mx-auto font-tamil">
-              {lang === 'ta' ? section.descTa : section.descEn}
+              <span class="i18n-ta">{section.descTa}</span><span class="i18n-en">{section.descEn}</span>
             </p>
           </div>
 
@@ -109,14 +113,14 @@ const gallerySections = [
             <button
               type="button"
               class="gallery-scroll-prev absolute left-0 top-1/2 z-10 -translate-y-1/2 -translate-x-1 md:-translate-x-2 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-lg border border-gray-200 text-primary-700 hover:bg-primary-50 hover:border-primary-200 items-center justify-center hidden sm:flex transition-opacity disabled:opacity-30 disabled:pointer-events-none"
-              aria-label={lang === 'ta' ? 'முந்தைய படங்கள்' : 'Scroll images left'}
+              aria-label="Previous images / முந்தைய படங்கள்"
             >
               <span class="text-2xl leading-none pb-0.5" aria-hidden="true">&#8249;</span>
             </button>
             <button
               type="button"
               class="gallery-scroll-next absolute right-0 top-1/2 z-10 -translate-y-1/2 translate-x-1 md:translate-x-2 w-10 h-10 md:w-11 md:h-11 rounded-full bg-white shadow-lg border border-gray-200 text-primary-700 hover:bg-primary-50 hover:border-primary-200 items-center justify-center hidden sm:flex transition-opacity disabled:opacity-30 disabled:pointer-events-none"
-              aria-label={lang === 'ta' ? 'அடுத்த படங்கள்' : 'Scroll images right'}
+              aria-label="Next images / அடுத்த படங்கள்"
             >
               <span class="text-2xl leading-none pb-0.5" aria-hidden="true">&#8250;</span>
             </button>
@@ -130,7 +134,7 @@ const gallerySections = [
                 <svg class="w-16 h-16 mb-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                <p>{lang === 'ta' ? 'படங்களை ஏற்றுகிறது...' : 'Loading images...'}</p>
+                <p><span class="i18n-ta">படங்களை ஏற்றுகிறது...</span><span class="i18n-en">Loading images...</span></p>
               </div>
             </div>
           </div>
@@ -144,21 +148,24 @@ const gallerySections = [
   <section class="py-16 bg-gradient-to-r from-primary-600 to-primary-700">
     <div class="container mx-auto px-4 text-center">
       <h2 class="text-2xl md:text-3xl font-bold text-white mb-4 font-tamil">
-        {lang === 'ta' ? 'உங்கள் புகைப்படங்களை பகிரவும்!' : 'Share Your Photos!'}
+        <I18nPair ta="உங்கள் புகைப்படங்களை பகிரவும்!" en="Share Your Photos!" />
       </h2>
       <p class="text-white/90 mb-6 max-w-2xl mx-auto">
-        {lang === 'ta' 
-          ? 'நீங்கள் எங்கள் நிகழ்வுகளில் எடுத்த புகைப்படங்களை எங்களுக்கு அனுப்பலாம்'
-          : 'Send us photos you\'ve taken at our events'}
+        <I18nPair
+          block
+          ta="நீங்கள் எங்கள் நிகழ்வுகளில் எடுத்த புகைப்படங்களை எங்களுக்கு அனுப்பலாம்"
+          en="Send us photos you've taken at our events"
+        />
       </p>
       <a 
-        href={`/contact${lang === 'en' ? '?lang=en' : ''}`}
+        href="/contact"
+        data-preserve-lang
         class="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary-600 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
-        {lang === 'ta' ? 'தொடர்பு கொள்ளுங்கள்' : 'Contact Us'}
+        <I18nPair ta="தொடர்பு கொள்ளுங்கள்" en="Contact Us" />
       </a>
     </div>
   </section>

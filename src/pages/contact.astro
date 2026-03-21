@@ -2,12 +2,14 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTranslation, type Language } from '../utils/i18n';
 import { siteConfig } from '../utils/seo';
+import I18nPair from '../components/I18nPair.astro';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 ---
 
 <BaseLayout 
-  title={getTranslation('contact', lang)}
+  title={getTranslation('contact', 'ta')}
+  titleEn={getTranslation('contact', 'en')}
   description="Contact London Tamil Sangam (TMK London). Get in touch for Tamil school registration, London Tamil Sangam events, or general inquiries. Tamil Sangam London."
   lang={lang}
 >
@@ -15,13 +17,13 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
     <div class="container mx-auto px-4">
       <div class="max-w-4xl mx-auto">
         <h1 class="text-4xl font-bold mb-8 text-center font-tamil">
-          {getTranslation('contact', lang)}
+          <span class="i18n-ta">{getTranslation('contact', 'ta')}</span><span class="i18n-en">{getTranslation('contact', 'en')}</span>
         </h1>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div class="bg-white rounded-lg shadow-lg p-8">
             <h2 class="text-2xl font-bold mb-4 font-tamil">
-              {getTranslation('address', lang)}
+              <span class="i18n-ta">{getTranslation('address', 'ta')}</span><span class="i18n-en">{getTranslation('address', 'en')}</span>
             </h2>
             <p class="text-gray-700 leading-relaxed">
               TMK House,<br />
@@ -35,17 +37,17 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 
           <div class="bg-white rounded-lg shadow-lg p-8">
             <h2 class="text-2xl font-bold mb-4 font-tamil">
-              {getTranslation('contact', lang)}
+              <span class="i18n-ta">{getTranslation('contact', 'ta')}</span><span class="i18n-en">{getTranslation('contact', 'en')}</span>
             </h2>
             <div class="space-y-4">
               <p class="text-gray-700">
-                <strong>{getTranslation('email', lang)}:</strong><br />
+                <strong><span class="i18n-ta">{getTranslation('email', 'ta')}</span><span class="i18n-en">{getTranslation('email', 'en')}</span>:</strong><br />
                 <a href={`mailto:${siteConfig.contact.email}`} class="text-primary-600 hover:underline">
                   {siteConfig.contact.email}
                 </a>
               </p>
               <p class="text-gray-700">
-                <strong>{getTranslation('phone', lang)}:</strong><br />
+                <strong><span class="i18n-ta">{getTranslation('phone', 'ta')}</span><span class="i18n-en">{getTranslation('phone', 'en')}</span>:</strong><br />
                 <a href={`tel:${siteConfig.contact.phone}`} class="text-primary-600 hover:underline">
                   {siteConfig.contact.phone}
                 </a>
@@ -62,49 +64,49 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
               </svg>
             </div>
             <h2 class="text-2xl font-bold font-tamil text-gray-900">
-              {lang === 'ta' ? 'முக்கிய தொடர்பு எண்கள்' : 'Key Contact Numbers'}
+              <I18nPair ta="முக்கிய தொடர்பு எண்கள்" en="Key Contact Numbers" />
             </h2>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
             <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p>
-                <strong class="text-gray-900">{lang === 'ta' ? 'த மு க/ தமிழ்ப் பள்ளி:' : 'TMK / Tamil School:'}</strong><br />
+                <strong class="text-gray-900"><I18nPair ta="த மு க/ தமிழ்ப் பள்ளி:" en="TMK / Tamil School:" /></strong><br />
                 <a href="tel:+447459528739" class="text-primary-600 hover:text-primary-700 font-medium">+44 7459 528739</a>
               </p>
             </div>
             <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p>
-                <strong class="text-gray-900">{lang === 'ta' ? 'தலைவர்:' : 'President:'}</strong><br />
+                <strong class="text-gray-900"><I18nPair ta="தலைவர்:" en="President:" /></strong><br />
                 <a href="tel:+447931463952" class="text-primary-600 hover:text-primary-700 font-medium">+44 7931 463952</a>
               </p>
             </div>
             <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p>
-                <strong class="text-gray-900">{lang === 'ta' ? 'துணைத் தலைவர்:' : 'Vice President:'}</strong><br />
+                <strong class="text-gray-900"><I18nPair ta="துணைத் தலைவர்:" en="Vice President:" /></strong><br />
                 <a href="tel:+447540647760" class="text-primary-600 hover:text-primary-700 font-medium">+44 7540 647760</a>
               </p>
             </div>
             <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p>
-                <strong class="text-gray-900">{lang === 'ta' ? 'செயலாளர்:' : 'Secretary:'}</strong><br />
+                <strong class="text-gray-900"><I18nPair ta="செயலாளர்:" en="Secretary:" /></strong><br />
                 <a href="tel:+447942863702" class="text-primary-600 hover:text-primary-700 font-medium">+44 7942 863702</a>
               </p>
             </div>
             <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p>
-                <strong class="text-gray-900">{lang === 'ta' ? 'பொருளாளர்:' : 'Treasurer:'}</strong><br />
+                <strong class="text-gray-900"><I18nPair ta="பொருளாளர்:" en="Treasurer:" /></strong><br />
                 <a href="tel:+447738529167" class="text-primary-600 hover:text-primary-700 font-medium">+44 7738 529167</a>
               </p>
             </div>
             <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p>
-                <strong class="text-gray-900">{lang === 'ta' ? 'தலைமை ஆசிரியை:' : 'Head Teacher:'}</strong><br />
+                <strong class="text-gray-900"><I18nPair ta="தலைமை ஆசிரியை:" en="Head Teacher:" /></strong><br />
                 <a href="tel:+447340077673" class="text-primary-600 hover:text-primary-700 font-medium">+44 7340 077673</a>
               </p>
             </div>
             <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <p>
-                <strong class="text-gray-900">{lang === 'ta' ? 'பள்ளி ஒருங்கினணப்பாளர்:' : 'School Coordinator:'}</strong><br />
+                <strong class="text-gray-900"><I18nPair ta="பள்ளி ஒருங்கினணப்பாளர்:" en="School Coordinator:" /></strong><br />
                 <a href="tel:+447725049347" class="text-primary-600 hover:text-primary-700 font-medium">+44 7725 049347</a>
               </p>
             </div>

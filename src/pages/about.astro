@@ -1,12 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTranslation, type Language } from '../utils/i18n';
+import I18nPair from '../components/I18nPair.astro';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 ---
 
 <BaseLayout 
-  title={getTranslation('about', lang)}
+  title={getTranslation('about', 'ta')}
+  titleEn={getTranslation('about', 'en')}
   description="Learn about London Tamil Sangam (TMK London) – our mission, vision, and commitment to the Tamil community in London. Tamil Sangam London since 1975."
   lang={lang}
 >
@@ -14,34 +16,38 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
     <div class="container mx-auto px-4">
       <div class="max-w-4xl mx-auto">
         <h1 class="text-4xl font-bold mb-8 text-center font-tamil">
-          {getTranslation('about', lang)}
+          <span class="i18n-ta">{getTranslation('about', 'ta')}</span><span class="i18n-en">{getTranslation('about', 'en')}</span>
         </h1>
         
         <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
           <h2 class="text-2xl font-bold mb-4 font-tamil">
-            {lang === 'ta' ? 'நமது பணி' : 'Our Mission'}
+            <I18nPair ta="நமது பணி" en="Our Mission" />
           </h2>
           <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
-            {lang === 'ta' 
-              ? 'தமிழர் முன்னேற்றக் கழகம் (TMK) லண்டன், ஐக்கிய இராச்சியத்தில் வாழும் தமிழ் சமூகத்தின் முன்னேற்றத்திற்காக பணியாற்றும் ஒரு அமைப்பாகும். நாங்கள் தமிழ் மொழி, கலாச்சாரம் மற்றும் மரபுகளை பாதுகாத்து, அடுத்த தலைமுறைக்கு கடத்துவதில் கவனம் செலுத்துகிறோம்.'
-              : 'Thamizhar Munnetra Kazhagam (TMK) London is an organization working for the progress of the Tamil community living in the United Kingdom. We focus on preserving and passing on the Tamil language, culture, and traditions to the next generation.'}
+            <I18nPair
+              block
+              ta="தமிழர் முன்னேற்றக் கழகம் (TMK) லண்டன், ஐக்கிய இராச்சியத்தில் வாழும் தமிழ் சமூகத்தின் முன்னேற்றத்திற்காக பணியாற்றும் ஒரு அமைப்பாகும். நாங்கள் தமிழ் மொழி, கலாச்சாரம் மற்றும் மரபுகளை பாதுகாத்து, அடுத்த தலைமுறைக்கு கடத்துவதில் கவனம் செலுத்துகிறோம்."
+              en="Thamizhar Munnetra Kazhagam (TMK) London is an organization working for the progress of the Tamil community living in the United Kingdom. We focus on preserving and passing on the Tamil language, culture, and traditions to the next generation."
+            />
           </p>
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
           <h2 class="text-2xl font-bold mb-4 font-tamil">
-            {lang === 'ta' ? 'நமது கண்ணோட்டம்' : 'Our Vision'}
+            <I18nPair ta="நமது கண்ணோட்டம்" en="Our Vision" />
           </h2>
           <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
-            {lang === 'ta' 
-              ? 'லண்டனில் வாழும் தமிழ் சமூகம் ஒற்றுமையுடன் வளர்ந்து, தமிழ் மொழி மற்றும் கலாச்சாரம் செழித்து வளர்வதை நாங்கள் காண விரும்புகிறோம். நமது குழந்தைகள் தங்கள் மொழி மற்றும் மரபுகளை பெருமையுடன் கொண்டாடுவார்கள் என்று நாங்கள் நம்புகிறோம்.'
-              : 'We envision a united Tamil community in London where the Tamil language and culture thrive. We believe that our children will proudly celebrate their language and heritage.'}
+            <I18nPair
+              block
+              ta="லண்டனில் வாழும் தமிழ் சமூகம் ஒற்றுமையுடன் வளர்ந்து, தமிழ் மொழி மற்றும் கலாச்சாரம் செழித்து வளர்வதை நாங்கள் காண விரும்புகிறோம். நமது குழந்தைகள் தங்கள் மொழி மற்றும் மரபுகளை பெருமையுடன் கொண்டாடுவார்கள் என்று நாங்கள் நம்புகிறோம்."
+              en="We envision a united Tamil community in London where the Tamil language and culture thrive. We believe that our children will proudly celebrate their language and heritage."
+            />
           </p>
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-8">
           <h2 class="text-2xl font-bold mb-4 font-tamil">
-            {lang === 'ta' ? 'நமது சேவைகள்' : 'Our Services'}
+            <I18nPair ta="நமது சேவைகள்" en="Our Services" />
           </h2>
           <ul class="space-y-4 text-gray-700">
             <li class="flex items-start">
@@ -49,7 +55,7 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span class="font-tamil">
-                {lang === 'ta' ? 'தமிழ் மொழி கல்வி' : 'Tamil Language Education'}
+                <I18nPair ta="தமிழ் மொழி கல்வி" en="Tamil Language Education" />
               </span>
             </li>
             <li class="flex items-start">
@@ -57,7 +63,7 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span class="font-tamil">
-                {lang === 'ta' ? 'கலாச்சார நிகழ்வுகள்' : 'Cultural Events'}
+                <I18nPair ta="கலாச்சார நிகழ்வுகள்" en="Cultural Events" />
               </span>
             </li>
             <li class="flex items-start">
@@ -65,7 +71,7 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span class="font-tamil">
-                {lang === 'ta' ? 'சமூக ஒருங்கிணைப்பு' : 'Community Integration'}
+                <I18nPair ta="சமூக ஒருங்கிணைப்பு" en="Community Integration" />
               </span>
             </li>
             <li class="flex items-start">
@@ -73,7 +79,7 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span class="font-tamil">
-                {lang === 'ta' ? 'இலக்கிய வெளியீடுகள்' : 'Literary Publications'}
+                <I18nPair ta="இலக்கிய வெளியீடுகள்" en="Literary Publications" />
               </span>
             </li>
           </ul>

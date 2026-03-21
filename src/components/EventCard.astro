@@ -9,17 +9,16 @@ interface Props {
     ta: string;
     en: string;
   };
-  lang?: 'ta' | 'en';
 }
 
-const { date, title, description, lang = 'ta' } = Astro.props;
+const { date, title, description } = Astro.props;
 ---
 
 <div class="event-card group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-primary-200 flex">
   <div class="w-1 rounded-l-2xl bg-primary shrink-0 self-stretch opacity-80 group-hover:opacity-100 transition-opacity" aria-hidden="true"></div>
   <div class="p-6 flex-1">
     <div class="flex items-center gap-2 mb-3">
-      <span class="text-xs font-semibold text-primary uppercase tracking-wide">{lang === 'ta' ? 'நிகழ்வு' : 'Event'}</span>
+      <span class="text-xs font-semibold text-primary uppercase tracking-wide"><span class="i18n-ta">நிகழ்வு</span><span class="i18n-en">Event</span></span>
       <span class="text-gray-300">·</span>
       <div class="flex items-center gap-2">
         <div class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -30,10 +29,10 @@ const { date, title, description, lang = 'ta' } = Astro.props;
         <span class="text-sm text-primary font-semibold">{date}</span>
       </div>
     </div>
-    <h3 class="text-xl font-bold mb-3 text-gray-900 font-tamil">{title[lang]}</h3>
-    <p class="text-gray-600 mb-4 font-tamil leading-relaxed text-sm">{description[lang]}</p>
-    <a href="#activities" class="text-primary hover:text-primary-dark font-semibold inline-flex items-center gap-1 text-sm group/link">
-      {lang === 'ta' ? 'மேலும் அறிய' : 'Learn More'}
+    <h3 class="text-xl font-bold mb-3 text-gray-900 font-tamil"><span class="i18n-ta">{title.ta}</span><span class="i18n-en">{title.en}</span></h3>
+    <p class="text-gray-600 mb-4 font-tamil leading-relaxed text-sm"><span class="i18n-ta">{description.ta}</span><span class="i18n-en">{description.en}</span></p>
+    <a href="#activities" data-preserve-lang class="text-primary hover:text-primary-dark font-semibold inline-flex items-center gap-1 text-sm group/link">
+      <span class="i18n-ta">மேலும் அறிய</span><span class="i18n-en">Learn More</span>
       <svg class="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
       </svg>

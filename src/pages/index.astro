@@ -4,6 +4,7 @@ import { getTranslation, type Language } from '../utils/i18n';
 import { getLocalBusinessSchema, getLocalBusinessSchemaForSEO } from '../utils/seo';
 import HeroSection from '../components/HeroSection.astro';
 import EventCard from '../components/EventCard.astro';
+import I18nPair from '../components/I18nPair.astro';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 const schoolSchema = getLocalBusinessSchema();
@@ -53,28 +54,36 @@ const events = [
   schema={[schoolSchema, localBusinessSchema]}
 >
   <!-- Hero Section with LTS-style design -->
-  <HeroSection lang={lang} />
+  <HeroSection />
 
   <!-- Upcoming Events Section (Below Hero) -->
   <section id="activities" class="py-16 md:py-24 theme-section-events">
     <div class="container mx-auto px-4">
       <p class="text-center text-primary font-semibold text-sm uppercase tracking-wide mb-2">
-        {lang === 'ta' ? 'கல்வி மற்றும் சமூகம்' : 'Education & Community'}
+        <I18nPair ta="கல்வி மற்றும் சமூகம்" en="Education & Community" />
       </p>
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-3 font-tamil text-gray-800">
-        {getTranslation('upcomingEvent', lang)}
+        <span class="i18n-ta">{getTranslation('upcomingEvent', 'ta')}</span><span class="i18n-en">{getTranslation('upcomingEvent', 'en')}</span>
       </h2>
       <p class="text-center text-gray-600 mb-10 md:mb-14 text-base md:text-lg max-w-2xl mx-auto">
-        {lang === 'ta' ? 'வரவிருக்கும் நிகழ்வுகளைப் பார்க்கவும்' : 'Check out our upcoming events'}
+        <I18nPair
+          block
+          ta="வரவிருக்கும் நிகழ்வுகளைப் பார்க்கவும்"
+          en="Check out our upcoming events"
+        />
       </p>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
         {events.map((event) => (
-          <EventCard {...event} lang={lang} />
+          <EventCard {...event} />
         ))}
       </div>
       <div class="text-center mt-10 md:mt-14">
-        <a href="/activities" class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-all shadow-lg hover:shadow-xl">
-          {lang === 'ta' ? 'அனைத்து நிகழ்வுகளையும் பார்க்க' : 'View All Events'}
+        <a
+          href="/activities"
+          data-preserve-lang
+          class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-all shadow-lg hover:shadow-xl"
+        >
+          <I18nPair ta="அனைத்து நிகழ்வுகளையும் பார்க்க" en="View All Events" />
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
@@ -88,19 +97,21 @@ const events = [
     <div class="container mx-auto px-4">
       <div class="max-w-4xl mx-auto text-center">
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-5 font-tamil">
-          {getTranslation('getInTouch', lang)}
+          <span class="i18n-ta">{getTranslation('getInTouch', 'ta')}</span><span class="i18n-en">{getTranslation('getInTouch', 'en')}</span>
         </h2>
         <p class="text-lg md:text-xl text-white/95 mb-8 leading-relaxed">
-          {lang === 'ta' 
-            ? 'நம்முடன் இணைந்து தமிழ் சமூக கல்வி மற்றும் முன்னேற்றத்திற்கு பங்களிக்கவும்'
-            : 'Join us and support Tamil community education and progress'}
+          <I18nPair
+            block
+            ta="நம்முடன் இணைந்து தமிழ் சமூக கல்வி மற்றும் முன்னேற்றத்திற்கு பங்களிக்கவும்"
+            en="Join us and support Tamil community education and progress"
+          />
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href={`/contact${lang === 'en' ? '?lang=en' : ''}`} class="bg-white text-primary px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl border-0">
-            {getTranslation('contact', lang)}
+          <a href="/contact" data-preserve-lang class="bg-white text-primary px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl border-0">
+            <span class="i18n-ta">{getTranslation('contact', 'ta')}</span><span class="i18n-en">{getTranslation('contact', 'en')}</span>
           </a>
           <a href="tel:+447459528739" class="bg-white/15 hover:bg-white/25 text-white px-8 py-4 rounded-xl font-semibold transition-all border border-white/30">
-            {lang === 'ta' ? '📞 +44 7459 528739' : '📞 Call Us'}
+            <span class="i18n-ta">📞 +44 7459 528739</span><span class="i18n-en">📞 Call Us</span>
           </a>
         </div>
       </div>

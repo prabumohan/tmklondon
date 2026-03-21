@@ -1,20 +1,14 @@
 ---
-import { getTranslation, type Language } from '../utils/i18n';
-
-interface Props {
-  lang?: Language;
-}
-
-const { lang = 'ta' } = Astro.props;
 
 // Full-screen hero background – scrolling through these images (position = background-position for crop/focus)
+// Images are loaded from R2 via /api/hero/image/ (falls back to static if R2 not configured)
 const carouselImages: { src: string; position?: string }[] = [
-  { src: '/static/content/london-skyline-sunset.jpg' },
-  { src: '/static/content/background-london.jpg' },
-  { src: '/static/content/london-skyline-colorful.png' },
-  { src: '/static/content/hero-banner.jpg' },
-  { src: '/static/content/header-carousel/fiery_sunset_sky_swirling-full.jpg' },
-  { src: '/static/content/banner-tam-2.jpg', position: 'left center' }, // crop to show circular image on left
+  { src: '/api/hero/image/london-skyline-sunset.jpg' },
+  { src: '/api/hero/image/background-london.jpg' },
+  { src: '/api/hero/image/london-skyline-colorful.png' },
+  { src: '/api/hero/image/hero-banner.jpg' },
+  { src: '/api/hero/image/fiery_sunset_sky_swirling-full.jpg' },
+  { src: '/api/hero/image/banner-tam-2.jpg', position: 'left center' }, // crop to show circular image on left
 ];
 
 // YouTube video on the right. Default shown here; admin can override via Dashboard (stored in localStorage as heroYoutubeVideoId).
@@ -84,14 +78,14 @@ const stats = [
       </p>
       <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-1 mt-0">
         <span class="i18n-ta block font-tamil">வணக்கம்!</span>
-        <span class="i18n-en block">Welcome to London Tamil Sangam</span>
+        <span class="i18n-en block">Welcome to Thamizhar Munnetra Kazhagam</span>
       </h1>
       <p class="text-xl md:text-2xl font-tamil text-white/95 mb-2">
         <span class="i18n-ta">
           <span class="font-semibold text-amber-300 drop-shadow-sm" style="text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);">தமிழர் முன்னேற்றக் கழகம்</span>
           {' '}லண்டன் தங்களை அன்புடன் வரவேற்கிறது
         </span>
-        <span class="i18n-en">London Tamil Sangam – TMK London welcomes you</span>
+        <span class="i18n-en">Thamizhar Munnetra Kazhagam – TMK London welcomes you</span>
       </p>
 
     <!-- Tagline (bilingual) -->
@@ -117,6 +111,7 @@ const stats = [
       </a>
       <a
         href="#activities"
+        data-preserve-lang
         class="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-accent text-white border border-accent-dark hover:bg-accent-dark transition-all shadow-lg"
       >
         <span class="i18n-ta">எங்கள் நிகழ்வுகள்</span><span class="i18n-en">Our Events</span>
@@ -147,7 +142,9 @@ const stats = [
           <div class="text-3xl md:text-4xl lg:text-5xl font-bold text-amber-400" data-stat-value={stat.value}>
             {stat.value}
           </div>
-          <div class="text-sm md:text-base text-white/90 font-medium mt-2">{stat.label[lang]}</div>
+          <div class="text-sm md:text-base text-white/90 font-medium mt-2">
+            <span class="i18n-ta">{stat.label.ta}</span><span class="i18n-en">{stat.label.en}</span>
+          </div>
         </div>
       ))}
     </div>

@@ -1,12 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTranslation, type Language } from '../utils/i18n';
+import I18nPair from '../components/I18nPair.astro';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 ---
 
 <BaseLayout 
-  title={getTranslation('studentRegistration', lang)}
+  title={getTranslation('studentRegistration', 'ta')}
+  titleEn={getTranslation('studentRegistration', 'en')}
   description="Register for London Tamil Sangam Tamil School (TMK London). Join Tamil language and culture classes. Tamil Sangam London student registration."
   lang={lang}
 >
@@ -14,23 +16,27 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
     <div class="container mx-auto px-4">
       <div class="max-w-4xl mx-auto">
         <h1 class="text-4xl font-bold mb-8 text-center font-tamil">
-          {getTranslation('studentRegistration', lang)}
+          <span class="i18n-ta">{getTranslation('studentRegistration', 'ta')}</span><span class="i18n-en">{getTranslation('studentRegistration', 'en')}</span>
         </h1>
         
         <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
           <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
-            {lang === 'ta' 
-              ? 'TMK தமிழ்ப் பள்ளியில் பதிவு செய்ய, தயவுசெய்து கீழ்க்கண்ட விவரங்களுடன் தொடர்பு கொள்ளவும்:'
-              : 'To register at TMK Tamil School, please contact us with the following details:'}
+            <I18nPair
+              block
+              ta="TMK தமிழ்ப் பள்ளியில் பதிவு செய்ய, தயவுசெய்து கீழ்க்கண்ட விவரங்களுடன் தொடர்பு கொள்ளவும்:"
+              en="To register at TMK Tamil School, please contact us with the following details:"
+            />
           </p>
           <div class="border-t border-gray-200 pt-6">
             <h2 class="text-xl font-bold mb-3 font-tamil">
-              {lang === 'ta' ? 'மாணவர் சேர்க்கை படிவம் (V3.0)' : 'Tamil School Admission Form (V3.0)'}
+              <I18nPair ta="மாணவர் சேர்க்கை படிவம் (V3.0)" en="Tamil School Admission Form (V3.0)" />
             </h2>
             <p class="text-gray-700 mb-4">
-              {lang === 'ta' 
-                ? 'பள்ளி சேர்க்கை படிவத்தைப் பதிவிறக்கம் செய்து நிரப்பி, தொடர்பு விவரங்களுக்கு அனுப்பவும்.'
-                : 'Download the admission form, fill it in, and submit it using the contact details below.'}
+              <I18nPair
+                block
+                ta="பள்ளி சேர்க்கை படிவத்தைப் பதிவிறக்கம் செய்து நிரப்பி, தொடர்பு விவரங்களுக்கு அனுப்பவும்."
+                en="Download the admission form, fill it in, and submit it using the contact details below."
+              />
             </p>
             <a 
               href="/api/forms/admission" 
@@ -39,27 +45,27 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
               class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors shadow-md"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-              {lang === 'ta' ? 'சேர்க்கை படிவம் பதிவிறக்கம் (Word)' : 'Download Admission Form (Word)'}
+              <I18nPair ta="சேர்க்கை படிவம் பதிவிறக்கம் (Word)" en="Download Admission Form (Word)" />
             </a>
           </div>
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-8">
           <h2 class="text-2xl font-bold mb-4 font-tamil">
-            {lang === 'ta' ? 'தொடர்பு விவரங்கள்' : 'Contact Details'}
+            <I18nPair ta="தொடர்பு விவரங்கள்" en="Contact Details" />
           </h2>
           <div class="space-y-4">
             <p class="text-gray-700">
-              <strong>{lang === 'ta' ? 'தலைமை ஆசிரியை:' : 'Head Teacher:'}</strong> +44 7340 077673
+              <strong><I18nPair ta="தலைமை ஆசிரியை:" en="Head Teacher:" /></strong> +44 7340 077673
             </p>
             <p class="text-gray-700">
-              <strong>{lang === 'ta' ? 'பள்ளி ஒருங்கினணப்பாளர்:' : 'School Coordinator:'}</strong> +44 7725 049347
+              <strong><I18nPair ta="பள்ளி ஒருங்கினணப்பாளர்:" en="School Coordinator:" /></strong> +44 7725 049347
             </p>
             <p class="text-gray-700">
-              <strong>{lang === 'ta' ? 'மின்னஞ்சல்:' : 'Email:'}</strong> tmktamilschool@gmail.com
+              <strong><I18nPair ta="மின்னஞ்சல்:" en="Email:" /></strong> tmktamilschool@gmail.com
             </p>
             <p class="text-gray-700">
-              <strong>{lang === 'ta' ? 'தொலைபேசி:' : 'Phone:'}</strong> +44 7459 528739
+              <strong><I18nPair ta="தொலைபேசி:" en="Phone:" /></strong> +44 7459 528739
             </p>
           </div>
         </div>

@@ -1,17 +1,13 @@
 ---
-import { getTranslation, type Language } from '../utils/i18n';
+import type { Language } from '../utils/i18n';
 import { siteConfig } from '../utils/seo';
 
 interface Props {
-  lang?: Language;
   /** Logo + Home only (e.g. /admin routes opened in a new tab) */
   minimalHeader?: boolean;
 }
 
-// Extract language from URL query parameter first, then fall back to props
-const urlLang = Astro.url.searchParams.get('lang') as Language;
-const { lang: propLang = 'ta', minimalHeader = false } = Astro.props;
-const lang = urlLang || propLang;
+const { minimalHeader = false } = Astro.props;
 const currentPath = Astro.url.pathname;
 const currentUrl = Astro.url;
 
@@ -23,6 +19,7 @@ function getUrlWithLang(langParam: Language): string {
 }
 
 // Header: use paths that exist in repo (public/logo.png; static/ may be untracked on deploy)
+// Served from public/static/content/header-carousel/…
 const headerBgImage = '/static/content/header-carousel/fiery_sunset_sky_swirling-full.jpg';
 const logoUrl = '/logo.png';
 
@@ -87,21 +84,18 @@ const initialTickerHtml = tickerItems.map((item, index) => {
         <a href="/" class="header-name flex-1 flex items-center justify-center text-center min-w-0 px-1 sm:px-2 md:px-4 group ring-0 border-0 outline-none focus:ring-0 focus:outline-none focus:border-0">
           <div class="header-name-block animate-name-fall w-full max-w-none min-w-0 pt-1.5 pb-1 px-2 sm:pt-2 sm:pb-1.5 md:pt-2.5 md:pb-2 md:px-3 overflow-visible">
             <!-- Main title: multi-colour gradient – readable on bright bg with shadow -->
-            {lang === 'ta' ? (
-              <div class="name-title name-title-gradient text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold font-tamil leading-tight sm:leading-relaxed mb-0.5 sm:mb-1 md:mb-1.5 tracking-wide">
-                தமிழர் முன்னேற்றக் கழகம்
-              </div>
-            ) : (
-              <div class="name-title name-title-gradient text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold leading-tight sm:leading-snug mb-0.5 sm:mb-1 md:mb-1.5 tracking-wide">
-                Thamizhar Munnetra Kazhagam
-              </div>
-            )}
-            <!-- English subtitle: hidden on smallest mobile to reduce clutter -->
+            <div class="i18n-ta i18n-block name-title name-title-gradient text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold font-tamil leading-tight sm:leading-relaxed mb-0.5 sm:mb-1 md:mb-1.5 tracking-wide">
+              தமிழர் முன்னேற்றக் கழகம்
+            </div>
+            <div class="i18n-en i18n-block name-title name-title-gradient text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold leading-tight sm:leading-snug mb-0.5 sm:mb-1 md:mb-1.5 tracking-wide">
+              Thamizhar Munnetra Kazhagam
+            </div>
+            <!-- Tamil UI: Latin all-caps; English UI: same name in Tamil script -->
             <div class="name-subtitle-gradient hidden sm:block text-[10px] md:text-xs lg:text-sm font-bold tracking-[0.15em] md:tracking-[0.2em] uppercase mb-0.5 md:mb-1 letter-spread">
-              THAMIZHAR MUNNETRA KAZHAGAM
+              <span class="i18n-ta">THAMIZHAR MUNNETRA KAZHAGAM</span><span class="i18n-en font-tamil normal-case tracking-wide md:tracking-[0.12em]">தமிழர் முன்னேற்றக் கழகம்</span>
             </div>
             <div class="header-name-tagline text-[9px] sm:text-[10px] md:text-xs font-medium tracking-wide leading-snug sm:leading-relaxed text-white">
-              {lang === 'ta' ? 'தமிழ் சமூகம் மற்றும் கல்வி மையம் · நிறுவப்பட்டது 1975' : 'Tamil Community & Education Center · Estd. 1975'}
+              <span class="i18n-ta">தமிழ் சமூகம் மற்றும் கல்வி மையம் · நிறுவப்பட்டது 1975</span><span class="i18n-en">Tamil Community & Education Center · Estd. 1975</span>
             </div>
           </div>
         </a>

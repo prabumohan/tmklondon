@@ -1,0 +1,18 @@
+---
+/**
+ * Renders Tamil + English in the DOM; BaseLayout CSS + ?lang=en script show one or the other.
+ * Required for static builds (build-time lang is always default).
+ */
+interface Props {
+  ta: string;
+  en: string;
+  /** Use for block-level copy (headings, paragraphs) so display isn’t forced to inline */
+  block?: boolean;
+  extraClass?: string;
+}
+
+const { ta, en, block = false, extraClass } = Astro.props;
+const blockCls = block ? 'i18n-block' : '';
+---
+
+<span class:list={['i18n-ta', blockCls, extraClass]}>{ta}</span><span class:list={['i18n-en', blockCls, extraClass]}>{en}</span>

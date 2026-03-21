@@ -1,12 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTranslation, type Language } from '../utils/i18n';
+import I18nPair from '../components/I18nPair.astro';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 ---
 
 <BaseLayout 
-  title={getTranslation('publications', lang)}
+  title={getTranslation('publications', 'ta')}
+  titleEn={getTranslation('publications', 'en')}
   description="Explore TMK London publications - Tamil literature, educational materials, and cultural resources."
   lang={lang}
 >
@@ -14,14 +16,12 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
     <div class="container mx-auto px-4">
       <div class="max-w-4xl mx-auto">
         <h1 class="text-4xl font-bold mb-8 text-center font-tamil">
-          {getTranslation('publications', lang)}
+          <span class="i18n-ta">{getTranslation('publications', 'ta')}</span><span class="i18n-en">{getTranslation('publications', 'en')}</span>
         </h1>
         
         <div class="bg-white rounded-lg shadow-lg p-8">
           <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
-            {lang === 'ta' 
-              ? 'விரைவில் வெளியிடப்படும்'
-              : 'Coming soon'}
+            <I18nPair block ta="விரைவில் வெளியிடப்படும்" en="Coming soon" />
           </p>
         </div>
       </div>

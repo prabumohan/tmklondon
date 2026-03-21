@@ -2,16 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTranslation, type Language } from '../utils/i18n';
 import { getLocalBusinessSchema } from '../utils/seo';
+import I18nPair from '../components/I18nPair.astro';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 const schoolSchema = getLocalBusinessSchema();
+
+const pageTitleTa = 'தமிழ்ப் பள்ளி - London Tamil Sangam Tamil School';
+const pageTitleEn = 'Tamil School - London Tamil Sangam | TMK Tamil School London';
 ---
 
 <BaseLayout 
-  title={lang === 'ta' ? 'தமிழ்ப் பள்ளி - London Tamil Sangam Tamil School' : 'Tamil School - London Tamil Sangam | TMK Tamil School London'}
-  description={lang === 'ta' 
-    ? 'லண்டன் தமிழ் சங்கம் தமிழ்ப் பள்ளி – லண்டனில் தமிழ் மொழி மற்றும் கலாச்சாரம். குழந்தைகள் மற்றும் பெரியவர்களுக்கான தமிழ் வகுப்புகள். Tamil school London, Tamil Sangam London.'
-    : 'London Tamil Sangam Tamil School – TMK Tamil School London. Learn Tamil language and culture. Tamil classes for children and adults. Tamil Sangam London, Tamil school East London.'}
+  title={pageTitleTa}
+  titleEn={pageTitleEn}
+  description="London Tamil Sangam Tamil School – TMK Tamil School London. Learn Tamil language and culture. Tamil classes for children and adults. Tamil Sangam London, Tamil school East London."
   lang={lang}
   schema={schoolSchema}
 >
@@ -19,63 +22,67 @@ const schoolSchema = getLocalBusinessSchema();
     <div class="container mx-auto px-4">
       <div class="max-w-4xl mx-auto">
         <h1 class="text-4xl font-bold mb-8 text-center font-tamil">
-          {getTranslation('tamilSchool', lang)}
+          <span class="i18n-ta">{getTranslation('tamilSchool', 'ta')}</span><span class="i18n-en">{getTranslation('tamilSchool', 'en')}</span>
         </h1>
         
         <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
           <h2 class="text-2xl font-bold mb-4 font-tamil">
-            {lang === 'ta' ? 'நமது பள்ளி பற்றி' : 'About Our School'}
+            <I18nPair ta="நமது பள்ளி பற்றி" en="About Our School" />
           </h2>
           <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
-            {lang === 'ta' 
-              ? 'TMK தமிழ்ப் பள்ளி லண்டனில் வாழும் தமிழ் குழந்தைகளுக்கு தமிழ் மொழி மற்றும் கலாச்சாரத்தை கற்பிக்கும் ஒரு அமைப்பாகும். நாங்கள் தமிழ் மொழியின் அழகு மற்றும் செழுமையை அடுத்த தலைமுறைக்கு கடத்துவதில் கவனம் செலுத்துகிறோம்.'
-              : 'TMK Tamil School is an organization that teaches Tamil language and culture to Tamil children living in London. We focus on passing on the beauty and richness of the Tamil language to the next generation.'}
+            <I18nPair
+              block
+              ta="TMK தமிழ்ப் பள்ளி லண்டனில் வாழும் தமிழ் குழந்தைகளுக்கு தமிழ் மொழி மற்றும் கலாச்சாரத்தை கற்பிக்கும் ஒரு அமைப்பாகும். நாங்கள் தமிழ் மொழியின் அழகு மற்றும் செழுமையை அடுத்த தலைமுறைக்கு கடத்துவதில் கவனம் செலுத்துகிறோம்."
+              en="TMK Tamil School is an organization that teaches Tamil language and culture to Tamil children living in London. We focus on passing on the beauty and richness of the Tamil language to the next generation."
+            />
           </p>
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
           <h2 class="text-2xl font-bold mb-4 font-tamil">
-            {lang === 'ta' ? 'பாடத்திட்டம்' : 'Curriculum'}
+            <I18nPair ta="பாடத்திட்டம்" en="Curriculum" />
           </h2>
           <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
-            {lang === 'ta' 
-              ? 'நமது பாடத்திட்டம் தமிழ் மொழி கற்பித்தல், இலக்கியம், கலாச்சாரம் மற்றும் மரபுகளை உள்ளடக்கியது. வயது வந்தோர் மற்றும் குழந்தைகள் இருவருக்கும் வகுப்புகள் வழங்கப்படுகின்றன.'
-              : 'Our curriculum includes Tamil language teaching, literature, culture, and traditions. Classes are offered for both adults and children.'}
+            <I18nPair
+              block
+              ta="நமது பாடத்திட்டம் தமிழ் மொழி கற்பித்தல், இலக்கியம், கலாச்சாரம் மற்றும் மரபுகளை உள்ளடக்கியது. வயது வந்தோர் மற்றும் குழந்தைகள் இருவருக்கும் வகுப்புகள் வழங்கப்படுகின்றன."
+              en="Our curriculum includes Tamil language teaching, literature, culture, and traditions. Classes are offered for both adults and children."
+            />
           </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <a href="/student-registration" class="bg-primary-600 text-white p-6 rounded-lg shadow-md hover:bg-primary-700 transition-colors text-center">
+          <a href="/student-registration" data-preserve-lang class="bg-primary-600 text-white p-6 rounded-lg shadow-md hover:bg-primary-700 transition-colors text-center">
             <h3 class="text-xl font-bold mb-2 font-tamil">
-              {getTranslation('studentRegistration', lang)}
+              <span class="i18n-ta">{getTranslation('studentRegistration', 'ta')}</span><span class="i18n-en">{getTranslation('studentRegistration', 'en')}</span>
             </h3>
             <p class="text-primary-100">
-              {lang === 'ta' ? 'மாணவர் பதிவு செய்ய / சேர்க்கை படிவம் பதிவிறக்கம்' : 'Register as a student / Download admission form'}
+              <I18nPair block ta="மாணவர் பதிவு செய்ய / சேர்க்கை படிவம் பதிவிறக்கம்" en="Register as a student / Download admission form" />
             </p>
           </a>
 
-          <a href="/tamil-school/donation" class="bg-primary-500 text-white p-6 rounded-lg shadow-md hover:bg-primary-600 transition-colors text-center">
+          <a href="/tamil-school/donation" data-preserve-lang class="bg-primary-500 text-white p-6 rounded-lg shadow-md hover:bg-primary-600 transition-colors text-center">
             <h3 class="text-xl font-bold mb-2 font-tamil">
-              {getTranslation('schoolDonation', lang)}
+              <span class="i18n-ta">{getTranslation('schoolDonation', 'ta')}</span><span class="i18n-en">{getTranslation('schoolDonation', 'en')}</span>
             </h3>
             <p class="text-primary-100">
-              {lang === 'ta' ? 'பள்ளிக்கு நன்கொடை அளிக்க' : 'Donate to the school'}
+              <I18nPair block ta="பள்ளிக்கு நன்கொடை அளிக்க" en="Donate to the school" />
             </p>
           </a>
         </div>
 
         <div class="bg-white rounded-lg shadow-lg p-8">
           <h2 class="text-2xl font-bold mb-4 font-tamil">
-            {lang === 'ta' ? 'தொடர்பு' : 'Contact'}
+            <I18nPair ta="தொடர்பு" en="Contact" />
           </h2>
           <p class="text-gray-700 mb-4">
-            <strong>{lang === 'ta' ? 'தலைமை ஆசிரியை:' : 'Head Teacher:'}</strong> +44 7340 077673
+            <strong><I18nPair ta="தலைமை ஆசிரியை:" en="Head Teacher:" /></strong> +44 7340 077673
           </p>
           <p class="text-gray-700 mb-4">
-            <strong>{lang === 'ta' ? 'பள்ளி ஒருங்கினணப்பாளர்:' : 'School Coordinator:'}</strong> +44 7725 049347
+            <strong><I18nPair ta="பள்ளி ஒருங்கினணப்பாளர்:" en="School Coordinator:" /></strong> +44 7725 049347
           </p>
           <p class="text-gray-700">
-            <strong>{lang === 'ta' ? 'மின்னஞ்சல்:' : 'Email:'}</strong> tmktamilschool@gmail.com
+            <strong><I18nPair ta="மின்னஞ்சல்:" en="Email:" /></strong> tmktamilschool@gmail.com
           </p>
         </div>
       </div>
