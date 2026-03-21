@@ -9,7 +9,7 @@ const CACHE_R2 = 'public, max-age=604800, s-maxage=604800';
 /** Bundled static defaults under /static/content/ — filenames stable per deploy; long TTL helps repeat visits (PSI “cache lifetimes”). */
 const CACHE_STATIC = 'public, max-age=2592000, s-maxage=2592000';
 
-/** Map API filename → path under /static/content/ (legacy bundled defaults). */
+/** Map API filename → path under /static/content/ — keep in sync with src/config/hero-backgrounds.ts HERO_STATIC_SUBPATH. */
 const STATIC_SUBPATH = {
   'fiery_sunset_sky_swirling-full.jpg': 'header-carousel/fiery_sunset_sky_swirling-full.jpg',
 };

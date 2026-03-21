@@ -1,11 +1,11 @@
 ---
-import { HERO_CAROUSEL_SLIDES } from '../config/hero-backgrounds';
+import { HERO_CAROUSEL_SLIDES, getBundledHeroImageUrl } from '../config/hero-backgrounds';
 import LogoPicture from './LogoPicture.astro';
 
 // When R2 has ≥1 object under hero/, the client replaces slides with that list (GET /api/hero/list).
-// SSR defaults below are used if the list is empty or the API is unavailable (e.g. local dev).
+// SSR defaults use /static/content/… (not /api/hero/image) so Cloudflare Pages applies long cache (public/_headers).
 const carouselImages = HERO_CAROUSEL_SLIDES.map((s) => ({
-  src: `/api/hero/image/${s.key.split('/').map((p) => encodeURIComponent(p)).join('/')}`,
+  src: getBundledHeroImageUrl(s.key),
   position: s.position,
 }));
 
