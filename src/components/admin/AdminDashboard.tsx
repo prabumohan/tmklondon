@@ -101,6 +101,15 @@ export default function AdminDashboard() {
                 <h2 className="text-xl font-semibold text-gray-800 mb-2">Forms</h2>
                 <p className="text-gray-600">Update donation PDF and admission form (stored in R2)</p>
               </a>
+
+              <a
+                href="/admin/hero"
+                className="block p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 border-2 border-primary-500/20 hover:border-primary-600"
+              >
+                <div className="text-3xl mb-3">🌅</div>
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">Hero backgrounds</h2>
+                <p className="text-gray-600">Home page rotating background images (R2)</p>
+              </a>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

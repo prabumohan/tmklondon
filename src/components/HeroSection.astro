@@ -1,16 +1,11 @@
 ---
+import { HERO_CAROUSEL_SLIDES } from '../config/hero-backgrounds';
 
-// Full-screen hero background – scrolling through these images (position = background-position for crop/focus)
-// Served from public/static/content/… so each deploy shows the files in the repo. (R2 hero/* was taking priority
-// on production and kept showing older uploads—use /api/hero/image/… only if you intentionally host overrides in R2.)
-const carouselImages: { src: string; position?: string }[] = [
-  { src: '/static/content/london-skyline-sunset.jpg' },
-  { src: '/static/content/background-london.jpg' },
-  { src: '/static/content/london-skyline-colorful.png' },
-  { src: '/static/content/hero-banner.jpg' },
-  { src: '/static/content/header-carousel/fiery_sunset_sky_swirling-full.jpg' },
-  { src: '/static/content/banner-tam-2.jpg', position: 'left center' }, // crop to show circular image on left
-];
+// Full-screen hero carousel: /api/hero/image/{key} serves R2 upload if present, else static file from the repo.
+const carouselImages = HERO_CAROUSEL_SLIDES.map((s) => ({
+  src: `/api/hero/image/${s.key}`,
+  position: s.position,
+}));
 
 // YouTube video on the right. Default shown here; admin can override via Dashboard (stored in localStorage as heroYoutubeVideoId).
 const youtubeVideoId = 'dqw9Eto_3JU';

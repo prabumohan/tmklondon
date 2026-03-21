@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdminHeroBackgrounds from '../../components/admin/AdminHeroBackgrounds';
+
+const seoConfig = {
+  title: 'Hero backgrounds - TMK Admin',
+  description: 'Upload homepage hero carousel images',
+  noindex: true,
+};
+---
+
+<BaseLayout {...seoConfig}>
+  <AdminHeroBackgrounds client:load />
+</BaseLayout>
