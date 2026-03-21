@@ -132,7 +132,10 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
       <main
         class:list={[
           'main-below-header main-content-in',
-          isAdminRoute ? 'pt-[4.75rem] sm:pt-20' : 'pt-[7.5rem] sm:pt-[8rem] md:pt-[8.5rem]',
+          isAdminRoute
+            ? 'pt-[4.75rem] sm:pt-20'
+            : /* Below md: banner can grow past min-h when title wraps; stack + ticker needs ~14rem */
+              'pt-[14rem] md:pt-[8.5rem]',
         ]}
       >
         <slot />

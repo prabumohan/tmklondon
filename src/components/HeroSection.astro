@@ -32,7 +32,7 @@ const stats = [
 ];
 ---
 
-<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-2 md:pt-4 pb-16 md:pb-20">
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-x-hidden pt-2 md:pt-4 pb-16 md:pb-20">
   <!-- Full-screen background carousel – text and logo sit in front -->
   <div class="absolute inset-0 z-0 hero-bg-slides" id="hero-bg-slides">
     {carouselImages.map((slide, index) => (
@@ -46,7 +46,7 @@ const stats = [
     <div class="absolute inset-0 hero-overlay z-20 pointer-events-none" style="background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(80, 35, 30, 0.4) 40%, rgba(25, 18, 18, 0.75) 85%, rgba(12, 10, 10, 0.88) 100%);"></div>
   </div>
 
-  <!-- Logo: on desktop only (lg+) so mobile has no overlap/clipping). Header shows logo on all sizes. -->
+  <!-- Logo: large left placement on lg+; below md we show a centered logo in the content column instead. -->
   <a href="/" class="absolute left-16 xl:left-24 top-[35%] -translate-y-1/2 z-30 hero-logo-link group hidden lg:block" aria-label="TMK London - Home">
     <img src="/logo.png" alt="TMK London - London Tamil Sangam" class="w-72 lg:w-72 xl:w-80 h-72 lg:h-72 xl:h-80 rounded-full object-cover transition-transform duration-300 group-hover:scale-105" width="320" height="320" loading="eager" decoding="async" />
   </a>
@@ -67,9 +67,26 @@ const stats = [
     </div>
   )}
 
-  <!-- Content: centered. On mobile no hero logo so less top padding; on desktop logo is left. -->
-  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center pt-24 sm:pt-28 lg:pt-0">
+  <!-- Content: centered. Main layout already clears header+ticker; light inner padding on small screens only. -->
+  <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center justify-center pt-4 sm:pt-6 lg:pt-0">
     <div class="flex flex-col items-center text-center w-full max-w-2xl text-white">
+      <!-- Hero logo on small screens (large left logo is hidden until lg) -->
+      <a
+        href="/"
+        data-preserve-lang
+        class="lg:hidden mb-5 sm:mb-6 flex justify-center shrink-0 group"
+        aria-label="TMK London - Home"
+      >
+        <img
+          src="/logo.png"
+          alt=""
+          class="h-28 w-28 sm:h-32 sm:w-32 rounded-full object-cover ring-2 ring-white/25 shadow-xl transition-transform duration-300 group-hover:scale-105"
+          width="128"
+          height="128"
+          loading="eager"
+          decoding="async"
+        />
+      </a>
       <p class="text-sm md:text-base font-medium tracking-[0.2em] uppercase text-white/90 mb-5 md:mb-6 leading-snug min-h-[1.5em]">
         [ <span class="i18n-ta">நிறுவப்பட்டது 1975 · லண்டன், UK</span><span class="i18n-en">Est. 1975 · London, UK</span> ]
       </p>
