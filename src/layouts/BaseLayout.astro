@@ -57,6 +57,8 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
       <>
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <!-- Body theme uses Unsplash; cheap DNS hint only (not preconnect) -->
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </>
     )}
     {!isAdminRoute && useGtm && (
@@ -100,19 +102,20 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
     )}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Non-blocking font CSS: avoids render-blocking on the main stylesheet (PSI “render-blocking resources”) -->
+    <!-- Non-blocking font CSS; 400–700 only (smaller CSS than 300–700) -->
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Tamil:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap"
       />
     </noscript>
+    <slot name="head-extra" />
     <SEO {...seoConfig} schema={allSchemas} />
     <!-- hreflang for Tamil/English – helps Google index both language versions -->
     <link rel="alternate" hreflang="ta" href={`https://tmklondon.com${Astro.url.pathname}`} />
@@ -131,8 +134,6 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
         el.textContent = 'body.theme-body-bg{background:' + c.body + '!important}.site-bg-fallback,.theme-bg-fallback{background:' + c.fallback + '!important}.site-bg-overlay,.theme-bg-overlay{background:' + c.overlay + '!important}.hero-overlay{background:' + hero + '!important}';
       })();
     </script>
-    <!-- Plausible: privacy-friendly analytics (see plausible.io). Not related to ticker or KV. -->
-    <script defer data-domain="tmklondon.com" src="https://plausible.io/js/script.js" is:inline></script>
     <!-- Sync language with URL so ?lang=en works on static build -->
     <script is:inline>
       (function() {
@@ -211,6 +212,9 @@ effectiveThemeColors.modern = { ...themeColors.modern, ...modernBg } as typeof t
           });
         }
       </script>
+    )}
+    {!isAdminRoute && (
+      <script defer data-domain="tmklondon.com" src="https://plausible.io/js/script.js" is:inline></script>
     )}
   </body>
 </html>

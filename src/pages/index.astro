@@ -10,8 +10,10 @@ import {
 import HeroSection from '../components/HeroSection.astro';
 import I18nPair from '../components/I18nPair.astro';
 import UpcomingEventsSection from '../components/UpcomingEventsSection';
+import { getFirstHeroSlideImageUrl } from '../config/hero-backgrounds';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
+const firstHeroImageUrl = getFirstHeroSlideImageUrl();
 const schoolSchema = getLocalBusinessSchema();
 const localBusinessSchema = getLocalBusinessSchemaForSEO();
 const webSiteSchema = getWebSiteSchema();
@@ -23,6 +25,13 @@ const faqSchema = getHomepageFAQSchema();
   lang={lang}
   schema={[webSiteSchema, faqSchema, schoolSchema, localBusinessSchema]}
 >
+  <link
+    slot="head-extra"
+    rel="preload"
+    as="image"
+    href={firstHeroImageUrl}
+    fetchpriority="high"
+  />
   <!-- Hero Section with LTS-style design -->
   <HeroSection />
 

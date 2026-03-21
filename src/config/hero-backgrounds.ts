@@ -10,3 +10,9 @@ export const HERO_CAROUSEL_SLIDES: readonly { key: string; label: string; positi
   { key: 'fiery_sunset_sky_swirling-full.jpg', label: '5 — Fiery sunset sky' },
   { key: 'banner-tam-2.jpg', label: '6 — Tamil banner', position: 'left center' },
 ];
+
+/** First slide URL (matches HeroSection) — use for LCP preload on the homepage. */
+export function getFirstHeroSlideImageUrl(): string {
+  const key = HERO_CAROUSEL_SLIDES[0].key;
+  return `/api/hero/image/${key.split('/').map((p) => encodeURIComponent(p)).join('/')}`;
+}
