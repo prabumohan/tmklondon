@@ -109,6 +109,23 @@ If you need to set environment variables:
 3. Check SSL/TLS settings in Cloudflare dashboard
 4. Ensure the domain is properly added in Pages settings
 
+## Security / Lighthouse notes (CORS, Rocket Loader, Web Analytics)
+
+### 1. `cloudflareinsights.com` / beacon + `signature-agent` CORS
+
+If an audit reports **CORS blocked** on `static.cloudflareinsights.com/...beacon...` with a header like **`signature-agent`**, that header is usually **not from your site** — it is injected by a **browser extension** (e.g. Cursor, dev tools, or similar). Cloudflare’s beacon cannot allow arbitrary extension headers in `Access-Control-Allow-Headers`, so the warning is often **false noise** for real visitors.
+
+**Options:**
+
+- Re-run the audit in a **clean profile** with extensions disabled.
+- Or turn off **Cloudflare Web Analytics** (or the RUM beacon) for the zone if you do not need it: **Analytics & logs** → Web Analytics.
+
+### 2. Rocket Loader vs `/_astro/*.js` preload (“credentials mode does not match”)
+
+**Rocket Loader** can inject script preloads that do not match how Astro’s **`type="module"`** scripts load. This repo adds **`crossorigin`** on module scripts in the built HTML (`astro:build:done` hook) so preloads and scripts align.
+
+**Still recommended:** In Cloudflare, open **Speed** → **Optimization** and **disable Rocket Loader** for `tmklondon.com`. Astro already ships small, static JS chunks; Rocket Loader often adds little value and can conflict with modern module scripts.
+
 ## Continuous Deployment
 
 Once connected to Git, Cloudflare Pages will automatically:
