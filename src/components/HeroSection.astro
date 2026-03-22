@@ -12,6 +12,26 @@ const carouselImages = HERO_CAROUSEL_SLIDES.map((s) => ({
 // YouTube video on the right. Default shown here; admin can override via Dashboard (stored in localStorage as heroYoutubeVideoId).
 const youtubeVideoId = 'dqw9Eto_3JU';
 
+/** Error 153 “configuration” often = missing Referer; nocookie + `origin` + iframe referrerpolicy fixes most embeds (see Simon Willison / YouTube embed notes). */
+const siteOrigin =
+  import.meta.env.DEV && Astro.url?.origin
+    ? Astro.url.origin
+    : (Astro.site?.href && Astro.site.href.replace(/\/$/, '')) || 'https://tmklondon.com';
+
+function buildHeroYoutubeEmbedSrc(videoId: string): string {
+  const params = new URLSearchParams({
+    autoplay: '1',
+    mute: '1',
+    loop: '1',
+    playlist: videoId,
+    playsinline: '1',
+    rel: '0',
+    modestbranding: '1',
+    origin: siteOrigin,
+  });
+  return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
+}
+
 // Riyadh-style: 4 stats in a row
 const stats = [
   {
@@ -66,10 +86,11 @@ const stats = [
         <iframe
           class="hero-youtube-embed w-full h-full"
           title="TMK London YouTube"
-          src={`https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&playsinline=1&rel=0`}
+          src={buildHeroYoutubeEmbedSrc(youtubeVideoId)}
           data-video-id={youtubeVideoId}
           loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
         />
       </div>
@@ -148,9 +169,10 @@ const stats = [
           <iframe
             class="hero-youtube-embed w-full h-full"
             title="TMK London YouTube"
-            src={`https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&playsinline=1&rel=0`}
+            src={buildHeroYoutubeEmbedSrc(youtubeVideoId)}
             data-video-id={youtubeVideoId}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen
           />
         </div>
@@ -174,7 +196,21 @@ const stats = [
   </div>
 </section>
 
-<script>
+<script define:vars={{ siteOrigin }}>
+  function buildHeroYoutubeSrc(id) {
+    const q = new URLSearchParams({
+      autoplay: '1',
+      mute: '1',
+      loop: '1',
+      playlist: id,
+      playsinline: '1',
+      rel: '0',
+      modestbranding: '1',
+      origin: siteOrigin,
+    });
+    return 'https://www.youtube-nocookie.com/embed/' + id + '?' + q.toString();
+  }
+
   function heroImageUrl(key) {
     return '/api/hero/image/' + key.split('/').map(encodeURIComponent).join('/');
   }
@@ -220,7 +256,7 @@ const stats = [
     if (savedId) {
       document.querySelectorAll('.hero-youtube-embed').forEach((iframe) => {
         if (iframe.getAttribute('data-video-id') !== savedId) {
-          iframe.src = `https://www.youtube.com/embed/${savedId}?autoplay=1&mute=1&loop=1&playlist=${savedId}&playsinline=1&rel=0`;
+          iframe.src = buildHeroYoutubeSrc(savedId);
           iframe.setAttribute('data-video-id', savedId);
         }
       });
