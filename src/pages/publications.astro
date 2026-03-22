@@ -4,12 +4,16 @@ import { getTranslation, type Language } from '../utils/i18n';
 import I18nPair from '../components/I18nPair.astro';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
+
+/** Blurb Books UK — TMK 40th year souvenir (print-on-demand publisher) */
+const BLURB_40TH_SOUVENIR =
+  'https://www.blurb.co.uk/books/6840280-40-t-m-k-40th-year-souvenir';
 ---
 
 <BaseLayout 
   title={getTranslation('publications', 'ta')}
   titleEn={getTranslation('publications', 'en')}
-  description="Explore TMK London publications - Tamil literature, educational materials, and cultural resources."
+  description="TMK London publications — Tamil literature and cultural resources. 40th year souvenir via Blurb Books UK."
   lang={lang}
 >
   <section class="py-16 bg-gray-50">
@@ -18,10 +22,51 @@ const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
         <h1 class="text-4xl font-bold mb-8 text-center font-tamil">
           <span class="i18n-ta">{getTranslation('publications', 'ta')}</span><span class="i18n-en">{getTranslation('publications', 'en')}</span>
         </h1>
-        
+
+        <p class="text-gray-700 leading-relaxed mb-10 text-center max-w-2xl mx-auto font-tamil">
+          <I18nPair
+            block
+            ta="எங்கள் பதிப்புகள் மற்றும் வெளியீட்டாளர்களுடன் இணைந்த தளங்களை இங்கே காணலாம்."
+            en="Browse our publications and publisher partners where our titles are available."
+          />
+        </p>
+
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <h2 class="text-2xl font-bold mb-6 font-tamil text-primary-800 border-b border-primary-100 pb-3">
+            <I18nPair ta="வெளியீட்டாளர்கள்" en="Publishers" />
+          </h2>
+          <ul class="space-y-6">
+            <li>
+              <article class="rounded-xl border border-gray-200 p-6 hover:border-primary-200 hover:shadow-md transition-all">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">Blurb Books UK</h3>
+                <p class="text-sm text-gray-500 mb-4">
+                  <I18nPair ta="அச்சிடப்பட்ட புத்தகங்கள் · இணைய விற்பனை" en="Print-on-demand books · Online bookstore" />
+                </p>
+                <p class="text-gray-800 font-medium mb-4 font-tamil">
+                  <I18nPair
+                    ta="40 T.M.K. — 40-வது ஆண்டு நினைவிதழ்"
+                    en="40 T.M.K. — 40th Year Souvenir"
+                  />
+                </p>
+                <a
+                  href={BLURB_40TH_SOUVENIR}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-600 text-white font-medium hover:bg-primary-700 transition-colors"
+                >
+                  <I18nPair ta="Blurb இல் பார்க்க" en="View on Blurb" />
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </article>
+            </li>
+          </ul>
+        </div>
+
         <div class="bg-white rounded-lg shadow-lg p-8">
-          <p class="text-gray-700 leading-relaxed mb-6 font-tamil">
-            <I18nPair block ta="விரைவில் வெளியிடப்படும்" en="Coming soon" />
+          <p class="text-gray-700 leading-relaxed font-tamil text-center text-sm">
+            <I18nPair block ta="மேலும் பதிப்புகள் விரைவில் சேர்க்கப்படும்." en="More publications will be added soon." />
           </p>
         </div>
       </div>
