@@ -1,13 +1,47 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTranslation, type Language } from '../utils/i18n';
 import I18nPair from '../components/I18nPair.astro';
+import PublicationsSection from '../components/PublicationsSection';
 
 const lang = (Astro.url.searchParams.get('lang') as Language) || 'ta';
 
 /** Blurb Books UK — TMK 40th year souvenir (print-on-demand publisher) */
 const BLURB_40TH_SOUVENIR =
   'https://www.blurb.co.uk/books/6840280-40-t-m-k-40th-year-souvenir';
+
+const PUBLICATION_THUMB_DIR = path.join(process.cwd(), 'public', 'static', 'content', 'publications');
+
+function thumbnailPublicUrl(file: string) {
+  return `/static/content/publications/${file}`;
+}
+
+function resolveThumbnailSrc(file: string | null): string | null {
+  if (!file) return null;
+  const abs = path.join(PUBLICATION_THUMB_DIR, file);
+  return fs.existsSync(abs) ? thumbnailPublicUrl(file) : null;
+}
+
+/** Shown when R2 manifest is empty or API fails (dev). Live site uses /admin/publications when manifest has items. */
+const fallbackPublications = [
+  {
+    id: 'fallback-blurb-40th',
+    publisher: 'Blurb Books UK',
+    publisherNoteTa: 'அச்சிடப்பட்ட புத்தகங்கள் · இணைய விற்பனை',
+    publisherNoteEn: 'Print-on-demand books · Online bookstore',
+    titleTa: '40 T.M.K. — 40-வது ஆண்டு நினைவிதழ்',
+    titleEn: '40 T.M.K. — 40th Year Souvenir',
+    href: BLURB_40TH_SOUVENIR,
+    ctaTa: 'Blurb இல் பார்க்க',
+    ctaEn: 'View on Blurb',
+    coverKey: null as string | null,
+    thumbnailAltTa: '40-வது ஆண்டு நினைவிதழ் — முன்பக்க முன்னோட்டம்',
+    thumbnailAltEn: '40th year souvenir — cover / first page preview',
+    thumbnailSrc: resolveThumbnailSrc('tmk-40th-souvenir-cover.jpg'),
+  },
+];
 ---
 
 <BaseLayout 
@@ -31,38 +65,7 @@ const BLURB_40TH_SOUVENIR =
           />
         </p>
 
-        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-          <h2 class="text-2xl font-bold mb-6 font-tamil text-primary-800 border-b border-primary-100 pb-3">
-            <I18nPair ta="வெளியீட்டாளர்கள்" en="Publishers" />
-          </h2>
-          <ul class="space-y-6">
-            <li>
-              <article class="rounded-xl border border-gray-200 p-6 hover:border-primary-200 hover:shadow-md transition-all">
-                <h3 class="text-lg font-semibold text-gray-900 mb-1">Blurb Books UK</h3>
-                <p class="text-sm text-gray-500 mb-4">
-                  <I18nPair ta="அச்சிடப்பட்ட புத்தகங்கள் · இணைய விற்பனை" en="Print-on-demand books · Online bookstore" />
-                </p>
-                <p class="text-gray-800 font-medium mb-4 font-tamil">
-                  <I18nPair
-                    ta="40 T.M.K. — 40-வது ஆண்டு நினைவிதழ்"
-                    en="40 T.M.K. — 40th Year Souvenir"
-                  />
-                </p>
-                <a
-                  href={BLURB_40TH_SOUVENIR}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-600 text-white font-medium hover:bg-primary-700 transition-colors"
-                >
-                  <I18nPair ta="Blurb இல் பார்க்க" en="View on Blurb" />
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
-              </article>
-            </li>
-          </ul>
-        </div>
+        <PublicationsSection client:load fallbackPublications={fallbackPublications} />
 
         <div class="bg-white rounded-lg shadow-lg p-8">
           <p class="text-gray-700 leading-relaxed font-tamil text-center text-sm">

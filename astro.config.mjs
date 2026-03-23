@@ -89,6 +89,11 @@ export default defineConfig({
           changeOrigin: true,
           rewrite: () => '/forms/Tamil_School_Admission_Form_New_V3.0.docx',
         },
+        '/api/publications/list': {
+          target: 'http://localhost:4321',
+          changeOrigin: true,
+          rewrite: () => '/publications-list-fallback.json',
+        },
       },
     },
   },

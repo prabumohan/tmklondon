@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdminPublications from '../../components/admin/AdminPublications';
+
+const seoConfig = {
+  title: 'Publications - TMK London Admin',
+  description: 'Manage publications list and covers in R2',
+  noindex: true,
+};
+---
+
+<BaseLayout {...seoConfig}>
+  <AdminPublications client:load />
+</BaseLayout>

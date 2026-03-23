@@ -108,7 +108,7 @@ One bucket **tmklondon-store** is used for forms and (later) gallery images. Obj
 
 1. **Create an R2 bucket:** Cloudflare Dashboard → **R2** → **Create bucket** → name **tmklondon-store** (or CLI: `npx wrangler r2 bucket create tmklondon-store`).
 2. **Bind it to Pages:** Pages project → **Settings** → **Functions** → **R2 bucket bindings** → **Add** → Variable name **TMK_STORE**, select the bucket **tmklondon-store**.
-3. Deploy. Use **/admin/forms** to upload the PDF and DOCX; they are stored as `forms/donation.pdf` and `forms/admission.docx`. The site serves them from `/api/forms/donation` and `/api/forms/admission`; if R2 is empty, those URLs redirect to the static files in `public/forms/`. For gallery, you can store images under keys like `gallery/teachers/...`, `gallery/events/...`, etc.
+3. Deploy. Use **/admin/forms** to upload the PDF and DOCX; they are stored as `forms/donation.pdf` and `forms/admission.docx`. The site serves them from `/api/forms/donation` and `/api/forms/admission`; if R2 is empty, those URLs redirect to the static files in `public/forms/`. For gallery, images live under `gallery/...`. For **publications**, use **/admin/publications**: the manifest is **`publications/manifest.json`** and cover images **`publications/covers/{id}.jpg`** (etc.). The public `/publications` page reads **`GET /api/publications/list`**; if the manifest is missing or empty, the page uses the built-in Blurb fallback and optional local cover in `public/static/content/publications/`.
 
 ---
 
@@ -121,6 +121,6 @@ One bucket **tmklondon-store** is used for forms and (later) gallery images. Obj
 | 3 | Set the secret **TMK_ADMIN_API_KEY** in the Pages project (server-side only). |
 | 4 | (Optional) Seeded `newsTickerItems` in KV. |
 | 5 | Log in at **/admin/login** with that value; cookie auth is used for saving the ticker. |
-| 6 | (Optional) Create R2 bucket **tmklondon-store**, bind as **TMK_STORE**; use **/admin/forms** to upload forms (stored under `forms/`). Same bucket can hold gallery images in other folders. |
+| 6 | (Optional) Create R2 bucket **tmklondon-store**, bind as **TMK_STORE**; use **/admin/forms** for forms, **/admin/gallery** for gallery, **/admin/publications** for the publications list and covers (`publications/` prefix). |
 
-After this, the ticker reads from KV and admin can update it after logging in. Forms are stored in R2 under `forms/`; each download = 1 R2 read (free tier: 10M reads/month). Use **TMK_STORE** for gallery images later (e.g. `gallery/` prefix).
+After this, the ticker reads from KV and admin can update it after logging in. Forms are stored in R2 under `forms/`; each download = 1 R2 read (free tier: 10M reads/month). **TMK_STORE** also holds gallery images and publications data under **`gallery/`** and **`publications/`**.
